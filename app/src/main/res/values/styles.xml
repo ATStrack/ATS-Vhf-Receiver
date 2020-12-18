@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colortextbutton</item>
+        <!-- <item name="colorPrimaryDark">@color/colorPrimaryDark</item> -->
+        <item name="colorAccent">@color/colortext</item>
+        <item name="android:textColorPrimary">@color/colortext</item>
+        <item name="android:textColorSecondary">@color/colortext</item>
+    </style>
+
+    <style name="Holo" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- no borrar este estilo, se ocupa en el toolbar de escaneo -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- <item name="colorPrimaryDark">@color/colorPrimaryDark</item> -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colortext</item>
+        <item name="android:textColorSecondary">@color/colortext</item>
+        <item name="android:actionBarSize">@dimen/bar_height</item>
+        <item name="actionBarSize">@dimen/bar_height</item>
+    </style>
+
+    <style name="Body" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="HeadLine" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">@dimen/text_size_headline</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Subhead" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textSize">@dimen/text_size_subhead</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+</resources>

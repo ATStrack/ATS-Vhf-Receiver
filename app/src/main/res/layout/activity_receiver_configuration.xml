@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorbackground"
+    tools:context=".ReceiverConfigurationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/edit_frequency_tables_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorbutton"
+            android:text="@string/lb_edit_frequency_tables"
+            android:textColor="@color/colortextbutton"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/edit_receiver_defaults_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorbutton"
+            android:text="@string/lb_edit_receiver_defaults"
+            android:textColor="@color/colortextbutton"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/set_transmitter_type_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorbutton"
+            android:text="@string/lb_set_transmitter_type"
+            android:textColor="@color/colortextbutton"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/clone_from_other_receiver_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorbutton"
+            android:text="@string/lb_clone_from_other_receiver"
+            android:textColor="@color/colortextbutton"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/connecting_device_receiverConfiguration"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorbackground"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            android:elevation="4dp"
+            android:background="@color/colortextbutton">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="6">
+
+                <TextView
+                    android:id="@+id/device_name_receiverConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colortext"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/device_address_receiverConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colortext"
+                    android:textSize="12dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_battery_full"/>
+
+                <TextView
+                    android:id="@+id/percent_battery_receiverConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="%75"
+                    android:textSize="12dp"
+                    android:textColor="@color/colortext"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/state_view"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/colorbutton"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

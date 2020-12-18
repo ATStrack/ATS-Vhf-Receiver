@@ -1,0 +1,2 @@
+rootProject.name='ATS_VHF_Receiver'
+include ':app'

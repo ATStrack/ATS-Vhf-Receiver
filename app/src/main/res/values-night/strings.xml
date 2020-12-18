@@ -1,0 +1,275 @@
+<resources>
+    <string name="app_name">ATS VHF Receiver</string>
+    <string name="action_settings">Settings</string>
+
+    <!--HOME-->
+    <string name="lb_you_must_connect">You must connect to a receiver to get started.</string>
+    <string name="lb_connect">Connect to a Receiver</string>
+    <string name="lb_connected">Connected</string>
+    <string name="lb_not_scanning">Not scanning</string>
+    <string name="lb_start_scanning">Start Scanning</string>
+    <string name="lb_receiver_configuration">Receiver Configuration</string>
+    <string name="lb_manage_receiver">Manage Receiver Data</string>
+    <string name="lb_successful">Receiver connection was successful.</string>
+    <string name="lb_error">Error. Unable to connect to receiver.</string>
+    <string name="lb_vhf_receiver">VHF RECEIVER</string>
+    <string name="lb_searching_receivers">Searching for Receivers</string>
+    <string name="lb_unable_find">Unable to find any devices within range</string>
+    <string name="lb_retry">Retry</string>
+    <string name="lb_update">We have made an important update to the app and we need you to install the latest version. Please head to the App Store and upgrade to the latest version to continue using the app. Thank you.</string>
+    <string name="lb_connecting_device">Connecting ...</string>
+    <string name="lb_connected_no_scanning">Connected, Not Scanning</string>
+    <string name="lb_disconnect">Disconnect Receiver</string>
+    <string name="lb_unable_connect">Unable to connect to device</string>
+
+    <!--SCAN-->
+    <string name="lb_searching">Searching for Receivers, Please Wait.</string>
+    <string name="lb_stop_searching">Stop Searching</string>
+    <string name="lb_search_complete">Search Complete!</string>
+    <string name="lb_oops">Oops! No results</string>
+    <string name="lb_no_result">Please make sure there is a receiver around.</string>
+    <string name="lb_return">Return to home Screen</string>
+    <string name="lb_connecting">Connecting to receiver, Please Wait.</string>
+    <string name="lb_cancel">&lt; Cancel</string>
+
+    <!--START SCANNING-->
+    <string name="lb_manual_scan">Manual Scan</string>
+    <string name="lb_aerial_scan">Aerial Scan</string>
+    <string name="lb_stationary_scan">Stationary Scan</string>
+    <string name="lb_start_manual_scan">Start Manual Scan</string>
+    <string name="lb_start_aerial_scan">Start Aerial Scan</string>
+    <string name="lb_start_stationary_scan">Start Stationary Scan</string>
+    <string name="lb_ready_scan">Ready to Scan</string>
+    <string name="lb_hold">Hold</string>
+    <string name="lb_record">Start Recording</string>
+    <string name="lb_scanning">SCANNING ...</string>
+    <string name="lb_frequency">Frequency</string>
+    <string name="lb_pulse_rate">Pulse Rate</string>
+    <string name="lb_sig">SIG</string>
+    <string name="lb_table_row">Table</string>
+    <string name="lb_gps">GPS</string>
+    <string name="lb_temperature_tags">Temperature Tags</string>
+    <string name="lb_time">Time</string>
+    <string name="lb_antenna">Antenna</string>
+    <string name="lb_tx_data">Tx Data</string>
+    <string name="lb_tag_type">Tag Type</string>
+    <string name="lb_code">Code</string>
+    <string name="lb_scan_rate">Scan Rate (seconds)</string>
+    <string name="lb_selected_frequency">Selected Frequency</string>
+    <string name="lb_number_antennas">Number of Antennas</string>
+    <string name="lb_timeout">Timeout (seconds)</string>
+    <string name="lb_edit_defaults">Edit Defaults</string>
+
+    <!--RECEIVER CONFIGURATION-->
+    <string name="lb_edit_frequency_tables">Edit Frequency Tables</string>
+    <string name="lb_edit_receiver_defaults">Edit Receiver Defaults</string>
+    <string name="lb_set_transmitter_type">Set Transmitter Type</string>
+    <string name="lb_test_receiver">Test Receiver</string>
+    <string name="lb_clone_from_other_receiver">Clone From Other Receiver</string>
+
+    <!--EDIT RECEIVER DEFAULTS-->
+    <string name="lb_aerial_defaults">Aerial Defaults</string>
+    <string name="lb_stationary_defaults">Stationary Defaults</string>
+    <string name="lb_frequency_table_number">Frequency Table Number</string>
+    <string name="lb_scan_rat">Scan Rate (seconds)</string>
+    <string name="lb_scan_timeout">Scan Timeout (seconds)</string>
+    <string name="lb_auto_record">Auto Record</string>
+    <string name="lb_on">On</string>
+    <string name="lb_off">Off</string>
+    <string name="lb_antenna_number">Number of Antennas</string>
+    <string-array name="tables">
+        <item>Table 1</item>
+        <item>Table 2</item>
+        <item>Table 3</item>
+        <item>Table 4</item>
+        <item>Table 5</item>
+        <item>Table 6</item>
+        <item>Table 7</item>
+        <item>Table 8</item>
+        <item>Table 9</item>
+        <item>Table 10</item>
+        <item>Table 11</item>
+        <item>Table 12</item>
+    </string-array>
+    <string-array name="antennas">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
+    <!--CLONE RECEIVER-->
+    <string name="lb_ready_clone">Ready To Clone</string>
+    <string name="lb_begin_cloning">Begin Cloning</string>
+
+    <!--TEST RECEIVER-->
+    <string name="lb_running_test">Running Test. Please wait.</string>
+    <string name="lb_test_complete">Test Complete</string>
+    <string name="lb_serial_number">Serial Number: </string>
+    <string name="lb_snapshot_interval_min">Snapshot Interval (min): </string>
+    <string name="lb_snapshot_interval_ms">Snapshot Interval (ms): </string>
+    <string name="lb_bytes_stored">Bytes Stored: </string>
+    <string name="lb_battery">Battery (%): </string>
+    <string name="lb_memory_used_percent">Memory Used (%):</string>
+    <string name="lb_frequency_tables">Frequency Tables:</string>
+    <string name="lb_first_table">Table 1:</string>
+    <string name="lb_second_table">Table 2:</string>
+    <string name="lb_third_table">Table 3:</string>
+    <string name="lb_fourth_table">Table 4:</string>
+    <string name="lb_fifth_table">Table 5:</string>
+    <string name="lb_sixth_table">Table 6:</string>
+    <string name="lb_seventh_table">Table 7:</string>
+    <string name="lb_eighth_table">Table 8:</string>
+    <string name="lb_ninth_table">Table 9:</string>
+    <string name="lb_tenth_table">Table 10:</string>
+    <string name="lb_eleventh_table">Table 11:</string>
+    <string name="lb_twelfth_table">Table 12:</string>
+
+    <!--SET TRANSMITTER TYPE-->
+    <string name="lb_select_type">Select Type:</string>
+    <string name="lb_fixed_pulsed_rate">Fixed Pulsed Rate</string>
+    <string name="lb_pattern_matching">Pattern Matching</string>
+    <string name="lb_pulses_per_scan_time">Pulses Per Scan Time</string>
+    <string name="lb_variable_pulse_rate">Variable Pulse Rate</string>
+    <string name="lb_temperature">Temperature</string>
+    <string name="lb_period">Period</string>
+    <string name="lb_altitude">Altitude</string>
+    <string name="lb_depth">Depth</string>
+
+    <string name="lb_SetUp">Set Up</string>
+    <string name="lb_FreqTables">Freq Tables</string>
+    <string name="lb_GetData">Get Data</string>
+    <string name="lb_Test">Test</string>
+    <string name="lb_Log">Log</string>
+    <string name="lb_Keypad">Keypad</string>
+    <string name="lb_DarkMode">Dark Mode</string>
+
+    <!-- string freq tables -->
+    <string name="lb_load_table_from_file">Load Frequencies From File</string>
+    <string name="lb_table1">Table 1</string>
+    <string name="lb_table2">Table 2</string>
+    <string name="lb_table3">Table 3</string>
+    <string name="lb_table4">Table 4</string>
+    <string name="lb_table5">Table 5</string>
+    <string name="lb_table6">Table 6</string>
+    <string name="lb_table7">Table 7</string>
+    <string name="lb_table8">Table 8</string>
+    <string name="lb_table9">Table 9</string>
+    <string name="lb_table10">Table 10</string>
+    <string name="lb_table11">Table 11</string>
+    <string name="lb_table12">Table 12</string>
+    <string name="lb_save_changes">Save Changes</string>
+    <string name="lb_edit_table">Edit Table</string>
+    <string name="lb_clear_table">Clear Table</string>
+    <string name="lb_discard_changes">Discard Changes</string>
+
+    <string name="lb_text_freq_tables">Select a source to load your tables from:</string>
+    <string name="lb_load_tables_from_receiver">Load Tables From Receiver</string>
+    <string name="lb_enter_data_tables_manually">Enter Data Tables Manually</string>
+    <string name="lb_tables_overview">Tables Overview</string>
+    <string name="lb_add_new_table">Add New\nTable</string>
+    <string name="lb_edit_all_tables">Edit All\nTables</string>
+    <string name="lb_delete_selected_tables">Delete Selected\nTables</string>
+    <string name="lb_edit_selected_tables">Edit Selected\nTables</string>
+    <string name="lb_edit_cell">Edit Cell</string>
+    <string name="lb_undo_changes">Undo Changes</string>
+    <string name="lb_done">Done</string>
+    <string name="lb_text_create_tables">No tables yet. Create a table to get started.</string>
+    <string name="lb_create_table">Create Table</string>
+
+    <!-- string get data -->
+    <string name="lb_memory">Memory</string>
+    <string name="lb_view_data">View Data</string>
+    <string name="lb_download_data">Download Data</string>
+    <string name="lb_erase_data">Delete Data</string>
+
+    <!-- string log -->
+    <string name="lb_start">Start</string>
+    <string name="lb_stop">Stop</string>
+
+    <!-- string keypad -->
+    <string name="lb_model">MODEL: R4520C</string>
+    <string name="btn_Menu">Menu\n\n0</string>
+    <string name="btn_Freq">Freq\n\n1</string>
+    <string name="btn_GPS">GPS\n\n2</string>
+    <string name="btn_F1">F1\n\n3</string>
+    <string name="btn_Test">Test\n\n4</string>
+    <string name="btn_One">One\n\n5</string>
+    <string name="btn_All">All\n\n6</string>
+    <string name="btn_None">None\n\n7</string>
+    <string name="btn_ViewUp">View↑\n\n8</string>
+    <string name="btn_ViewDown">View↓\n\n9</string>
+    <string name="btn_F2">F2</string>
+    <string name="btn_AddFr">Addfr\n\nChan↑</string>
+    <string name="btn_Esc">ESC</string>
+    <string name="btn_Enter">Enter</string>
+    <string name="btn_Merge">Merge</string>
+    <string name="btn_DelFr">Delfr\n\nChan↓</string>
+    <string name="btn_Record">Record\n\nHold</string>
+    <string name="btn_Shift">Shift</string>
+
+    <string name="lb_TimeFix">Snapshot Interval (min)</string>
+    <string name="lb_SizeFix">Snapshot Duration (ms)</string>
+    <string name="lb_DateFix">Date/Hour</string>
+
+    <string name="start_scan">START SCAN</string>
+    <string name="stop_scan">STOP SCAN</string>
+    <string name="mac_address">MAC: %s</string>
+    <string name="connect">CONNECT</string>
+    <string name="enable">ENABLE</string>
+    <string name="location_adapter_is_disabled">Location adapter is disabled.</string>
+    <string name="bluetooth_adapter_is_disabled">Bluetooth adapter is disabled.</string>
+    <string name="title_activity_main_program">MainProgramActivity</string>
+
+    <!-- string gps -->
+    <string name="lb_latitude">Lat:</string>
+    <string name="lb_longitude">Lon:</string>
+    <string name="lb_gpson">GPS ON</string>
+    <string name="lb_gpsoff">GPS OFF</string>
+    <string name="lb_no_fix">NO/FIX</string>
+
+    <!-- string menu -->
+    <string name="lb_main_menu">Main Menu:</string>
+    <string name="lb_gps_off">GPS/OFF</string>
+    <string name="lb_gps_on">GPS/ON</string>
+    <string name="lb_manual">MANUAL</string>
+    <string name="lb_aerial">AERIAL</string>
+    <string name="lb_stationary">STATIONARY</string>
+    <string name="lb_setup">SETUP</string>
+
+
+    <!-- string ble example -->
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+
+    <string name="write_input">Write input</string>
+    <string name="title_activity_extended_read">ExtendedReadActivity</string>
+    <string name="title_activity_device_scan">DeviceScanActivity</string>
+    <string name="serial_number">Serial Number</string>
+    <string name="ccontinue">Continue</string>
+    <string name="ccancel">Cancel</string>
+    <string name="snapshots_stored">Snapshots Stored</string>
+    <string name="battery">Battery (%)</string>
+    <string name="gps_test">GPS Test</string>
+    <string name="ddone">Done</string>
+</resources>

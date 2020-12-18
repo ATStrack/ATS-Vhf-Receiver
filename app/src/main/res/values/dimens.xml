@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="message_title">22dp</dimen>
+    <dimen name="message">18dp</dimen>
+    <dimen name="text_button">20sp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="bar_height">65dp</dimen>
+    <dimen name="btn_width">69dp</dimen>
+    <dimen name="btn_height">65dp</dimen>
+    <dimen name="item_margin">24dp</dimen>
+    <dimen name="text_size_caption">12sp</dimen>
+    <dimen name="text_size_subhead">16sp</dimen>
+    <dimen name="text_size_tab">14sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_headline">17sp</dimen>
+    <dimen name="device_selection_max_width">0dp</dimen>
+    <dimen name="device_selection_max_height">0dp</dimen>
+    <dimen name="device_selection_item_padding">8dp</dimen>
+    <integer name="device_selection_columns">1</integer>
+    <dimen name="text">14sp</dimen>
+    <dimen name="text2">11sp</dimen>
+</resources>

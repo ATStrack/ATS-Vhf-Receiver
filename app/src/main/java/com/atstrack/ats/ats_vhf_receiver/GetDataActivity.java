@@ -73,6 +73,10 @@ public class GetDataActivity extends AppCompatActivity {
     TextView percentage;
     @BindView(R.id.subMenuLinearLayout)
     LinearLayout subMenu;
+    @BindView(R.id.device_name_manageReceiverData)
+    TextView device_name_textView;
+    @BindView(R.id.device_address_manageReceiverData)
+    TextView device_address_textView;
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -248,6 +252,9 @@ public class GetDataActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+
+        device_name_textView.setText(mDeviceName);
+        device_address_textView.setText(mDeviceAddress);
 
         mHandler = new Handler();
 

@@ -138,14 +138,14 @@
                 android:layout_weight="6">
 
                 <TextView
-                    android:id="@+id/device_name_mainMenu"
+                    android:id="@+id/device_name_manageReceiverData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colortext"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/device_address_mainMenu"
+                    android:id="@+id/device_address_manageReceiverData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colortext"
@@ -165,7 +165,7 @@
                     android:src="@drawable/ic_battery_full"/>
 
                 <TextView
-                    android:id="@+id/percent_battery_mainMenu"
+                    android:id="@+id/percent_battery_manageReceiverData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

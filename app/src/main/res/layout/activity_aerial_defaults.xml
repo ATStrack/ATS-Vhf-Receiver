@@ -15,205 +15,251 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="8dp"
-            android:layout_weight="6"
-            app:layout_constraintBottom_toTopOf="@id/connecting_device_aerialDefaults">
+            android:layout_margin="6dp"
+            android:layout_weight="6">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/lb_base_defaults"
+                    android:textSize="18dp"
+                    android:textColor="@color/dark"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:background="@color/colortextbutton">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
                         android:text="@string/lb_frequency_table_number"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:textColor="@color/dark"
+                        android:textSize="18dp"/>
 
                     <Spinner
                         android:id="@+id/aerial_tables_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_scan_rat"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <EditText
-                        android:id="@+id/scan_rate_aerial_defaults_editText"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_scan_timeout"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <EditText
-                        android:id="@+id/scan_timeout_aerial_defaults_editText"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_antenna_number"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <Spinner
-                        android:id="@+id/aerial_antennas_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_gps"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_on"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/aerial_gps_switch"
-                        android:layout_width="wrap_content"
+                        android:layout_width="132dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:thumb="@drawable/thumb_switch"
-                        app:track="@drawable/track_switch"/>
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/spinner_style"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/lb_off"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_scan_rat"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <EditText
+                            android:id="@+id/scan_rate_aerial_defaults_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cuadro_input"
+                            android:textColor="@color/colortext"
+                            android:textSize="14dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_scan_timeout"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <EditText
+                            android:id="@+id/scan_timeout_aerial_defaults_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cuadro_input"
+                            android:textColor="@color/colortext"
+                            android:textSize="14dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_antenna_number"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <Spinner
+                            android:id="@+id/aerial_antennas_spinner"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_style"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_gps"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_off"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/aerial_gps_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:thumb="@drawable/thumb_switch"
+                            app:track="@drawable/track_switch"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_on"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_auto_record"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_off"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/aerial_auto_record_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:thumb="@drawable/thumb_switch"
+                            app:track="@drawable/track_switch"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lb_on"
+                            android:textColor="@color/dark"
+                            android:textSize="18dp"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_auto_record"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_on"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/aerial_auto_record_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:thumb="@drawable/thumb_switch"
-                        app:track="@drawable/track_switch"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lb_off"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text"/>
-
-                </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="8dp"
+                    />
 
             </LinearLayout>
 

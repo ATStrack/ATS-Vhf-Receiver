@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,7 +19,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -215,6 +220,10 @@ public class MainMenuActivity extends AppCompatActivity {
         device_name_mainMenu.setText(mDeviceName);
         device_address_mainMenu.setText(mDeviceAddress);
 
+        check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
+        final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
+        animated.start();
+
         mHandlerMenu = new Handler();
         mHandler = new Handler();
         connectingToReceiver();
@@ -250,11 +259,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                unbindService(mServiceConnection);
-                mBluetoothLeService = null;
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -293,7 +298,20 @@ public class MainMenuActivity extends AppCompatActivity {
         mHandler.postDelayed(() -> {
             if (mConnected){
                 state_textView.setText(R.string.lb_connected);
-                check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.check_avd_anim));
+
+                check_avd_anim.setImageDrawable((AnimatedVectorDrawable) getResources().getDrawable(R.drawable.check_avd_anim));
+                //final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
+                //((AnimatedVectorDrawable) animated).start();
+                Drawable drawable = check_avd_anim.getDrawable();
+                Animatable animatable = (Animatable) drawable;
+                AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, new Animatable2Compat.AnimationCallback() {
+                    @Override
+                    public void onAnimationEnd(Drawable drawable) {
+                        new Handler().postDelayed(() -> animatable.start(), 1000);
+                    }
+                });
+                animatable.start();
+
                 state_textView.setTextColor(ContextCompat.getColor(this, R.color.colorbutton));
                 state_view.setBackgroundResource(R.color.colorbutton);
                 mHandlerMenu.postDelayed(() -> {

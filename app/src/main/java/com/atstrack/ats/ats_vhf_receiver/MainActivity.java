@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -133,10 +136,18 @@ public class MainActivity extends AppCompatActivity {
 
         initDarkMode();
 
-        //anim_spinner.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
-        //final AnimationDrawable animationDrawable;
-        //animationDrawable = (AnimationDrawable) anim_spinner.getDrawable();
-        //animationDrawable.start();
+        anim_spinner.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
+        final Animatable animated = (Animatable) anim_spinner.getDrawable();
+        ((Animatable) animated).start();
+        /*Drawable drawable = anim_spinner.getDrawable();
+        Animatable animatable = (Animatable) drawable;
+        AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, new Animatable2Compat.AnimationCallback() {
+            @Override
+            public void onAnimationEnd(Drawable drawable) {
+                new Handler().postDelayed(() -> animatable.start(), 1000);
+            }
+        });
+        animatable.start();*/
 
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)

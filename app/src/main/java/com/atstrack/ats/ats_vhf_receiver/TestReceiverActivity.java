@@ -41,12 +41,6 @@ public class TestReceiverActivity extends AppCompatActivity {
     TextView device_address_textView;
     @BindView(R.id.running_test_constraintLayout)
     ConstraintLayout running_test_constraintLayout;
-    @BindView(R.id.test_exit_image)
-    ImageView exit_image;
-    @BindView(R.id.testing_linearLayout)
-    LinearLayout testing_linearLayout;
-    @BindView(R.id.iv_ProgressGIF_testing)
-    ImageView iv_ProgressGIF_testing;
     @BindView(R.id.test_complete_linearLayout)
     LinearLayout test_complete_linearLayout;
     @BindView(R.id.battery_textView)
@@ -81,6 +75,30 @@ public class TestReceiverActivity extends AppCompatActivity {
     TextView eleventh_table_textView;
     @BindView(R.id.twelfth_table_textView)
     TextView twelfth_table_textView;
+    @BindView(R.id.table1_textView)
+    TextView table1_textView;
+    @BindView(R.id.table2_textView)
+    TextView table2_textView;
+    @BindView(R.id.table3_textView)
+    TextView table3_textView;
+    @BindView(R.id.table4_textView)
+    TextView table4_textView;
+    @BindView(R.id.table5_textView)
+    TextView table5_textView;
+    @BindView(R.id.table6_textView)
+    TextView table6_textView;
+    @BindView(R.id.table7_textView)
+    TextView table7_textView;
+    @BindView(R.id.table8_textView)
+    TextView table8_textView;
+    @BindView(R.id.table9_textView)
+    TextView table9_textView;
+    @BindView(R.id.table10_textView)
+    TextView table10_textView;
+    @BindView(R.id.table11_textView)
+    TextView table11_textView;
+    @BindView(R.id.table12_textView)
+    TextView table12_textView;
 
     private final static String TAG = TestReceiverActivity.class.getSimpleName();
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
@@ -163,18 +181,16 @@ public class TestReceiverActivity extends AppCompatActivity {
         mBluetoothLeService.readCharacteristicDiagnostic(uservice,uservicechar);
     }
 
-    @OnClick(R.id.test_exit_image)
-    public void onClickExit(View v){
-        finish();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_receiver);
         ButterKnife.bind(this);
 
-        Glide.with(this).asGif().load(R.raw.searching).into(iv_ProgressGIF_testing);
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
+        getSupportActionBar().setTitle("TEST RECEIVER");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;
@@ -241,7 +257,7 @@ public class TestReceiverActivity extends AppCompatActivity {
     private void showMessageDisconnect() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        View view =inflater.inflate(R.layout.disconnect_message, null);
+        View view = inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
         dialog.setView(view);
@@ -272,29 +288,80 @@ public class TestReceiverActivity extends AppCompatActivity {
         bytes_stored_textView.setText(String.valueOf(numberPage * 2048));
         memory_used_textView.setText(String.valueOf(numberPage * 100 / lastPage));
         frequency_tables_textView.setText(Converters.getDecimalValue(data[2]));
-        first_table_textView.setText(Converters.getDecimalValue(data[3]));
-        second_table_textView.setText(Converters.getDecimalValue(data[4]));
-        third_table_textView.setText(Converters.getDecimalValue(data[5]));
-        fourth_table_textView.setText(Converters.getDecimalValue(data[6]));
-        fifth_table_textView.setText(Converters.getDecimalValue(data[7]));
-        sixth_table_textView.setText(Converters.getDecimalValue(data[8]));
-        seventh_table_textView.setText(Converters.getDecimalValue(data[9]));
-        eighth_table_textView.setText(Converters.getDecimalValue(data[10]));
-        ninth_table_textView.setText(Converters.getDecimalValue(data[11]));
-        tenth_table_textView.setText(Converters.getDecimalValue(data[12]));
-        eleventh_table_textView.setText(Converters.getDecimalValue(data[13]));
-        twelfth_table_textView.setText(Converters.getDecimalValue(data[14]));
+
+        if (Integer.parseInt(Converters.getDecimalValue(data[3])) > 0) {
+            first_table_textView.setText(Converters.getDecimalValue(data[3]));
+            table1_textView.setVisibility(View.VISIBLE);
+            first_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[4])) > 0) {
+            second_table_textView.setText(Converters.getDecimalValue(data[4]));
+            table2_textView.setVisibility(View.VISIBLE);
+            second_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[5])) > 0) {
+            third_table_textView.setText(Converters.getDecimalValue(data[5]));
+            table3_textView.setVisibility(View.VISIBLE);
+            third_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[6])) > 0) {
+            fourth_table_textView.setText(Converters.getDecimalValue(data[6]));
+            table4_textView.setVisibility(View.VISIBLE);
+            fourth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[7])) > 0) {
+            fifth_table_textView.setText(Converters.getDecimalValue(data[7]));
+            table5_textView.setVisibility(View.VISIBLE);
+            fifth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[8])) > 0) {
+            sixth_table_textView.setText(Converters.getDecimalValue(data[8]));
+            table6_textView.setVisibility(View.VISIBLE);
+            sixth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[9])) > 0) {
+            seventh_table_textView.setText(Converters.getDecimalValue(data[9]));
+            table7_textView.setVisibility(View.VISIBLE);
+            seventh_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[10])) > 0) {
+            eighth_table_textView.setText(Converters.getDecimalValue(data[10]));
+            table8_textView.setVisibility(View.VISIBLE);
+            eighth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[11])) > 0) {
+            ninth_table_textView.setText(Converters.getDecimalValue(data[11]));
+            table9_textView.setVisibility(View.VISIBLE);
+            ninth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[12])) > 0) {
+            tenth_table_textView.setText(Converters.getDecimalValue(data[12]));
+            table10_textView.setVisibility(View.VISIBLE);
+            tenth_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[13])) > 0) {
+            eleventh_table_textView.setText(Converters.getDecimalValue(data[13]));
+            table11_textView.setVisibility(View.VISIBLE);
+            eleventh_table_textView.setVisibility(View.VISIBLE);
+        }
+        if (Integer.parseInt(Converters.getDecimalValue(data[14])) > 0) {
+            twelfth_table_textView.setText(Converters.getDecimalValue(data[14]));
+            table12_textView.setVisibility(View.VISIBLE);
+            twelfth_table_textView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void runningTest(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.layout_running_test, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setView(view);
+        dialog.show();
+
         mHandlerTest.postDelayed(() -> {
+            dialog.dismiss();
             running_test_constraintLayout.setVisibility(View.GONE);
             test_complete_linearLayout.setVisibility(View.VISIBLE);
-
-            getSupportActionBar().setTitle("Screen Title");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_ab_back);
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
         }, TEST_PERIOD);
     }
 }

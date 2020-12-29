@@ -159,10 +159,10 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.activity_aerial_defaults);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle("Edit Receiver Defaults");
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_ab_back);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
+        getSupportActionBar().setTitle("AERIAL DEFAULTS");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;

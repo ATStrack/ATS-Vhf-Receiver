@@ -68,11 +68,12 @@
     <string name="lb_clone_from_other_receiver">Clone From Other Receiver</string>
 
     <!--EDIT RECEIVER DEFAULTS-->
+    <string name="lb_base_defaults">Base Defaults</string>
     <string name="lb_aerial_defaults">Aerial Defaults</string>
     <string name="lb_stationary_defaults">Stationary Defaults</string>
     <string name="lb_frequency_table_number">Frequency Table Number</string>
-    <string name="lb_scan_rat">Scan Rate (seconds)</string>
-    <string name="lb_scan_timeout">Scan Timeout (seconds)</string>
+    <string name="lb_scan_rat">Scan Rate (Seconds)</string>
+    <string name="lb_scan_timeout">Scan Timeout (Seconds)</string>
     <string name="lb_auto_record">Auto Record</string>
     <string name="lb_on">On</string>
     <string name="lb_off">Off</string>
@@ -101,6 +102,7 @@
         <item>7</item>
         <item>8</item>
     </string-array>
+    <string name="lb_pulse_defaults">Pulse Defaults</string>
 
     <!--CLONE RECEIVER-->
     <string name="lb_ready_clone">Ready To Clone</string>

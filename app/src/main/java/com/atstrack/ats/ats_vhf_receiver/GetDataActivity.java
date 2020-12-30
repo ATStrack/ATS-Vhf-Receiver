@@ -230,8 +230,17 @@ public class GetDataActivity extends AppCompatActivity {
 
     @OnClick(R.id.btt_EraseData)
     public void onClickEraseData(View v) {
-        parameter1 = "eraseData";
-        onRestartConnection();
+        //mBluetoothLeService.disconnect();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning");
+        builder.setMessage("Are you sure you want to delete data?");
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            parameter1 = "eraseData";
+            //mBluetoothLeService.connect(mDeviceAddress);
+            onRestartConnection();
+        });
+        builder.show();
     }
 
     @Override

@@ -152,6 +152,9 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("6dd91f4d-b30b-46c4-b111-dd49cd1f952e");
         mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
+
+        finish();
+        mBluetoothLeService.disconnect();
     }
 
     @Override
@@ -196,17 +199,8 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
-                //finish();
                 parameter = "save";
                 mBluetoothLeService.connect(mDeviceAddress);
-                //onRestartConnection();
-                /*new Handler().postDelayed(() -> {
-                    Intent intent = new Intent(this, EditReceiverDefaultsActivity.class);
-                    intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-                    intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-                    startActivity(intent);
-                    mBluetoothLeService.disconnect();
-                }, 4000);*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

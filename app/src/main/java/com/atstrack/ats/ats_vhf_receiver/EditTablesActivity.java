@@ -207,11 +207,11 @@ public class EditTablesActivity extends AppCompatActivity {
         UUID uservicechar = UUID.fromString("ad0ea6e5-d93a-47a5-a6fc-a930552520dd");
         mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
 
-        /*Intent intent = new Intent(this, TableOverviewActivity.class);
+        Intent intent = new Intent(this, TableOverviewActivity.class);
         intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
         startActivity(intent);
-        mBluetoothLeService.disconnect();*/
+        mBluetoothLeService.disconnect();
     }
 
     public View.OnLongClickListener listenerTable = new View.OnLongClickListener() {
@@ -638,11 +638,13 @@ public class EditTablesActivity extends AppCompatActivity {
     }
 
     private void createBody() {
-        newCell();
-        textCell.setText("" + table[0]);
-        textCell.setOnLongClickListener(listenerTable);
-        tableRow.addView(textCell, newTableRowParams(8, 10, 8, 6));
-        frequency_table.addView(tableRow);
+        if (table.length > 1) {
+            newCell();
+            textCell.setText("" + table[0]);
+            textCell.setOnLongClickListener(listenerTable);
+            tableRow.addView(textCell, newTableRowParams(8, 10, 8, 6));
+            frequency_table.addView(tableRow);
+        }
         for (int i = 1; i < table.length - 1; i++) {
             newCell();
             textCell.setText("" + table[i]);
@@ -650,11 +652,13 @@ public class EditTablesActivity extends AppCompatActivity {
             tableRow.addView(textCell, newTableRowParams(8, 6, 8, 6));
             frequency_table.addView(tableRow);
         }
-        newCell();
-        textCell.setText("" + table[table.length - 1]);
-        textCell.setOnLongClickListener(listenerTable);
-        tableRow.addView(textCell, newTableRowParams(8, 6, 8, 10));
-        frequency_table.addView(tableRow);
+        if (table.length > 0) {
+            newCell();
+            textCell.setText("" + table[table.length - 1]);
+            textCell.setOnLongClickListener(listenerTable);
+            tableRow.addView(textCell, newTableRowParams(8, 6, 8, 10));
+            frequency_table.addView(tableRow);
+        }
     }
 
     public void downloadData(byte[] data) {

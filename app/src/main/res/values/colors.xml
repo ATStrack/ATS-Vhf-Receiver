@@ -20,6 +20,7 @@
     <color name="dark">#000000</color>
     <color name="light">#ffffff</color>
     <color name="grey">#C4C4C4</color>
+    <color name="red">#BA2525</color>
 
     <color name="dialog_loading_spinner_center">#FF999999</color>
     <color name="dialog_loading_spinner_end">#FF666666</color>

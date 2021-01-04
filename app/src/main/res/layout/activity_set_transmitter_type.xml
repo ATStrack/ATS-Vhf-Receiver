@@ -17,96 +17,120 @@
             android:id="@+id/set_transmitter_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
+            android:layout_margin="18dp"
             android:orientation="vertical"
-            android:gravity="center"
             android:layout_weight="6">
-
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_crop_original_black_24dp"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="16dp"
                 android:text="@string/lb_select_type"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                android:textColor="@color/dark"
+                android:textSize="18dp"/>
 
-            <RadioButton
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/lb_fixed_pulsed_rate"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                android:layout_marginTop="18dp"
+                android:orientation="vertical"
+                android:background="@color/colortextbutton">
 
-            <RadioButton
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/lb_fixed_pulsed_rate"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/lb_pattern_matching"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/lb_pulses_per_scan_time"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_pattern_matching"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                android:layout_marginTop="18dp"
+                android:orientation="vertical"
+                android:background="@color/colortextbutton">
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_pulses_per_scan_time"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="@string/lb_variable_pulse_rate"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:layout_marginStart="4dp"
-                android:text="@string/lb_variable_pulse_rate"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey"/>
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_temperature"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/lb_temperature"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_period"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/lb_period"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_altitude"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/lb_altitude"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
 
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:text="@string/lb_depth"
-                android:textColor="@color/colortext"
-                android:textSize="@dimen/message"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/lb_depth"
+                    android:textColor="@color/dark"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

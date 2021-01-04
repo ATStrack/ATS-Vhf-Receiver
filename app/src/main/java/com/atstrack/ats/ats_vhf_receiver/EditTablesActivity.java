@@ -594,17 +594,29 @@ public class EditTablesActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
+        Button continue_button = view.findViewById(R.id.continue_button);
+        continue_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
         dialog.setView(view);
         dialog.show();
         dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
 
-        mHandler.postDelayed(() -> {
+        /*mHandler.postDelayed(() -> {
             dialog.dismiss();
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        }, MESSAGE_PERIOD);
+        }, MESSAGE_PERIOD);*/
     }
 
     private void showTable() {
@@ -633,7 +645,7 @@ public class EditTablesActivity extends AppCompatActivity {
         textCell.setText("Table " + number + " (tap table to edit)");
         textCell.setBackgroundColor(ContextCompat.getColor(this, colortext));
         textCell.setOnLongClickListener(listenerTable);
-        tableRow.addView(textCell, newTableRowParams(10, 10, 10, 10));
+        tableRow.addView(textCell, newTableRowParams(24, 30, 24, 30));
         frequency_table.addView(tableRow);
     }
 
@@ -642,21 +654,21 @@ public class EditTablesActivity extends AppCompatActivity {
             newCell();
             textCell.setText("" + table[0]);
             textCell.setOnLongClickListener(listenerTable);
-            tableRow.addView(textCell, newTableRowParams(8, 10, 8, 6));
+            tableRow.addView(textCell, newTableRowParams(24, 30, 24, 18));
             frequency_table.addView(tableRow);
         }
         for (int i = 1; i < table.length - 1; i++) {
             newCell();
             textCell.setText("" + table[i]);
             textCell.setOnLongClickListener(listenerTable);
-            tableRow.addView(textCell, newTableRowParams(8, 6, 8, 6));
+            tableRow.addView(textCell, newTableRowParams(24, 18, 24, 18));
             frequency_table.addView(tableRow);
         }
         if (table.length > 0) {
             newCell();
             textCell.setText("" + table[table.length - 1]);
             textCell.setOnLongClickListener(listenerTable);
-            tableRow.addView(textCell, newTableRowParams(8, 6, 8, 10));
+            tableRow.addView(textCell, newTableRowParams(24, 18, 24, 30));
             frequency_table.addView(tableRow);
         }
     }

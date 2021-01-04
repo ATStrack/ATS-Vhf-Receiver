@@ -12,19 +12,28 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/ic_bluetooth"/>
+            android:layout_width="134dp"
+            android:layout_height="134dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_receiver_disconnected_dark"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
-            android:textSize="@dimen/message_title"
+            android:textSize="18dp"
             android:text="@string/disconnect_receiver"
             android:textColor="@color/colordeletebutton"/>
+
+        <Button
+            android:id="@+id/continue_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_margin="10dp"
+            android:background="@color/red"
+            android:text="@string/ccontinue"
+            android:textSize="20dp"
+            android:textColor="@color/colortextbutton"/>
 
     </LinearLayout>
 

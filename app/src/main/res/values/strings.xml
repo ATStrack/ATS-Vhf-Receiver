@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ATS VHF Receiver</string>
     <string name="action_settings">Settings</string>
-    <string name="disconnect_receiver">Oh no, receiver disconnected</string>
+    <string name="disconnect_receiver">Receiver Disconnected</string>
 
     <!--HOME-->
     <string name="lb_you_must_connect">You must connect to a receiver to get started.</string>
@@ -106,8 +106,11 @@
     <string name="lb_pulse_defaults">Pulse Defaults</string>
 
     <!--CLONE RECEIVER-->
-    <string name="lb_ready_clone">Ready To Clone</string>
-    <string name="lb_begin_cloning">Begin Cloning</string>
+    <string name="lb_ready_clone">Ready to Clone</string>
+    <string name="lb_start_cloning">Start Clonning</string>
+    <string name="lb_no_receiver_detected">No Receiver Detected</string>
+    <string name="lb_make_sure_receivers">Make sure receivers are on and connected via the clone cable.</string>
+    <string name="lb_clonning">Clonning ...</string>
 
     <!--TEST RECEIVER-->
     <string name="lb_running_test">Running Test. Please wait.</string>

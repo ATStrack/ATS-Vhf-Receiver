@@ -3,6 +3,7 @@ package com.atstrack.ats.ats_vhf_receiver.Utils;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +21,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class LeDeviceListAdapter extends RecyclerView.Adapter<LeDeviceListAdapter.MyViewHolder> {
 
-    private ArrayList<BluetoothDevice> mLeDevices;
+    public ArrayList<BluetoothDevice> mLeDevices;
+    private ArrayList<byte[]> mScanRecords;
     private Context context;
 
     public LeDeviceListAdapter(Context context) {
         mLeDevices = new ArrayList<>();
+        mScanRecords = new ArrayList<>();
         this.context = context;
     }
 
-    public void addDevice(BluetoothDevice device) {
+    public void addDevice(BluetoothDevice device, byte[] scanRecord) {
         if(!mLeDevices.contains(device)) {
             final String deviceName = device.getName();
             if(deviceName != null)//add new for filter only Tinkler device
-                if(deviceName.equals("ATS Vhf Receiver"))//add new for filter only Tinkler device: Thermometer RTOS, ATS Vhf Receiver
+                if(deviceName.equals("ATS Vhf Receiver")) {//add new for filter only Tinkler device: Thermometer RTOS, ATS Vhf Receiver
                     mLeDevices.add(device);
+                    Log.i("SCAN RECORD", Converters.getDecimalValue(scanRecord));
+                    mScanRecords.add(scanRecord);
+                }
         }
     }
 

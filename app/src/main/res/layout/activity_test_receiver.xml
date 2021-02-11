@@ -49,8 +49,25 @@
                     android:layout_margin="12dp"
                     android:padding="8dp"
                     android:columnCount="2"
-                    android:rowCount="6"
+                    android:rowCount="17"
                     android:background="@color/colortextbutton">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/lb_frequency_range"
+                        android:textColor="@color/dark"
+                        android:textSize="12dp"/>
+
+                    <TextView
+                        android:id="@+id/range_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="end"
+                        android:textColor="@color/dark"
+                        android:textSize="18dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"

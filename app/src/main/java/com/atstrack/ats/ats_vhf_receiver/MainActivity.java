@@ -102,10 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
-    private SharedPreferences.Editor connectState;
-    boolean retry;
 
-    private boolean add = false;
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -113,9 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     runOnUiThread(() -> {
-                        if (device.getName() != null)
-                            add = true;
-                        mLeDeviceListAdapter.addDevice(device);
+                        mLeDeviceListAdapter.addDevice(device, scanRecord);
                         mLeDeviceListAdapter.notifyDataSetChanged();
                     });
                 }
@@ -139,21 +134,8 @@ public class MainActivity extends AppCompatActivity {
         anim_spinner.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
         final Animatable animated = (Animatable) anim_spinner.getDrawable();
         ((Animatable) animated).start();
-        /*Drawable drawable = anim_spinner.getDrawable();
-        Animatable animatable = (Animatable) drawable;
-        AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, new Animatable2Compat.AnimationCallback() {
-            @Override
-            public void onAnimationEnd(Drawable drawable) {
-                new Handler().postDelayed(() -> animatable.start(), 1000);
-            }
-        });
-        animatable.start();*/
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);*/
-
-        SharedPreferences preferences = getSharedPreferences("Connection", 0);
+        /*SharedPreferences preferences = getSharedPreferences("Connection", 0);
         connectState = preferences.edit();
         retry = preferences.getBoolean("retry", false);
         if (retry){
@@ -164,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             state_connect_textView.setText(R.string.lb_unable_connect);
             state_connect_textView.setTextColor(ContextCompat.getColor(this, R.color.colordeletebutton));
             retry_linearLayout.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         mHandler = new Handler();
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -186,20 +168,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     }
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.i(TAG, "PERMISSIONS RESULT");
-        if (requestCode == 1000) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "PERMISSION GRANTED!");
-            } else {
-                Log.i(TAG, "PERMISSION NOT GRANTED!");
-                finish();
-            }
-        }
-    }*/
 
     private void initDarkMode() {
         SharedPreferences appSettingPrefs = getSharedPreferences("AppSettingPrefs", 0);
@@ -237,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter(this);
-        if (!retry)
+        //if (!retry)
             scanLeDevice(true);
     }
 
@@ -268,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
                 search_linearLayout.setVisibility(View.GONE);
 
-                if (add) {
+                if (!mLeDeviceListAdapter.mLeDevices.isEmpty()) {
                     devices_scrollview.setVisibility(View.VISIBLE);
                     device_recyclerView.setAdapter(mLeDeviceListAdapter);
                     device_recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -303,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         locEnablerLL.setVisibility(View.GONE);
         Intent enableLocIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         int REQUEST_ENABLE_LOC = 1;
-        startActivityForResult(enableLocIntent,REQUEST_ENABLE_LOC);
+        startActivityForResult(enableLocIntent, REQUEST_ENABLE_LOC);
     }
     @OnClick (R.id.bluetoothONbtn)
     public void enableBluetooth(View v){

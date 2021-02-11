@@ -43,7 +43,9 @@
     <string name="lb_ready_scan">Ready to Scan</string>
     <string name="lb_hold">Hold</string>
     <string name="lb_record">Start Recording</string>
-    <string name="lb_scanning">SCANNING ...</string>
+    <string name="lb_manual_scanning">MANUAL SCANNING ...</string>
+    <string name="lb_aerial_scanning">AERIAL SCANNING ...</string>
+    <string name="lb_stationary_scanning">STATIONARY SCANNING ...</string>
     <string name="lb_frequency">Frequency</string>
     <string name="lb_pulse_rate">Pulse Rate</string>
     <string name="lb_sig">SIG</string>
@@ -56,7 +58,7 @@
     <string name="lb_tag_type">Tag Type</string>
     <string name="lb_code">Code</string>
     <string name="lb_scan_rate">Scan Rate (seconds)</string>
-    <string name="lb_selected_frequency">Selected Frequency</string>
+    <string name="lb_selected_frequency">Selected Frequency Table</string>
     <string name="lb_number_antennas">Number of Antennas</string>
     <string name="lb_timeout">Timeout (seconds)</string>
     <string name="lb_edit_defaults">Edit Defaults</string>
@@ -118,6 +120,7 @@
     <string name="lb_serial_number">Serial Number: </string>
     <string name="lb_snapshot_interval_min">Snapshot Interval (min): </string>
     <string name="lb_snapshot_interval_ms">Snapshot Interval (ms): </string>
+    <string name="lb_frequency_range">Frequency Range:</string>
     <string name="lb_bytes_stored">Bytes Stored: </string>
     <string name="lb_battery">Battery (%): </string>
     <string name="lb_memory_used_percent">Memory Used (%):</string>

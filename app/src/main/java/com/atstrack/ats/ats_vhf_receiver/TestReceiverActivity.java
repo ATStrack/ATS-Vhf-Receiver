@@ -44,6 +44,8 @@ public class TestReceiverActivity extends AppCompatActivity {
     ConstraintLayout running_test_constraintLayout;
     @BindView(R.id.test_complete_linearLayout)
     LinearLayout test_complete_linearLayout;
+    @BindView(R.id.range_textView)
+    TextView range_textView;
     @BindView(R.id.battery_textView)
     TextView battery_textView;
     @BindView(R.id.bytes_stored_textView)
@@ -275,15 +277,7 @@ public class TestReceiverActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 
     private int findPageNumber(byte[] packet) {
@@ -295,6 +289,14 @@ public class TestReceiverActivity extends AppCompatActivity {
     }
 
     private void downloadData(byte[] data) {
+        String range;
+        int baseFrequency = Integer.parseInt(Converters.getDecimalValue(data[23])) * 1000;
+        range = String.valueOf(baseFrequency).substring(0, 3) + "." + String.valueOf(baseFrequency).substring(3) + "-";
+        int frequencyRange = ((Integer.parseInt(Converters.getDecimalValue(data[23])) +
+                Integer.parseInt(Converters.getDecimalValue(data[24]))) * 1000) - 1;
+        range += String.valueOf(frequencyRange).substring(0, 3) + "." + String.valueOf(frequencyRange).substring(3);
+
+        range_textView.setText(range);
         battery_textView.setText(Converters.getDecimalValue(data[1]));
         int numberPage = findPageNumber(new byte[]{data[18], data[17], data[16], data[15]});
         int lastPage = findPageNumber(new byte[]{data[22], data[21], data[20], data[19]});

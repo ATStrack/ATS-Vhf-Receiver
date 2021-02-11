@@ -45,12 +45,8 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import static com.atstrack.ats.ats_vhf_receiver.R.color.colorbackground;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colorbody;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colorbodypair;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colorheader;
 import static com.atstrack.ats.ats_vhf_receiver.R.color.colortext;
 import static com.atstrack.ats.ats_vhf_receiver.R.color.colortextbutton;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colortexttable;
 import static com.atstrack.ats.ats_vhf_receiver.R.color.dark;
 
 public class EditTablesActivity extends AppCompatActivity {
@@ -484,48 +480,6 @@ public class EditTablesActivity extends AppCompatActivity {
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-        /*getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Connect to device
-
-        int heightPixels = getResources().getDisplayMetrics().heightPixels;
-        ViewGroup.LayoutParams params = editTables.getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.height = heightPixels * 3 / 4;
-        editTables.setLayoutParams(params);
-        longTable = 0;
-
-        final Intent intent = getIntent();
-        type = intent.getExtras().getString("type");
-
-        //Init connect to device
-        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
-        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-        //Finish connect to device
-
-        count = intent.getExtras().getInt("count");
-        tables = new int[count][];
-        if (!type.equals("createtable")) {
-            for (int i = 0; i < count; i++)
-                tables[i] = intent.getExtras().getIntArray("table" + i);
-
-            countTablesSelected = intent.getExtras().getInt("countTablesSelected");
-            idTablesSelected = intent.getExtras().getIntArray("idTablesSelected");
-            tablesSelected = new int[countTablesSelected][100];
-        } else {
-            countTablesSelected = 1;
-            idTablesSelected = new int[]{idInit};
-            tablesSelected = new int[countTablesSelected][100];
-        }
-        insertTable();
-
-        createHeader();
-        tableDynamic = new TableDynamic(tableLayout, this);
-        tableDynamic.addType(type);
-        tableDynamic.addLongTable(longTable);
-        tableDynamic.addHeader(header);
-        tableDynamic.addTable(tablesSelected);*/
     }
 
     @Override
@@ -608,15 +562,7 @@ public class EditTablesActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 
     private void showTable() {
@@ -706,122 +652,4 @@ public class EditTablesActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
-    /*@Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Warning");
-        builder.setMessage("Are you sure you want to discard your changes?");
-        builder.setNegativeButton("No", null);
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            super.onBackPressed();
-        });
-        builder.show();
-    }
-
-    public void createHeader(){
-        header = new String[countTablesSelected];
-        for (int i=0;i<countTablesSelected;i++){
-            header[i] = "Table " + ((idTablesSelected[i] % 1000) + 1);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG,"Connect request result= " + result);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbindService(mServiceConnection);
-        mBluetoothLeService = null;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.gatt_services, menu);
-        if (mConnected) {
-            menu.findItem(R.id.menu_connect).setVisible(false);
-            menu.findItem(R.id.menu_disconnect).setVisible(true);
-        } else {
-            menu.findItem(R.id.menu_connect).setVisible(true);
-            menu.findItem(R.id.menu_disconnect).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_connect:
-                mBluetoothLeService.connect(mDeviceAddress);
-                return true;
-            case R.id.menu_disconnect:
-                mBluetoothLeService.disconnect();
-                return true;
-            case android.R.id.home:
-                Intent i=new Intent(this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void insertTable(){
-        if (!type.equals("addnewtable") && !type.equals("createtable")) {
-            for (int i = 0; i < countTablesSelected; i++) {
-                int row = idTablesSelected[i] - idInit;
-                for (int j = 0; j < tables[row].length; j++)
-                    tablesSelected[i][j] = tables[row][j];
-                if (tables[row].length > longTable)
-                    longTable = tables[row].length;
-            }
-        }
-    }
-
-    public int findCount(int index){
-        int count = 0;
-        while (count < 100 && tablesSelected[index][count] > 0){
-            count++;
-        }
-        return count;
-    }
-
-    public void setTableChanged(int count, int index, int id){
-        int[] table = new int[count];
-        for (int i = 0; i < count; i++){
-            table[i] = tableDynamic.table[index][i];
-        }
-        if (type.equals("addnewtable"))
-            addNewTable(table);
-        else
-            tables[id - idInit] = table;
-    }
-
-    public void addNewTable(int[] table){
-        int[][] newTablesReceived = new int[tables.length + 1][];
-        for (int i = 0; i < tables.length; i++)
-            newTablesReceived[i] = tables[i];
-        newTablesReceived[tables.length] = table;
-        tables = newTablesReceived;
-    }
-
-    public void onRestartConnection() {
-        mBluetoothLeService.disconnect();
-        SystemClock.sleep(1000);
-        mBluetoothLeService.connect(mDeviceAddress);
-    }*/
 }

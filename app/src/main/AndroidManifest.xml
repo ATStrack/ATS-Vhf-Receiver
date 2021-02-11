@@ -27,7 +27,6 @@
         <activity android:name=".MainMenuActivity" android:screenOrientation="portrait"/>
         <activity android:name=".EditTablesActivity" android:screenOrientation="portrait"/>
         <activity android:name=".TableOverviewActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".FreqTablesActivity" android:screenOrientation="portrait"/>
         <activity android:name=".GetDataActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"

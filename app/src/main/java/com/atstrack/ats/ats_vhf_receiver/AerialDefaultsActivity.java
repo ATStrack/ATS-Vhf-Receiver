@@ -58,14 +58,12 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
-    private Handler mHandler;
     private int heightPixels;
     private int widthPixels;
 
@@ -189,8 +187,6 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
 
-        mHandler = new Handler();
-
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
@@ -271,15 +267,7 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 
     private void downloadData(byte[] data) {

@@ -29,7 +29,7 @@
                 android:layout_marginTop="26dp"
                 android:background="@color/colortextbutton"
                 android:columnCount="2"
-                android:rowCount="5">
+                android:rowCount="7">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,6 +104,42 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="14dp"
+                    android:text="@string/lb_gps"
+                    android:textColor="@color/colortext"
+                    android:textSize="12dp"/>
+
+                <TextView
+                    android:id="@+id/gps_stationary_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="14dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/dark"
+                    android:textSize="16dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="14dp"
+                    android:text="@string/lb_auto_record"
+                    android:textColor="@color/colortext"
+                    android:textSize="12dp"/>
+
+                <TextView
+                    android:id="@+id/auto_record_stationary_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="14dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/dark"
+                    android:textSize="16dp"
+                    android:textStyle="bold"/>
+
+                <TextView
                     android:id="@+id/edit_stationary_defaults_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -158,174 +194,170 @@
             android:layout_weight="6">
 
             <LinearLayout
-                android:id="@+id/menu_scanning"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/stationary_exit_image"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/menu_scanning"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_close_icon_opt"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:layout_margin="14dp"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/stationary_exit_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_close_icon_opt"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="6"
+                        android:textColor="@color/colortext"
+                        android:text="@string/lb_stationary_scanning"
+                        android:textSize="18dp"/>
+
+                    <ImageView
+                        android:id="@+id/stationary_setting_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_setting"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/table_freq_stationary"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="18dp"
+                    android:padding="6dp"
                     android:gravity="center"
-                    android:layout_weight="6"
-                    android:textColor="@color/colortext"
-                    android:text="@string/lb_scanning"
-                    android:textSize="18dp"/>
+                    android:background="@color/colortextbutton"
+                    android:textSize="18dp"
+                    android:textColor="@color/colortext"/>
 
-                <ImageView
-                    android:id="@+id/stationary_setting_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_setting"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="18dp"
+                    android:padding="8dp"
+                    android:orientation="vertical"
+                    android:background="@color/colortextbutton"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/lbFirstResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbSecondResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbThirdResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbForthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbFifthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbSixthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbSeventhResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbEighthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbNinthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbTenthResult_stationary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/colortext"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginTop="26dp"
-                android:background="@color/colortextbutton"
-                android:columnCount="2"
-                android:rowCount="6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/menu_scanning">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_table_row"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/row_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_frequency"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/frequency_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_time"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/time_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_antenna"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/antenna_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_tx_data"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/tx_data_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:text="@string/lb_sig"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-                <TextView
-                    android:id="@+id/sig_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/dark"
-                    android:textSize="16dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/hold_stationary_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
-                    android:layout_gravity="start"
-                    android:text="@string/lb_hold"
-                    android:textColor="@color/colorbutton"
-                    android:textSize="18dp"/>
-
-            </GridLayout>
 
             <Button
                 android:id="@+id/record_stationary_button"

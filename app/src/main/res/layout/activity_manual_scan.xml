@@ -75,7 +75,7 @@
                     android:gravity="center"
                     android:layout_weight="6"
                     android:textColor="@color/colortext"
-                    android:text="@string/lb_scanning"
+                    android:text="@string/lb_manual_scanning"
                     android:textSize="18dp"/>
 
                 <ImageView

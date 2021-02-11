@@ -191,14 +191,6 @@ public class SetTransmitterTypeActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 }

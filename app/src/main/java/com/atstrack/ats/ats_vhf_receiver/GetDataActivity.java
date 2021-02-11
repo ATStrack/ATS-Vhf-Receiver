@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,12 @@ import java.util.zip.ZipOutputStream;
 
 public class GetDataActivity extends AppCompatActivity {
 
+    @BindView(R.id.memory_used_percent_textView)
+    TextView memory_used;
+    @BindView(R.id.memory_used_progressBar)
+    ProgressBar memory_used_progressBar;
+    @BindView(R.id.bytes_stored)
+    TextView bytes_stored;
     @BindView(R.id.iv_ProgressGIF)
     ImageView progressGIF;
     @BindView(R.id.percentage)
@@ -150,7 +157,9 @@ public class GetDataActivity extends AppCompatActivity {
 //                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter1.equals("downloadData"))
+                    if (parameter1.equals("test"))
+                        onClickTest();
+                    else if (parameter1.equals("downloadData"))
                         onClickDownloadData();
                     else if (parameter1.equals("eraseData"))
                         onClickEraseData();
@@ -179,6 +188,8 @@ public class GetDataActivity extends AppCompatActivity {
                     }
                     if (parameter1.equals("eraseData"))
                         showMessage(packet);
+                    if (parameter1.equals("test"))
+                        downloadTest(packet);
                 }
             }
             catch (Exception e) {
@@ -194,6 +205,12 @@ public class GetDataActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
+    }
+
+    private void onClickTest(){
+        UUID uservice=UUID.fromString("fab2d796-3364-4b54-b9a1-7735545814ad");
+        UUID uservicechar=UUID.fromString("42d03a17-ebe1-4072-97a5-393f4a0515d7");
+        mBluetoothLeService.readCharacteristicDiagnostic(uservice,uservicechar);
     }
 
     public void onClickDownloadData() {
@@ -262,6 +279,7 @@ public class GetDataActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        parameter1 = "test";
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
@@ -322,15 +340,7 @@ public class GetDataActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 
     @Override
@@ -341,6 +351,14 @@ public class GetDataActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void downloadTest(byte[] data) {
+        int numberPage = findPageNumber(new byte[]{data[18], data[17], data[16], data[15]});
+        int lastPage = findPageNumber(new byte[]{data[22], data[21], data[20], data[19]});
+        memory_used.setText((numberPage * 100 / lastPage) + "%");
+        memory_used_progressBar.setProgress(numberPage * 100 / lastPage);
+        bytes_stored.setText("Memory Used " + "(" + (numberPage * 2048) + " bytes stored)");
     }
 
     private int findPageNumber(byte[] packet) {
@@ -396,7 +414,7 @@ public class GetDataActivity extends AppCompatActivity {
                 }
                 if ((pageNumber + 1) == findPageNumber(packet) && (pageNumber + 1) < finalPageNumber) {
                     pageNumber = findPageNumber(packet);
-                    percent += (100 / finalPageNumber);
+                    percent = (pageNumber / finalPageNumber) * 100;
                     percentage.setText(percent + "%");
                 } else {
                     progressGIF.setVisibility(View.GONE);

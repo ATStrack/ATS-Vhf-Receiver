@@ -118,6 +118,7 @@ public class StartScanningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AerialScanActivity.class);
         intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra("scanning", false);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -127,6 +128,7 @@ public class StartScanningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StationaryScanActivity.class);
         intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra("scanning", false);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -185,7 +187,13 @@ public class StartScanningActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
-                finish();
+                Intent intent = new Intent(this, MainMenuActivity.class);
+                intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+                intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                mBluetoothLeService.disconnect();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -219,14 +227,6 @@ public class StartScanningActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 }

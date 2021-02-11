@@ -39,7 +39,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
+import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 import com.bumptech.glide.Glide;
+
+import java.util.UUID;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -80,6 +83,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private Handler mHandlerMenu;
     private int heightPixels;
     private int widthPixels;
+    private boolean scanning;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -101,6 +105,7 @@ public class MainMenuActivity extends AppCompatActivity {
     };
 
     private boolean mConnected = false;
+    private String parameter;
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -114,10 +119,12 @@ public class MainMenuActivity extends AppCompatActivity {
                     mConnected = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-
+                    if (parameter.equals("scanning"))
+                        onClickScanning();
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-
+                    if (parameter.equals("scanning"))
+                        download(packet);
                 }
             }
             catch (Exception e) {
@@ -133,6 +140,12 @@ public class MainMenuActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
+    }
+
+    private void onClickScanning(){
+        UUID uservice=UUID.fromString("fab2d796-3364-4b54-b9a1-7735545814ad");
+        UUID uservicechar=UUID.fromString("cae6ad69-2a38-4285-b6f8-6a2f8517d1fd");
+        mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
     @OnClick(R.id.connecting_device_mainMenu)
@@ -220,6 +233,7 @@ public class MainMenuActivity extends AppCompatActivity {
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         device_name_mainMenu.setText(mDeviceName);
         device_address_mainMenu.setText(mDeviceAddress);
+        parameter = "scanning";
 
         check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
         final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
@@ -227,6 +241,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         mHandlerMenu = new Handler();
         mHandler = new Handler();
+        scanning = false;
         connectingToReceiver();
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
@@ -271,16 +286,19 @@ public class MainMenuActivity extends AppCompatActivity {
         if (mConnected) {
             connecting_device_linearLayout.setVisibility(View.VISIBLE);
         } else if (menu_linearLayout.getVisibility() == View.VISIBLE) {
-            showMessageDisconnect();
+            showMessageDisconnect("Receiver Disconnected");
         }
         return true;
     }
 
-    private void showMessageDisconnect() {
+    private void showMessageDisconnect(String message) {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this).create();
+
+        TextView disconnect_message = view.findViewById(R.id.disconnect_message);
+        disconnect_message.setText(message);
 
         Button continue_button = view.findViewById(R.id.continue_button);
         continue_button.setOnClickListener(new View.OnClickListener() {
@@ -296,15 +314,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 1 / 2);
-
-        /*mHandler.postDelayed(() -> {
-            dialog.dismiss();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }, MESSAGE_PERIOD);*/
+        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
     }
 
     private void connectingToReceiver() {
@@ -328,22 +338,60 @@ public class MainMenuActivity extends AppCompatActivity {
                 state_textView.setTextColor(ContextCompat.getColor(this, R.color.colorbutton));
                 state_view.setBackgroundResource(R.color.colorbutton);
                 mHandlerMenu.postDelayed(() -> {
-                    getSupportActionBar().show();
-                    vhf_linearLayout.setVisibility(View.GONE);
-                    menu_linearLayout.setVisibility(View.VISIBLE);
-                    state_textView.setVisibility(View.GONE);
-                    check_avd_anim.setVisibility(View.GONE);
+                    if (!scanning) {
+                        getSupportActionBar().show();
+                        vhf_linearLayout.setVisibility(View.GONE);
+                        menu_linearLayout.setVisibility(View.VISIBLE);
+                        state_textView.setVisibility(View.GONE);
+                        check_avd_anim.setVisibility(View.GONE);
+                    }
                 }, MESSAGE_PERIOD);
             } else {
-                SharedPreferences preferences = getSharedPreferences("Connection", 0);
+                /*SharedPreferences preferences = getSharedPreferences("Connection", 0);
                 SharedPreferences.Editor connectState = preferences.edit();
                 connectState.putBoolean("retry", true);
                 connectState.apply();
                 unbindService(mServiceConnection);
                 mBluetoothLeService = null;
                 Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                startActivity(intent);*/
+                showMessageDisconnect("Failed to connect to receiver");
             }
         }, CONNECT_PERIOD);
+    }
+
+    public void download(byte[] data) {
+        Log.i(TAG, "download");
+        switch (Converters.getHexValue(data[0])) {
+            case "41":
+                scanning = false;
+                break;
+            case "82":
+                scanning = true;
+                Intent intentA = new Intent(this, AerialScanActivity.class);
+                intentA.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+                intentA.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intentA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentA.putExtra("scanning", true);
+                intentA.putExtra("year", Converters.getDecimalValue(data[6]));
+                intentA.putExtra("month", Converters.getDecimalValue(data[7]));
+                startActivity(intentA);
+                mBluetoothLeService.disconnect();
+                break;
+            case "83":
+                scanning = true;
+                Intent intentS = new Intent(this, StationaryScanActivity.class);
+                intentS.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+                intentS.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intentS.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentS.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentS.putExtra("scanning", true);
+                intentS.putExtra("year", Converters.getDecimalValue(data[6]));
+                intentS.putExtra("month", Converters.getDecimalValue(data[7]));
+                startActivity(intentS);
+                mBluetoothLeService.disconnect();
+                break;
+        }
     }
 }

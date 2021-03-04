@@ -42,6 +42,8 @@ public class StationaryScanActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_stationaryScan)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_stationaryScan)
+    TextView percent_battery_textView;
     @BindView(R.id.ready_stationary_scan_LinearLayout)
     LinearLayout ready_stationary_scan_LinearLayout;
     @BindView(R.id.scan_rate_stationary_textView)
@@ -85,10 +87,12 @@ public class StationaryScanActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
     private boolean response = true;
@@ -240,6 +244,7 @@ public class StationaryScanActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StationaryDefaultsActivity.class);
         intent.putExtra(StationaryDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StationaryDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(StationaryDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -277,6 +282,7 @@ public class StationaryScanActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         scanning = intent.getExtras().getBoolean("scanning");
 
         mortality = false;
@@ -294,6 +300,7 @@ public class StationaryScanActivity extends AppCompatActivity {
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 
@@ -308,6 +315,7 @@ public class StationaryScanActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, StartScanningActivity.class);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intent.putExtra(AerialScanActivity.EXTRAS_BATTERY, mPercentBattery);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

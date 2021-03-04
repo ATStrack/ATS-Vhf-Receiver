@@ -69,6 +69,12 @@ import java.util.zip.ZipOutputStream;
 
 public class GetDataActivity extends AppCompatActivity {
 
+    @BindView(R.id.device_name_manageReceiverData)
+    TextView device_name_textView;
+    @BindView(R.id.device_address_manageReceiverData)
+    TextView device_address_textView;
+    @BindView(R.id.percent_battery_manageReceiverData)
+    TextView percent_battery_textView;
     @BindView(R.id.memory_used_percent_textView)
     TextView memory_used;
     @BindView(R.id.memory_used_progressBar)
@@ -81,14 +87,13 @@ public class GetDataActivity extends AppCompatActivity {
     TextView percentage;
     @BindView(R.id.subMenuLinearLayout)
     LinearLayout subMenu;
-    @BindView(R.id.device_name_manageReceiverData)
-    TextView device_name_textView;
-    @BindView(R.id.device_address_manageReceiverData)
-    TextView device_address_textView;
+
+    private final static String TAG = GetDataActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    private final static String TAG = GetDataActivity.class.getSimpleName();
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
+
     public final static char CR  = (char) 0x0D;
     public final static char LF  = (char) 0x0A;
     private static final int REQUEST_CODE_SIGN_IN = 1;
@@ -116,6 +121,7 @@ public class GetDataActivity extends AppCompatActivity {
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
 
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
@@ -279,10 +285,12 @@ public class GetDataActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter1 = "test";
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 
@@ -637,6 +645,7 @@ public class GetDataActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainMenuActivity.class);
             intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_NAME, mDeviceName);
             intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            intent.putExtra(MainMenuActivity.EXTRAS_BATTERY, mPercentBattery);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             mBluetoothLeService.disconnect();

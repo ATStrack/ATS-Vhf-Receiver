@@ -41,6 +41,8 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
     TextView device_name_textView;
     @BindView(R.id.device_address_stationaryDefaults)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_stationaryDefaults)
+    TextView percent_battery_textView;
     @BindView(R.id.stationary_tables_spinner)
     Spinner stationary_tables_spinner;
     @BindView(R.id.stationary_antennas_spinner)
@@ -58,10 +60,12 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -175,6 +179,7 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter = "stationary";
 
         ArrayAdapter<CharSequence> tablesAdapter = ArrayAdapter.createFromResource(this, R.array.tables, android.R.layout.simple_spinner_item);
@@ -189,6 +194,7 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 
@@ -300,6 +306,7 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
             Intent intent = new Intent(this, EditReceiverDefaultsActivity.class);
             intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
             intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             mBluetoothLeService.disconnect();

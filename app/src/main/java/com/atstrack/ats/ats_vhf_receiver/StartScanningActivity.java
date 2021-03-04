@@ -33,15 +33,19 @@ public class StartScanningActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_startScanning)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_startScanning)
+    TextView percent_battery_textView;
 
     private final static String TAG = StartScanningActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -109,6 +113,7 @@ public class StartScanningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ManualScanActivity.class);
         intent.putExtra(ManualScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(ManualScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(ManualScanActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -118,6 +123,7 @@ public class StartScanningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AerialScanActivity.class);
         intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialScanActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("scanning", false);
         startActivity(intent);
         mBluetoothLeService.disconnect();
@@ -128,6 +134,7 @@ public class StartScanningActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StationaryScanActivity.class);
         intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(StationaryScanActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("scanning", false);
         startActivity(intent);
         mBluetoothLeService.disconnect();
@@ -150,9 +157,11 @@ public class StartScanningActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 

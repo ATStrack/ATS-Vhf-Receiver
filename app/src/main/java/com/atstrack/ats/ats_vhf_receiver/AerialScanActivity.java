@@ -42,6 +42,8 @@ public class AerialScanActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_aerialScan)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_aerialScan)
+    TextView percent_battery_textView;
     @BindView(R.id.ready_aerial_scan_LinearLayout)
     LinearLayout ready_aerial_scan_LinearLayout;
     @BindView(R.id.scan_rate_aerial_textView)
@@ -85,10 +87,12 @@ public class AerialScanActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
     private boolean response = true;
@@ -240,6 +244,7 @@ public class AerialScanActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AerialDefaultsActivity.class);
         intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -269,7 +274,7 @@ public class AerialScanActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("AERIAL SCANNING");
+        getSupportActionBar().setTitle("MOBILE SCANNING");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;
@@ -277,6 +282,7 @@ public class AerialScanActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         scanning = intent.getExtras().getBoolean("scanning");
 
         mortality = false;
@@ -294,6 +300,8 @@ public class AerialScanActivity extends AppCompatActivity {
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
+
 
         mHandler = new Handler();
 
@@ -308,6 +316,7 @@ public class AerialScanActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, StartScanningActivity.class);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intent.putExtra(AerialScanActivity.EXTRAS_BATTERY, mPercentBattery);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -399,8 +408,10 @@ public class AerialScanActivity extends AppCompatActivity {
         selectedFrequency = Integer.parseInt(Converters.getDecimalValue(data[1]));
         numberAntennas = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
         number_antennas_aerial_textView.setText("" + numberAntennas);
-        scan_rate_aerial_textView.setText(Converters.getDecimalValue(data[3]));
         scanRate = Integer.parseInt(Converters.getDecimalValue(data[3]));
+        int size = Converters.getDecimalValue(data[3]).length();
+        scan_rate_aerial_textView.setText(
+                Converters.getDecimalValue(data[3]).substring(0, size - 1) + "." + Converters.getDecimalValue(data[3]).substring(size - 1));
         timeout_aerial_textView.setText(Converters.getDecimalValue(data[4]));
         timeout = Integer.parseInt(Converters.getDecimalValue(data[4]));
         gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;

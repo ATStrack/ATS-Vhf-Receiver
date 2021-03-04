@@ -35,16 +35,16 @@
 
     <!--START SCANNING-->
     <string name="lb_manual_scan">Manual Scan</string>
-    <string name="lb_aerial_scan">Aerial Scan</string>
+    <string name="lb_aerial_scan">Mobile Scan</string>
     <string name="lb_stationary_scan">Stationary Scan</string>
     <string name="lb_start_manual_scan">Start Manual Scan</string>
-    <string name="lb_start_aerial_scan">Start Aerial Scan</string>
+    <string name="lb_start_aerial_scan">Start Mobile Scan</string>
     <string name="lb_start_stationary_scan">Start Stationary Scan</string>
     <string name="lb_ready_scan">Ready to Scan</string>
     <string name="lb_hold">Hold</string>
     <string name="lb_record">Start Recording</string>
     <string name="lb_manual_scanning">MANUAL SCANNING ...</string>
-    <string name="lb_aerial_scanning">AERIAL SCANNING ...</string>
+    <string name="lb_aerial_scanning">MOBILE SCANNING ...</string>
     <string name="lb_stationary_scanning">STATIONARY SCANNING ...</string>
     <string name="lb_frequency">Frequency</string>
     <string name="lb_pulse_rate">Pulse Rate</string>
@@ -72,10 +72,10 @@
 
     <!--EDIT RECEIVER DEFAULTS-->
     <string name="lb_base_defaults">Base Defaults</string>
-    <string name="lb_aerial_defaults">Aerial Defaults</string>
+    <string name="lb_aerial_defaults">Mobile Defaults</string>
     <string name="lb_stationary_defaults">Stationary Defaults</string>
     <string name="lb_frequency_table_number">Frequency Table Number</string>
-    <string name="lb_scan_rat">Scan Rate (Seconds)</string>
+    <string name="lb_scan_rat">Scan Rate (Half Seconds)</string>
     <string name="lb_scan_timeout">Scan Timeout (Seconds)</string>
     <string name="lb_auto_record">Auto Record</string>
     <string name="lb_on">On</string>
@@ -104,6 +104,57 @@
         <item>6</item>
         <item>7</item>
         <item>8</item>
+    </string-array>
+    <string-array name="scanRate">
+        <item>1.5</item>0
+        <item>2.0</item>1
+        <item>2.5</item>2
+        <item>3.0</item>3
+        <item>3.5</item>4
+        <item>4.0</item>5
+        <item>4.5</item>6
+        <item>5.0</item>7
+        <item>5.5</item>8
+        <item>6.0</item>9
+        <item>6.5</item>10
+        <item>7.0</item>11
+        <item>7.5</item>12
+        <item>8.0</item>13
+        <item>8.5</item>14
+        <item>9.0</item>15
+        <item>9.5</item>16
+        <item>10.0</item>17
+        <item>10.5</item>18
+        <item>11.0</item>19
+        <item>11.5</item>20
+        <item>12.0</item>21
+        <item>12.5</item>22
+        <item>13.0</item>23
+        <item>13.5</item>24
+        <item>14.0</item>25
+        <item>14.5</item>26
+        <item>15.0</item>27
+        <item>15.5</item>28
+        <item>16.0</item>29
+        <item>16.5</item>30
+        <item>17.0</item>31
+        <item>17.5</item>32
+        <item>18.0</item>33
+        <item>18.5</item>34
+        <item>19.0</item>35
+        <item>19.5</item>36
+        <item>20.0</item>37
+        <item>20.5</item>38
+        <item>21.0</item>39
+        <item>21.5</item>40
+        <item>22.0</item>41
+        <item>22.5</item>42
+        <item>23.0</item>43
+        <item>23.5</item>44
+        <item>24.0</item>45
+        <item>24.5</item>46
+        <item>25.0</item>47
+        <item>25.5</item>48
     </string-array>
     <string name="lb_pulse_defaults">Pulse Defaults</string>
 

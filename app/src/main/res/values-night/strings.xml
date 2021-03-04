@@ -75,7 +75,7 @@
     <string name="lb_aerial_defaults">Aerial Defaults</string>
     <string name="lb_stationary_defaults">Stationary Defaults</string>
     <string name="lb_frequency_table_number">Frequency Table Number</string>
-    <string name="lb_scan_rat">Scan Rate (Seconds)</string>
+    <string name="lb_scan_rat">Scan Rate (Half Seconds)</string>
     <string name="lb_scan_timeout">Scan Timeout (Seconds)</string>
     <string name="lb_auto_record">Auto Record</string>
     <string name="lb_on">On</string>

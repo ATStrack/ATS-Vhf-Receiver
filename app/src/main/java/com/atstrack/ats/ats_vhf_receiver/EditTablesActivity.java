@@ -55,6 +55,8 @@ public class EditTablesActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_editTables)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_editTables)
+    TextView percent_battery_textView;
     @BindView(R.id.frequency_table)
     TableLayout frequency_table;
 
@@ -64,6 +66,7 @@ public class EditTablesActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private int number;
@@ -82,6 +85,7 @@ public class EditTablesActivity extends AppCompatActivity {
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -204,8 +208,9 @@ public class EditTablesActivity extends AppCompatActivity {
         mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
 
         Intent intent = new Intent(this, TableOverviewActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -449,9 +454,11 @@ public class EditTablesActivity extends AppCompatActivity {
         totalFrequencies = getIntent().getExtras().getInt("total");
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 
@@ -492,8 +499,9 @@ public class EditTablesActivity extends AppCompatActivity {
                     builder.setMessage("If you leave without saving you will lose your changes. Do you wish to continue?");
                     builder.setPositiveButton("Discard", (dialog, which) -> {
                         Intent intent = new Intent(this, TableOverviewActivity.class);
-                        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-                        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+                        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                        intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     });
@@ -644,8 +652,9 @@ public class EditTablesActivity extends AppCompatActivity {
             builder.setMessage("Completed.");
         builder.setPositiveButton("OK", (dialog, which) -> {
             Intent intent = new Intent(this, TableOverviewActivity.class);
-            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+            intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             mBluetoothLeService.disconnect();

@@ -47,9 +47,11 @@ import java.util.UUID;
 public class MainMenuActivity extends AppCompatActivity {
 
     @BindView(R.id.device_name_mainMenu)
-    TextView device_name_mainMenu;
+    TextView device_name_textView;
     @BindView(R.id.device_address_mainMenu)
-    TextView device_address_mainMenu;
+    TextView device_address_textView;
+    @BindView(R.id.percent_battery_mainMenu)
+    TextView percent_battery_textView;
     @BindView(R.id.menu_linearLayout)
     LinearLayout menu_linearLayout;
     @BindView(R.id.vhf_linearLayout)
@@ -73,11 +75,13 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
 
     private static final long MESSAGE_PERIOD = 1000;
     private static final long CONNECT_PERIOD = 3000;
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private Handler mHandler;
     private Handler mHandlerMenu;
@@ -182,6 +186,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, StartScanningActivity.class);
         intent.putExtra(StartScanningActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StartScanningActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(StartScanningActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -191,6 +196,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ReceiverConfigurationActivity.class);
         intent.putExtra(ReceiverConfigurationActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(ReceiverConfigurationActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(ReceiverConfigurationActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -200,6 +206,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GetDataActivity.class);
         intent.putExtra(GetDataActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(GetDataActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(GetDataActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -209,6 +216,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TestReceiverActivity.class);
         intent.putExtra(TestReceiverActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(TestReceiverActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(TestReceiverActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -231,8 +239,11 @@ public class MainMenuActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-        device_name_mainMenu.setText(mDeviceName);
-        device_address_mainMenu.setText(mDeviceAddress);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
+
+        device_name_textView.setText(mDeviceName);
+        device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
         parameter = "scanning";
 
         check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
@@ -361,7 +372,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void download(byte[] data) {
-        Log.i(TAG, "download");
         switch (Converters.getHexValue(data[0])) {
             case "41":
                 scanning = false;
@@ -371,6 +381,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent intentA = new Intent(this, AerialScanActivity.class);
                 intentA.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
                 intentA.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intentA.putExtra(AerialScanActivity.EXTRAS_BATTERY, mPercentBattery);
                 intentA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intentA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intentA.putExtra("scanning", true);
@@ -382,8 +393,9 @@ public class MainMenuActivity extends AppCompatActivity {
             case "83":
                 scanning = true;
                 Intent intentS = new Intent(this, StationaryScanActivity.class);
-                intentS.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-                intentS.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intentS.putExtra(StationaryScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+                intentS.putExtra(StationaryScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+                intentS.putExtra(StationaryScanActivity.EXTRAS_BATTERY, mPercentBattery);
                 intentS.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intentS.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intentS.putExtra("scanning", true);

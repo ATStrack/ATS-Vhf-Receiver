@@ -35,12 +35,14 @@ import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 
 import java.util.UUID;
 
-public class AerialDefaultsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AerialDefaultsActivity extends AppCompatActivity {
 
     @BindView(R.id.device_name_aerialDefaults)
     TextView device_name_textView;
     @BindView(R.id.device_address_aerialDefaults)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_aerialDefaults)
+    TextView percent_battery_textView;
     @BindView(R.id.aerial_tables_spinner)
     Spinner aerial_tables_spinner;
     @BindView(R.id.aerial_antennas_spinner)
@@ -51,16 +53,18 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
     SwitchCompat aerial_auto_record_switch;
     @BindView(R.id.scan_timeout_aerial_defaults_editText)
     EditText scan_timeout_aerial_defaults_editText;
-    @BindView(R.id.scan_rate_aerial_defaults_editText)
-    EditText scan_rate_aerial_defaults_editText;
+    @BindView(R.id.aerial_scanRate_spinner)
+    Spinner aerial_scanRate_spinner;
 
     private final static String TAG = AerialDefaultsActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -140,17 +144,18 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
     }
 
     private void onClickSave() {
+        frequencyTableNumber = Integer.parseInt(aerial_tables_spinner.getSelectedItem().toString());
+        numberOfAntennas = Integer.parseInt(aerial_antennas_spinner.getSelectedItem().toString());
         int info = (aerial_gps_switch.isChecked() ? 1 : 0) << 7;
         info = info | ((aerial_auto_record_switch.isChecked() ? 1 : 0) << 6);
-        info  = info | (numberOfAntennas + 1);
-        byte[] b = new byte[]{(byte) 0x7D, (byte) (frequencyTableNumber + 1), (byte) info,
-                (byte) Integer.parseInt(scan_rate_aerial_defaults_editText.getText().toString()),
+        info = info | numberOfAntennas;
+        byte[] b = new byte[]{(byte) 0x7D, (byte) frequencyTableNumber, (byte) info,
+                (byte) Integer.parseInt(aerial_scanRate_spinner.getSelectedItem().toString().replace(".", "")),
                 (byte) Integer.parseInt(scan_timeout_aerial_defaults_editText.getText().toString()), (byte) 0x0, (byte) 0x0, (byte) 0x0};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
-
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b);
         finish();
         mBluetoothLeService.disconnect();
     }
@@ -164,7 +169,7 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("AERIAL DEFAULTS");
+        getSupportActionBar().setTitle("MOBILE DEFAULTS");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;
@@ -172,20 +177,24 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter = "aerial";
 
         ArrayAdapter<CharSequence> tablesAdapter = ArrayAdapter.createFromResource(this, R.array.tables, android.R.layout.simple_spinner_item);
         tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         aerial_tables_spinner.setAdapter(tablesAdapter);
-        aerial_tables_spinner.setOnItemSelectedListener(this);
 
         ArrayAdapter<CharSequence> antennasAdapter = ArrayAdapter.createFromResource(this, R.array.antennas, android.R.layout.simple_spinner_item);
         antennasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         aerial_antennas_spinner.setAdapter(antennasAdapter);
-        aerial_antennas_spinner.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> scanRateAdapter = ArrayAdapter.createFromResource(this, R.array.scanRate, android.R.layout.simple_spinner_item);
+        scanRateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        aerial_scanRate_spinner.setAdapter(scanRateAdapter);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -201,20 +210,6 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if (view.getId() == aerial_tables_spinner.getId()) {
-            frequencyTableNumber = i;
-        } else {
-            numberOfAntennas = i;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     @Override
@@ -280,7 +275,15 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
         aerial_auto_record_switch.setChecked(autoRecord == 1);
         int antennaNumber = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
         aerial_antennas_spinner.setSelection(antennaNumber - 1);
-        scan_rate_aerial_defaults_editText.setText(Converters.getDecimalValue(data[3]));
+        int index = 0;
+        for (int i = 0; i < 49; i++) {
+            String item = aerial_scanRate_spinner.getItemAtPosition(i).toString().replace(".", "");
+            if (item.equals(Converters.getDecimalValue(data[3]))) {
+                index = i;
+                break;
+            }
+        }
+        aerial_scanRate_spinner.setSelection(index);
         scan_timeout_aerial_defaults_editText.setText(Converters.getDecimalValue(data[4]));
     }
 
@@ -295,16 +298,11 @@ public class AerialDefaultsActivity extends AppCompatActivity implements Adapter
             Intent intent = new Intent(this, EditReceiverDefaultsActivity.class);
             intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
             intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             mBluetoothLeService.disconnect();
         });
         builder.show();
-    }
-
-    public void onRestartConnection() {
-        mBluetoothLeService.disconnect();
-        SystemClock.sleep(1000);
-        mBluetoothLeService.connect(mDeviceAddress);
     }
 }

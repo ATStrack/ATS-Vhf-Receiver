@@ -35,15 +35,19 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_receiverConfiguration)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_receiverConfiguration)
+    TextView percent_battery_textView;
 
     private final static String TAG = ReceiverConfigurationActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -109,8 +113,9 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
     @OnClick(R.id.edit_frequency_tables_button)
     public void onClickEditFrequencyTables(View v){
         Intent intent = new Intent(this, TableOverviewActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivityForResult(intent, 0);
         mBluetoothLeService.disconnect();
     }
@@ -120,6 +125,7 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditReceiverDefaultsActivity.class);
         intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -129,6 +135,7 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SetTransmitterTypeActivity.class);
         intent.putExtra(SetTransmitterTypeActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(SetTransmitterTypeActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(SetTransmitterTypeActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -138,6 +145,7 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CloneReceiverActivity.class);
         intent.putExtra(CloneReceiverActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(CloneReceiverActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(CloneReceiverActivity.EXTRAS_BATTERY, mPercentBattery);
         startActivity(intent);
         mBluetoothLeService.disconnect();
     }
@@ -159,9 +167,11 @@ public class ReceiverConfigurationActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         mHandler = new Handler();
 

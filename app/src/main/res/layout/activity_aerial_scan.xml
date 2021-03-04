@@ -365,7 +365,7 @@
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="12dp"
                     android:background="@color/colorbutton"
-                    android:text="@string/lb_record"
+                    android:text="@string/lb_hold"
                     android:textColor="@color/colortextbutton"
                     android:textSize="20dp"/>
 

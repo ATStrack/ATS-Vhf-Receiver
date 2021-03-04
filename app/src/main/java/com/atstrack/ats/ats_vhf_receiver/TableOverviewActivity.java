@@ -84,6 +84,8 @@ public class TableOverviewActivity extends AppCompatActivity {
     TextView device_name_textView;
     @BindView(R.id.device_address_tableOverview)
     TextView device_address_textView;
+    @BindView(R.id.percent_battery_tableOverview)
+    TextView percent_battery_textView;
     @BindView(R.id.table1_frequency)
     TextView table1_frequency;
     @BindView(R.id.table2_frequency)
@@ -119,6 +121,7 @@ public class TableOverviewActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_OPEN_STORAGE = 3;
@@ -135,6 +138,7 @@ public class TableOverviewActivity extends AppCompatActivity {
 
     private String mDeviceName;
     private String mDeviceAddress;
+    private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
@@ -554,8 +558,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table1)
     public void onClickTable1(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 1);
         intent.putExtra("total", (int)data[1]);
         intent.putExtra("isFile", isFile);
@@ -572,8 +577,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table2)
     public void onClickTable2(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 2);
         intent.putExtra("total", (int)data[2]);
         intent.putExtra("isFile", isFile);
@@ -590,8 +596,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table3)
     public void onClickTable3(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 3);
         intent.putExtra("total", (int)data[3]);
         if (isFile) {
@@ -607,8 +614,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table4)
     public void onClickTable4(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 4);
         intent.putExtra("total", (int)data[4]);
         if (isFile) {
@@ -624,8 +632,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table5)
     public void onClickTable5(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 5);
         intent.putExtra("total", (int)data[5]);
         if (isFile) {
@@ -641,8 +650,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table6)
     public void onClickTable6(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 6);
         intent.putExtra("total", (int)data[6]);
         if (isFile) {
@@ -658,8 +668,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table7)
     public void onClickTable7(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 7);
         intent.putExtra("total", (int)data[7]);
         if (isFile) {
@@ -675,8 +686,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table8)
     public void onClickTable8(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 8);
         intent.putExtra("total", (int)data[8]);
         if (isFile) {
@@ -692,8 +704,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table9)
     public void onClickTable9(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 9);
         intent.putExtra("total", (int)data[9]);
         if (isFile) {
@@ -709,8 +722,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table10)
     public void onClickTable10(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 10);
         intent.putExtra("total", (int)data[10]);
         if (isFile) {
@@ -726,8 +740,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table11)
     public void onClickTable11(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 11);
         intent.putExtra("total", (int)data[11]);
         if (isFile) {
@@ -743,8 +758,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     @OnClick(R.id.table12)
     public void onClickTable12(View v) {
         Intent intent = new Intent(this, EditTablesActivity.class);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(EditTablesActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(EditTablesActivity.EXTRAS_BATTERY, mPercentBattery);
         intent.putExtra("number", 12);
         intent.putExtra("total", (int)data[12]);
         if (isFile) {
@@ -776,9 +792,11 @@ public class TableOverviewActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+        mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
+        percent_battery_textView.setText(mPercentBattery);
 
         google_drive_webView.getSettings().setJavaScriptEnabled(true);
         google_drive_webView.setWebViewClient(new Callback());

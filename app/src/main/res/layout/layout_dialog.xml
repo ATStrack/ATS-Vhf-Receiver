@@ -16,21 +16,21 @@
             android:id="@+id/btt_editTable"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorbutton"
+            android:backgroundTint="@color/mountain_meadow"
             android:text="@string/lb_edit_table"
             android:gravity="center"
             android:textColor="@color/colortextbutton"
-            android:textSize="@dimen/text" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btt_clearTable"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorbutton"
+            android:backgroundTint="@color/mountain_meadow"
             android:text="@string/lb_clear_table"
             android:gravity="center"
             android:textColor="@color/colortextbutton"
-            android:textSize="@dimen/text" />
+            android:textSize="14sp" />
 
         <!--TextView
             android:layout_width="match_parent"

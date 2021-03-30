@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_view_data"
             android:textColor="@color/colortextbutton"
             android:textSize="20dp" />
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_download_data"
             android:textColor="@color/colortextbutton"
             android:textSize="20dp" />
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_erase_data"
             android:textColor="@color/colortextbutton"
             android:textSize="20dp" />

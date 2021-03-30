@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,20 +47,26 @@ public class AerialScanActivity extends AppCompatActivity {
     TextView percent_battery_textView;
     @BindView(R.id.ready_aerial_scan_LinearLayout)
     LinearLayout ready_aerial_scan_LinearLayout;
+    @BindView(R.id.ready_aerial_textView)
+    TextView ready_aerial_textView;
     @BindView(R.id.scan_rate_aerial_textView)
     TextView scan_rate_aerial_textView;
     @BindView(R.id.selected_frequency_aerial_textView)
     TextView selected_frequency_aerial_textView;
     @BindView(R.id.number_antennas_aerial_textView)
     TextView number_antennas_aerial_textView;
-    @BindView(R.id.timeout_aerial_textView)
-    TextView timeout_aerial_textView;
     @BindView(R.id.gps_aerial_textView)
     TextView gps_aerial_textView;
     @BindView(R.id.auto_record_aerial_textView)
     TextView auto_record_aerial_textView;
-    @BindView(R.id.aerial_result_constraintLayout)
-    ConstraintLayout aerial_result_constraintLayout;
+    @BindView(R.id.edit_aerial_defaults_textView)
+    TextView edit_aerial_defaults_textView;
+    @BindView(R.id.frequency_empty_textView)
+    TextView frequency_empty_textView;
+    @BindView(R.id.start_aerial_button)
+    Button start_aerial_button;
+    @BindView(R.id.aerial_result_linearLayout)
+    LinearLayout aerial_result_linearLayout;
     @BindView(R.id.table_freq_aerial)
     TextView table_freq;
     @BindView(R.id.lbFirstResult_aerial)
@@ -105,8 +112,7 @@ public class AerialScanActivity extends AppCompatActivity {
     private String currentData;
     private int selectedFrequency;
     private int numberAntennas;
-    private int scanRate;
-    private int timeout;
+    private float scanRate;
     private int gps;
     private int autoRecord;
     private String year;
@@ -200,7 +206,7 @@ public class AerialScanActivity extends AppCompatActivity {
         int ms = currentDate.get(Calendar.MILLISECOND);
 
         byte[] b = new byte[]{
-                (byte) 0x82, (byte) selectedFrequency, (byte) numberAntennas, (byte) scanRate, (byte) timeout, (byte) gps, (byte) autoRecord,
+                (byte) 0x82, (byte) selectedFrequency, (byte) numberAntennas, (byte) (scanRate * 10), 0, (byte) gps, (byte) autoRecord,
                 (byte) 0xff, (byte) 0x7f, (byte) (YY % 100), (byte) MM, (byte) DD, (byte) hh, (byte) mm, (byte) ss, (byte) (ms / 100), (byte) (ms % 100)};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
@@ -222,21 +228,17 @@ public class AerialScanActivity extends AppCompatActivity {
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b, true);
+        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
 
         scanning = false;
         getSupportActionBar().show();
         clear();
-        aerial_result_constraintLayout.setVisibility(View.GONE);
+        aerial_result_linearLayout.setVisibility(View.GONE);
         ready_aerial_scan_LinearLayout.setVisibility(View.VISIBLE);
-    }
 
-    private void onClickWait() {
-        if (response) {
-            showMessage(new byte[]{0});
-            response = false;
-        }
-        mBluetoothLeService.waiting();
+        new Handler().postDelayed(() -> {
+            onRestartConnection();
+        }, 500);
     }
 
     @OnClick(R.id.edit_aerial_defaults_textView)
@@ -256,7 +258,7 @@ public class AerialScanActivity extends AppCompatActivity {
         //onRestartConnection();
         getSupportActionBar().hide();
         ready_aerial_scan_LinearLayout.setVisibility(View.GONE);
-        aerial_result_constraintLayout.setVisibility(View.VISIBLE);
+        aerial_result_linearLayout.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.aerial_exit_image)
@@ -293,7 +295,7 @@ public class AerialScanActivity extends AppCompatActivity {
             month = intent.getExtras().getString("month");
             getSupportActionBar().hide();
             ready_aerial_scan_LinearLayout.setVisibility(View.GONE);
-            aerial_result_constraintLayout.setVisibility(View.VISIBLE);
+            aerial_result_linearLayout.setVisibility(View.VISIBLE);
         } else {
             parameter = "aerial";
         }
@@ -301,7 +303,6 @@ public class AerialScanActivity extends AppCompatActivity {
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
-
 
         mHandler = new Handler();
 
@@ -381,21 +382,15 @@ public class AerialScanActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     private void downloadData(byte[] data) {
@@ -404,20 +399,31 @@ public class AerialScanActivity extends AppCompatActivity {
             showMessage(new byte[]{0});
             response = true;
         }
-        selected_frequency_aerial_textView.setText(Converters.getDecimalValue(data[1]));
-        selectedFrequency = Integer.parseInt(Converters.getDecimalValue(data[1]));
-        numberAntennas = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
-        number_antennas_aerial_textView.setText("" + numberAntennas);
-        scanRate = Integer.parseInt(Converters.getDecimalValue(data[3]));
-        int size = Converters.getDecimalValue(data[3]).length();
-        scan_rate_aerial_textView.setText(
-                Converters.getDecimalValue(data[3]).substring(0, size - 1) + "." + Converters.getDecimalValue(data[3]).substring(size - 1));
-        timeout_aerial_textView.setText(Converters.getDecimalValue(data[4]));
-        timeout = Integer.parseInt(Converters.getDecimalValue(data[4]));
-        gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;
-        gps_aerial_textView.setText((gps == 1) ? "ON" : "OFF");
-        autoRecord = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 6 & 1;
-        auto_record_aerial_textView.setText((autoRecord == 1) ? "ON" : "OFF");
+        parameter = "aerial";
+        if (Converters.getHexValue(data[0]).equals("7D")) {
+            if (Integer.parseInt(Converters.getDecimalValue(data[1])) == 0) {
+                selected_frequency_aerial_textView.setText("None");
+                ready_aerial_textView.setText("Not Ready to Scan");
+                frequency_empty_textView.setVisibility(View.VISIBLE);
+                start_aerial_button.setEnabled(false);
+                start_aerial_button.setTextAppearance(this, R.style.button_primary_disabled);
+            } else {
+                selected_frequency_aerial_textView.setText(Converters.getDecimalValue(data[1]));
+                ready_aerial_textView.setText("Ready to Scan");
+                frequency_empty_textView.setVisibility(View.GONE);
+                start_aerial_button.setEnabled(true);
+                start_aerial_button.setTextAppearance(this, R.style.button_primary);
+            }
+            selectedFrequency = Integer.parseInt(Converters.getDecimalValue(data[1]));
+            numberAntennas = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
+            number_antennas_aerial_textView.setText("" + numberAntennas);
+            scanRate = (float) (Integer.parseInt(Converters.getDecimalValue(data[3])) * 0.1);
+            scan_rate_aerial_textView.setText(String.valueOf(scanRate));
+            gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;
+            gps_aerial_textView.setText((gps == 1) ? "ON" : "OFF");
+            autoRecord = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 6 & 1;
+            auto_record_aerial_textView.setText((autoRecord == 1) ? "ON" : "OFF");
+        }
     }
 
     public void setCurrentLog(byte[] data) {
@@ -452,7 +458,7 @@ public class AerialScanActivity extends AppCompatActivity {
                     freqOffset = (150 * 1000) + (Integer.parseInt(Converters.getDecimalValue(b)) + freqOffset);
                     break;
                 case 4:
-                    currentData += month + "/" + Converters.getDecimalValue(b) + "/" + year + " ";
+                    currentData += month + "/" + Converters.getDecimalValue(b) + "/" + year + "     ";
                     break;
                 case 5:
                     currentData += Converters.getDecimalValue(b) + ":";

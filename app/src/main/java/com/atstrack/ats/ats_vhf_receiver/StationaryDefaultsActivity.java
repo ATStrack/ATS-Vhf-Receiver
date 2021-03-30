@@ -33,9 +33,11 @@ import android.widget.TextView;
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class StationaryDefaultsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class StationaryDefaultsActivity extends AppCompatActivity {
 
     @BindView(R.id.device_name_stationaryDefaults)
     TextView device_name_textView;
@@ -73,7 +75,8 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
     private int heightPixels;
     private int widthPixels;
 
-    private int frequencyTableNumber;
+    private List<String> tables;
+    private int positionFrequencyTableNumber;
     private int numberOfAntennas;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -118,7 +121,6 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
                     }
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    Log.i(TAG, "Packet: "+ Converters.getDecimalValue(packet));
                     if (parameter.equals("stationary"))
                         downloadData(packet);
                     else if (parameter.equals("save"))
@@ -147,11 +149,13 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
     }
 
     private void onClickSave() {
+        positionFrequencyTableNumber = stationary_tables_spinner.getSelectedItemPosition();
+        numberOfAntennas = stationary_antennas_spinner.getSelectedItemPosition() + 1;
         int info = (stationary_gps_switch.isChecked() ? 1 : 0) << 7;
         info = info | ((stationary_auto_record_switch.isChecked() ? 1 : 0) << 6);
-        info  = info | (numberOfAntennas + 1);
-        byte[] b = new byte[]{(byte) 0x7D, (byte) (frequencyTableNumber + 1), (byte) info,
-                (byte) Integer.parseInt(scan_rate_stationary_defaults_editText.getText().toString()),
+        info  = info | numberOfAntennas;
+        byte[] b = new byte[]{(byte) 0x7D, (byte) Integer.parseInt(tables.get(positionFrequencyTableNumber).replace("Table ", "")),
+                (byte) info, (byte) Integer.parseInt(scan_rate_stationary_defaults_editText.getText().toString()),
                 (byte) Integer.parseInt(scan_timeout_stationary_defaults_editText.getText().toString()), (byte) 0x0, (byte) 0x0, (byte) 0x0};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
@@ -168,10 +172,10 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         setContentView(R.layout.activity_stationary_defaults);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle("Edit Receiver Defaults");
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_ab_back);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
+        getSupportActionBar().setTitle("STATIONARY DEFAULTS");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;
@@ -181,16 +185,11 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter = "stationary";
-
-        ArrayAdapter<CharSequence> tablesAdapter = ArrayAdapter.createFromResource(this, R.array.tables, android.R.layout.simple_spinner_item);
-        tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stationary_tables_spinner.setAdapter(tablesAdapter);
-        stationary_tables_spinner.setOnItemSelectedListener(this);
+        tables = new ArrayList<>();
 
         ArrayAdapter<CharSequence> antennasAdapter = ArrayAdapter.createFromResource(this, R.array.antennas, android.R.layout.simple_spinner_item);
         antennasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         stationary_antennas_spinner.setAdapter(antennasAdapter);
-        stationary_antennas_spinner.setOnItemSelectedListener(this);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
@@ -212,20 +211,6 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if (view.getId() == stationary_tables_spinner.getId()) {
-            frequencyTableNumber = i;
-        } else {
-            numberOfAntennas = i;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     @Override
@@ -264,27 +249,22 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     private void downloadData(byte[] data) {
         mBluetoothLeService.disconnect();
-        int frequencyTableNumber = data[1];
-        stationary_tables_spinner.setSelection(frequencyTableNumber - 1);
+        setTables(data);
+        stationary_tables_spinner.setSelection(positionFrequencyTableNumber);
         int gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;
         stationary_gps_switch.setChecked(gps == 1);
         int autoRecord = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 6 & 1;
@@ -293,6 +273,32 @@ public class StationaryDefaultsActivity extends AppCompatActivity implements Ada
         stationary_antennas_spinner.setSelection(antennaNumber - 1);
         scan_rate_stationary_defaults_editText.setText(Converters.getDecimalValue(data[3]));
         scan_timeout_stationary_defaults_editText.setText(Converters.getDecimalValue(data[4]));
+    }
+
+    private void setTables(byte[] data) {
+        positionFrequencyTableNumber = 0;
+        byte b = data[6];
+        for (int i = 1; i <= 8; i++) {
+            if ((b & 1) == 1) {
+                tables.add("Table " + i);
+                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
+            }
+            b = (byte) (b >> 1);
+        }
+        b = data[7];
+        for (int i = 9; i <= 12; i++) {
+            if ((b & 1) == 1) {
+                tables.add("Table " + i);
+                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
+            }
+            b = (byte) (b >> 1);
+        }
+        if (tables.isEmpty()) {
+            tables.add("None");
+        }
+        ArrayAdapter<String> tablesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tables);
+        tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        stationary_tables_spinner.setAdapter(tablesAdapter);
     }
 
     private void showMessage(byte[] data) {

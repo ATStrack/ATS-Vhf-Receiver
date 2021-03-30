@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".ManualScanActivity">
 
     <LinearLayout
@@ -16,8 +16,8 @@
         <LinearLayout
             android:id="@+id/ready_manual_scan_LinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_height="match_parent"
+            android:layout_margin="16sp"
             android:orientation="vertical"
             android:gravity="bottom|center"
             android:visibility="visible"
@@ -26,21 +26,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8sp"
                 android:text="@string/lb_ready_scan"
-                android:textColor="@color/colortext"
-                android:textSize="20dp" />
+                style="@style/subtitle"/>
 
             <Button
                 android:id="@+id/start_manual_button"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="18dp"
-                android:background="@color/colorbutton"
-                android:text="@string/lb_start_manual_scan"
-                android:textColor="@color/colortextbutton"
-                android:textSize="20dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8sp"
+                android:text="@string/lb_start_aerial_scan"
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
@@ -65,7 +61,7 @@
                     android:id="@+id/manual_exit_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_close_icon_opt"
+                    android:src="@drawable/ic_baseline_close_24"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -187,7 +183,7 @@
                 android:layout_marginStart="22dp"
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="12dp"
-                android:background="@color/colorbutton"
+                android:background="@color/mountain_meadow"
                 android:text="@string/lb_record"
                 android:textColor="@color/colortextbutton"
                 android:textSize="20dp"
@@ -201,8 +197,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorbackground"
-            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -211,10 +205,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="14dp"
-                android:elevation="4dp"
-                android:background="@color/colortextbutton">
+                android:padding="16sp"
+                android:background="@color/catskill_white">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -226,26 +218,28 @@
                         android:id="@+id/device_name_manualScan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="18dp"/>
+                        android:layout_marginBottom="8sp"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_large"/>
 
                     <TextView
                         android:id="@+id/device_address_manualScan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_battery_full"/>
 
@@ -253,10 +247,11 @@
                         android:id="@+id/percent_battery_manualScan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="%75"
-                        android:textSize="12dp"
-                        android:textColor="@color/colortext"/>
+                        android:layout_weight="1"
+                        android:layout_gravity="center|bottom"
+                        android:gravity="bottom"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
@@ -266,7 +261,7 @@
                 android:id="@+id/state_view"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="@color/colorbutton"/>
+                android:background="@color/mountain_meadow"/>
 
         </LinearLayout>
 

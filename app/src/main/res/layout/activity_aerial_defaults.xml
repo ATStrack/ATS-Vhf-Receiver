@@ -96,41 +96,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_scan_timeout"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <EditText
-                            android:id="@+id/scan_timeout_aerial_defaults_editText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/cuadro_input"
-                            android:inputType="number"
-                            android:textColor="@color/colortext"
-                            android:textSize="14dp"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -322,9 +287,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="%75"
-                        android:textSize="@dimen/text_size_caption"
-                        android:textColor="@color/colortext"/>
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
@@ -334,7 +297,7 @@
                 android:id="@+id/state_view"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="@color/colorbutton"/>
+                android:background="@color/mountain_meadow"/>
 
         </LinearLayout>
 

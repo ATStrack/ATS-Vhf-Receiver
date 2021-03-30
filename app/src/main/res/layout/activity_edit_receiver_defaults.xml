@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_aerial_defaults"
             android:textColor="@color/colortextbutton"
             android:textSize="20dp" />
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_stationary_defaults"
             android:textColor="@color/colortextbutton"
             android:textSize="20dp" />
@@ -109,7 +109,7 @@
             android:id="@+id/state_view"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:background="@color/colorbutton"/>
+            android:background="@color/mountain_meadow"/>
 
     </LinearLayout>
 

@@ -17,27 +17,112 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colortext</item>
         <item name="android:textColorSecondary">@color/colortext</item>
-        <item name="android:actionBarSize">@dimen/bar_height</item>
-        <item name="actionBarSize">@dimen/bar_height</item>
+        <item name="android:actionBarSize">12sp</item>
+        <item name="actionBarSize">12sp</item>
     </style>
 
-    <style name="Body" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">@dimen/text_size_body</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:maxLines">4</item>
-        <item name="android:ellipsize">end</item>
+    <style name="h1" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/h1</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
-    <style name="HeadLine" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textSize">@dimen/text_size_headline</item>
-        <item name="android:lines">1</item>
-        <item name="android:ellipsize">end</item>
+    <style name="h2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/h2</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
-    <style name="Subhead" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:textSize">@dimen/text_size_subhead</item>
-        <item name="android:lines">1</item>
-        <item name="android:ellipsize">none</item>
+    <style name="subtitle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/subtitle</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_large" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_large</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_small" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_small</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="button" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="text_button" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="paragraph" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/paragraph</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="lineHeight">@dimen/line_height</item>
+    </style>
+
+    <style name="button_primary" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/mountain_meadow</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_secondary" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/mountain_meadow</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="button_primary_destructive" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/tall_poppy</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_secondary_destructive" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary_destructive</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/tall_poppy</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_disabled" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/slate_gray</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/ghost</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_small" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:height">@dimen/button_small_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/mountain_meadow</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_disabled_small" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary_disabled</item>
+        <item name="android:height">@dimen/button_small_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/ghost</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

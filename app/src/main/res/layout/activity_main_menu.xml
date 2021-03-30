@@ -5,14 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".MainMenuActivity">
 
     <LinearLayout
         android:id="@+id/menu_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginStart="16sp"
+        android:layout_marginEnd="16sp"
+        android:layout_marginTop="24sp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone"
@@ -23,60 +25,43 @@
         <Button
             android:id="@+id/start_scanning_button"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16sp"
             android:text="@string/lb_start_scanning"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp"/>
+            style="@style/button_primary"/>
 
         <Button
             android:id="@+id/receiver_configuration_button"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16sp"
             android:text="@string/lb_receiver_configuration"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp"/>
+            style="@style/button_primary"/>
 
         <Button
             android:id="@+id/manage_receiver_data_button"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16sp"
             android:text="@string/lb_manage_receiver"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp"/>
+            style="@style/button_primary"/>
 
         <Button
             android:id="@+id/test_receiver_button"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:layout_height="wrap_content"
             android:text="@string/lb_test_receiver"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp"/>
+            style="@style/button_primary"/>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/vhf_linearLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/vhf_constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/connecting_device_mainMenu">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="200dp"
@@ -84,14 +69,22 @@
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
             android:elevation="0dp"
-            android:src="@drawable/receiver"/>
+            android:src="@drawable/receiver"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/logo_image"/>
 
         <ImageView
+            android:id="@+id/logo_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_logo"/>
+            android:src="@drawable/ic_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/vhf_receiver"
@@ -100,16 +93,18 @@
             android:layout_gravity="center"
             android:text="@string/lb_vhf_receiver"
             android:textSize="24dp"
-            android:textColor="@color/colortext"/>
+            android:textColor="@color/colortext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_image"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/connecting_device_mainMenu"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorbackground"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,6 +120,8 @@
             android:id="@+id/state_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16sp"
+            android:layout_marginBottom="24sp"
             android:gravity="center"
             android:text="@string/lb_connecting_device"
             android:textColor="@color/colortext"
@@ -134,10 +131,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="14dp"
-            android:padding="14dp"
-            android:elevation="4dp"
-            android:background="@color/colortextbutton">
+            android:padding="16sp"
+            android:background="@color/catskill_white">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -149,26 +144,28 @@
                     android:id="@+id/device_name_mainMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="18dp"/>
+                    android:layout_marginBottom="8sp"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/body_large"/>
 
                 <TextView
                     android:id="@+id/device_address_mainMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
+                    android:textColor="@color/ebony_clay"
+                    style="@style/body_small"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_battery_full"/>
 
@@ -176,10 +173,11 @@
                     android:id="@+id/percent_battery_mainMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="%75"
-                    android:textSize="12dp"
-                    android:textColor="@color/colortext"/>
+                    android:layout_weight="1"
+                    android:layout_gravity="center|bottom"
+                    android:gravity="bottom"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/body_small"/>
 
             </LinearLayout>
 
@@ -193,89 +191,56 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/disconnect_constraintLayout"
+    <LinearLayout
+        android:id="@+id/disconnect_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16sp"
+        android:orientation="vertical"
         android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/disconnect_linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="18dp"
-            android:orientation="vertical"
+        <ImageView
+            android:id="@+id/disconnect_exit_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_baseline_close_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <ImageView
-                android:id="@+id/disconnect_exit_image"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_close_icon_opt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:layout_width="134dp"
+            android:layout_height="134dp"
+            android:layout_marginTop="80sp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_receiver_connected_dark"/>
 
-            <TextView
-                android:id="@+id/name_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                android:textColor="@color/colortext"
-                android:textSize="24dp"/>
+        <TextView
+            android:id="@+id/name_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            style="@style/h2"/>
 
-            <TextView
-                android:id="@+id/address_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                android:textColor="@color/colortext"
-                android:textSize="16dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/lb_connected_no_scanning"
+            style="@style/body_large"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_receiver_connected_dark"/>
+        <Button
+            android:id="@+id/disconnect_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/lb_disconnect"
+            style="@style/button_primary_destructive"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lb_connected_no_scanning"
-                    android:textColor="@color/colortext"
-                    android:textSize="18dp"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/disconnect_button"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:gravity="center"
-                android:elevation="0dp"
-                android:background="@drawable/cuadro"
-                android:text="@string/lb_disconnect"
-                android:textColor="@color/dark"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,26 +13,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AerialDefaultsActivity extends AppCompatActivity {
@@ -51,8 +49,6 @@ public class AerialDefaultsActivity extends AppCompatActivity {
     SwitchCompat aerial_gps_switch;
     @BindView(R.id.aerial_auto_record_switch)
     SwitchCompat aerial_auto_record_switch;
-    @BindView(R.id.scan_timeout_aerial_defaults_editText)
-    EditText scan_timeout_aerial_defaults_editText;
     @BindView(R.id.aerial_scanRate_spinner)
     Spinner aerial_scanRate_spinner;
 
@@ -61,6 +57,7 @@ public class AerialDefaultsActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
+    private static final long MESSAGE_PERIOD = 3000;
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -71,7 +68,8 @@ public class AerialDefaultsActivity extends AppCompatActivity {
     private int heightPixels;
     private int widthPixels;
 
-    private int frequencyTableNumber;
+    private List<String> tables;
+    private int positionFrequencyTableNumber;
     private int numberOfAntennas;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -144,14 +142,14 @@ public class AerialDefaultsActivity extends AppCompatActivity {
     }
 
     private void onClickSave() {
-        frequencyTableNumber = Integer.parseInt(aerial_tables_spinner.getSelectedItem().toString());
-        numberOfAntennas = Integer.parseInt(aerial_antennas_spinner.getSelectedItem().toString());
+        positionFrequencyTableNumber = aerial_tables_spinner.getSelectedItemPosition();
+        numberOfAntennas = aerial_antennas_spinner.getSelectedItemPosition() + 1;
         int info = (aerial_gps_switch.isChecked() ? 1 : 0) << 7;
         info = info | ((aerial_auto_record_switch.isChecked() ? 1 : 0) << 6);
         info = info | numberOfAntennas;
-        byte[] b = new byte[]{(byte) 0x7D, (byte) frequencyTableNumber, (byte) info,
-                (byte) Integer.parseInt(aerial_scanRate_spinner.getSelectedItem().toString().replace(".", "")),
-                (byte) Integer.parseInt(scan_timeout_aerial_defaults_editText.getText().toString()), (byte) 0x0, (byte) 0x0, (byte) 0x0};
+        byte[] b = new byte[]{(byte) 0x7D, (byte) Integer.parseInt(tables.get(positionFrequencyTableNumber).replace("Table ", "")),
+                (byte) info, (byte) Integer.parseInt(aerial_scanRate_spinner.getSelectedItem().toString().replace(".", "")),
+                0, (byte) 0x0, (byte) 0x0, (byte) 0x0};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
@@ -179,10 +177,7 @@ public class AerialDefaultsActivity extends AppCompatActivity {
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter = "aerial";
-
-        ArrayAdapter<CharSequence> tablesAdapter = ArrayAdapter.createFromResource(this, R.array.tables, android.R.layout.simple_spinner_item);
-        tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        aerial_tables_spinner.setAdapter(tablesAdapter);
+        tables = new ArrayList<>();
 
         ArrayAdapter<CharSequence> antennasAdapter = ArrayAdapter.createFromResource(this, R.array.antennas, android.R.layout.simple_spinner_item);
         antennasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -237,8 +232,9 @@ public class AerialDefaultsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mConnected && !state)
+        if (!mConnected && !state) {
             showMessageDisconnect();
+        }
         return true;
     }
 
@@ -248,27 +244,22 @@ public class AerialDefaultsActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     private void downloadData(byte[] data) {
         mBluetoothLeService.disconnect();
-        int frequencyTableNumber = data[1];
-        aerial_tables_spinner.setSelection(frequencyTableNumber - 1);
+        setTables(data);
+        aerial_tables_spinner.setSelection(positionFrequencyTableNumber);
         int gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;
         aerial_gps_switch.setChecked(gps == 1);
         int autoRecord = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 6 & 1;
@@ -284,7 +275,32 @@ public class AerialDefaultsActivity extends AppCompatActivity {
             }
         }
         aerial_scanRate_spinner.setSelection(index);
-        scan_timeout_aerial_defaults_editText.setText(Converters.getDecimalValue(data[4]));
+    }
+
+    private void setTables(byte[] data) {
+        positionFrequencyTableNumber = 0;
+        byte b = data[6];
+        for (int i = 1; i <= 8; i++) {
+            if ((b & 1) == 1) {
+                tables.add("Table " + i);
+                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
+            }
+            b = (byte) (b >> 1);
+        }
+        b = data[7];
+        for (int i = 9; i <= 12; i++) {
+            if ((b & 1) == 1) {
+                tables.add("Table " + i);
+                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
+            }
+            b = (byte) (b >> 1);
+        }
+        if (tables.isEmpty()) {
+            tables.add("None");
+        }
+        ArrayAdapter<String> tablesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tables);
+        tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        aerial_tables_spinner.setAdapter(tablesAdapter);
     }
 
     private void showMessage(byte[] data) {

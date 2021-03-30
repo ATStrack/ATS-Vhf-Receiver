@@ -17,27 +17,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colortext</item>
         <item name="android:textColorSecondary">@color/colortext</item>
-        <item name="android:actionBarSize">@dimen/bar_height</item>
-        <item name="actionBarSize">@dimen/bar_height</item>
+        <item name="android:actionBarSize">12sp</item>
+        <item name="actionBarSize">12sp</item>
     </style>
 
-    <style name="Body" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">@dimen/text_size_body</item>
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:maxLines">4</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="HeadLine" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textSize">@dimen/text_size_headline</item>
-        <item name="android:lines">1</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="Subhead" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:textSize">@dimen/text_size_subhead</item>
-        <item name="android:lines">1</item>
-        <item name="android:ellipsize">none</item>
-    </style>
-    
 </resources>

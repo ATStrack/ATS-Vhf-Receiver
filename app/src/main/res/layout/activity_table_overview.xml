@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".TableOverviewActivity">
 
     <!--LinearLayout
@@ -229,10 +229,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:backgroundTint="@color/colorbutton"
+            android:backgroundTint="@color/mountain_meadow"
             android:text="OK"
             android:textColor="@color/colortextbutton"
-            android:textSize="@dimen/message"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -243,29 +243,43 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <TextView
-            android:id="@+id/load_tables_file_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_margin="16dp"
-            android:gravity="center"
-            android:elevation="0dp"
-            android:background="@drawable/cuadro"
-            android:text="@string/lb_load_table_from_file"
-            android:textColor="@color/dark"
-            android:textSize="20dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16sp"
+            android:layout_marginEnd="16sp"
+            android:layout_marginTop="24sp"
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2sp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/grey"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_select_table"
+                android:textColor="@color/black"
+                style="@style/subtitle"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/load_from_file_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_load_table_from_file"
+                android:textColor="@color/black"
+                style="@style/text_button"/>
+
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_marginStart="16sp"
+            android:layout_marginEnd="16sp"
+            android:layout_marginTop="16sp"
+            android:layout_marginBottom="8sp"
             android:layout_weight="6">
 
             <LinearLayout
@@ -277,29 +291,26 @@
                     android:id="@+id/table1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table1"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table1_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -307,29 +318,26 @@
                     android:id="@+id/table2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table2"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table2_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -337,29 +345,26 @@
                     android:id="@+id/table3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table3"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table3_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -367,29 +372,26 @@
                     android:id="@+id/table4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table4"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table4_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -397,29 +399,26 @@
                     android:id="@+id/table5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table5"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table5_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -427,29 +426,26 @@
                     android:id="@+id/table6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table6"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table6_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -457,29 +453,26 @@
                     android:id="@+id/table7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table7"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table7_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -487,29 +480,26 @@
                     android:id="@+id/table8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table8"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table8_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -517,29 +507,26 @@
                     android:id="@+id/table9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table9"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table9_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -547,29 +534,26 @@
                     android:id="@+id/table10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table10"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table10_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -577,29 +561,26 @@
                     android:id="@+id/table11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table11"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table11_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -607,29 +588,26 @@
                     android:id="@+id/table12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginBottom="16sp"
+                    android:padding="16sp"
                     android:orientation="vertical"
-                    android:elevation="10dp"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8sp"
                         android:text="@string/lb_table12"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
 
                     <TextView
                         android:id="@+id/table12_frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="14dp"
                         android:text="0 frequencies"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
 
                 </LinearLayout>
 
@@ -642,8 +620,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorbackground"
-            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -652,10 +628,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="14dp"
-                android:elevation="4dp"
-                android:background="@color/colortextbutton">
+                android:padding="16sp"
+                android:background="@color/catskill_white">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -667,26 +641,28 @@
                         android:id="@+id/device_name_tableOverview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="18dp"/>
+                        android:layout_marginBottom="8sp"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_large"/>
 
                     <TextView
                         android:id="@+id/device_address_tableOverview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_battery_full"/>
 
@@ -694,10 +670,11 @@
                         android:id="@+id/percent_battery_tableOverview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="%75"
-                        android:textSize="12dp"
-                        android:textColor="@color/colortext"/>
+                        android:layout_weight="1"
+                        android:layout_gravity="center|bottom"
+                        android:gravity="bottom"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
@@ -707,7 +684,7 @@
                 android:id="@+id/state_view"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="@color/colorbutton"/>
+                android:background="@color/mountain_meadow"/>
 
         </LinearLayout>
 

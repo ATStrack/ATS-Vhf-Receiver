@@ -57,10 +57,10 @@ public class EditTablesActivity extends AppCompatActivity {
     TextView device_address_textView;
     @BindView(R.id.percent_battery_editTables)
     TextView percent_battery_textView;
+    @BindView(R.id.number_table_textView)
+    TextView number_table_textView;
     @BindView(R.id.frequency_table)
     TableLayout frequency_table;
-
-    private int[] table;
 
     final private String TAG = EditTablesActivity.class.getSimpleName();
 
@@ -69,6 +69,7 @@ public class EditTablesActivity extends AppCompatActivity {
     public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
 
+    private int[] table;
     private int number;
     private int totalFrequencies;
     private int baseFrequency;
@@ -207,11 +208,12 @@ public class EditTablesActivity extends AppCompatActivity {
         UUID uservicechar = UUID.fromString("ad0ea6e5-d93a-47a5-a6fc-a930552520dd");
         mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
 
-        Intent intent = new Intent(this, TableOverviewActivity.class);
+        /*Intent intent = new Intent(this, TableOverviewActivity.class);
         intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
         intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
-        startActivity(intent);
+        startActivity(intent);*/
+        finish();
         mBluetoothLeService.disconnect();
     }
 
@@ -459,13 +461,14 @@ public class EditTablesActivity extends AppCompatActivity {
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
+        number_table_textView.setText("Table " + number);
 
         mHandler = new Handler();
 
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("EDIT TABLE " + number);
+        getSupportActionBar().setTitle("EDIT FREQUENCY TABLES");
 
         isFile = getIntent().getExtras().getBoolean("isFile");
         if (isFile) {
@@ -503,6 +506,7 @@ public class EditTablesActivity extends AppCompatActivity {
                         intent.putExtra(TableOverviewActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
                         intent.putExtra(TableOverviewActivity.EXTRAS_BATTERY, mPercentBattery);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     });
                     builder.setNegativeButton("Cancel", null);
@@ -556,26 +560,32 @@ public class EditTablesActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     private void showTable() {
-        createHeader();
-        createBody();
+        for (int i = 0; i < table.length - 1; i++) {
+            newCell();
+            textCell.setText("" + table[i]);
+            textCell.setOnLongClickListener(listenerTable);
+            tableRow.addView(textCell, newTableRowParams(0, 0, 0, 16));
+            frequency_table.addView(tableRow);
+        }
+        if (table.length > 0) {
+            newCell();
+            textCell.setText("" + table[table.length - 1]);
+            textCell.setOnLongClickListener(listenerTable);
+            tableRow.addView(textCell, newTableRowParams(0, 0, 0, 0));
+            frequency_table.addView(tableRow);
+        }
     }
 
     private void newCell() {
@@ -592,18 +602,7 @@ public class EditTablesActivity extends AppCompatActivity {
         return params;
     }
 
-    private void createHeader() {
-        newCell();
-        textCell.setTextSize(18);
-        textCell.setTextColor(ContextCompat.getColor(this, colortextbutton));
-        textCell.setText("Table " + number + " (tap table to edit)");
-        textCell.setBackgroundColor(ContextCompat.getColor(this, colortext));
-        textCell.setOnLongClickListener(listenerTable);
-        tableRow.addView(textCell, newTableRowParams(24, 30, 24, 30));
-        frequency_table.addView(tableRow);
-    }
-
-    private void createBody() {
+    /*private void createBody() {
         if (table.length > 1) {
             newCell();
             textCell.setText("" + table[0]);
@@ -625,7 +624,7 @@ public class EditTablesActivity extends AppCompatActivity {
             tableRow.addView(textCell, newTableRowParams(24, 18, 24, 30));
             frequency_table.addView(tableRow);
         }
-    }
+    }*/
 
     public void downloadData(byte[] data) {
         table = new int[totalFrequencies];

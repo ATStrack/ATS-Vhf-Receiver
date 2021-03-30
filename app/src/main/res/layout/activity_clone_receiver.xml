@@ -71,7 +71,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:background="@color/colorbutton"
+                android:background="@color/mountain_meadow"
                 android:text="@string/lb_start_cloning"
                 android:textColor="@color/colortextbutton"
                 android:textSize="20dp"/>
@@ -159,9 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="%75"
-                        android:textSize="@dimen/text_size_caption"
-                        android:textColor="@color/colortext"/>
+                        style="@style/body_small"/>
 
                 </LinearLayout>
 
@@ -171,7 +169,7 @@
                 android:id="@+id/state_view"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="@color/colorbutton"/>
+                android:background="@color/mountain_meadow"/>
 
         </LinearLayout>
 

@@ -334,21 +334,16 @@ public class GetDataActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     @Override

@@ -28,7 +28,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_load_table_from_file"
             android:textColor="@color/colortextbutton"
             android:textSize="18sp" />
@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_load_tables_from_receiver"
             android:textColor="@color/colortextbutton"
             android:textSize="18sp" />
@@ -48,7 +48,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/colorbutton"
+            android:background="@color/mountain_meadow"
             android:text="@string/lb_enter_data_tables_manually"
             android:textColor="@color/colortextbutton"
             android:textSize="18sp" />

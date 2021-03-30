@@ -1,34 +1,25 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,18 +27,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
-import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.DeviceScanActivity;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 import com.atstrack.ats.ats_vhf_receiver.Utils.DriveServiceHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -66,17 +51,11 @@ import com.google.api.services.drive.DriveScopes;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
-
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colortext;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.colortextbutton;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.disable;
 
 public class TableOverviewActivity extends AppCompatActivity {
 
@@ -220,17 +199,17 @@ public class TableOverviewActivity extends AppCompatActivity {
         return word[5];
     }
 
-    @OnClick(R.id.load_tables_file_button)
+    @OnClick(R.id.load_from_file_overview)
     public void onClickLoadTablesFromFile(View v) {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//
-//        intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().getPath()), "*/*");
-//        startActivityForResult(intent, REQUEST_CODE_OPEN_STORAGE);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+        intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().getPath()), "*/*");
+        startActivityForResult(intent, REQUEST_CODE_OPEN_STORAGE);
 //        requestSignIn();
 
-        google_drive_webView.loadUrl("https://drive.google.com/drive/my-drive");
-        table_overview_linearLayout.setVisibility(View.GONE);
-        google_drive_linearLayout.setVisibility(View.VISIBLE);
+//        google_drive_webView.loadUrl("https://drive.google.com/drive/my-drive");
+//        table_overview_linearLayout.setVisibility(View.GONE);
+//        google_drive_linearLayout.setVisibility(View.VISIBLE);
     }
 
     private class Callback extends WebViewClient {
@@ -779,10 +758,10 @@ public class TableOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_table_overview);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle("Screen Title");
+        getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_ab_back);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
+        getSupportActionBar().setTitle("EDIT FREQUENCY TABLES");
 
         heightPixels = getResources().getDisplayMetrics().heightPixels;
         widthPixels = getResources().getDisplayMetrics().widthPixels;
@@ -854,21 +833,15 @@ public class TableOverviewActivity extends AppCompatActivity {
         View view =inflater.inflate(R.layout.disconnect_message, null);
         final androidx.appcompat.app.AlertDialog dialog = new AlertDialog.Builder(this).create();
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, MESSAGE_PERIOD);
     }
 
     private void downloadData(byte[] data) {

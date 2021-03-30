@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     TextView version;
     @BindView(R.id.switch_dark_mode)
     Switch switchdarkmode;
-
     @BindView(R.id.search_linearLayout)
     LinearLayout search_linearLayout;
     @BindView(R.id.device_recyclerView)

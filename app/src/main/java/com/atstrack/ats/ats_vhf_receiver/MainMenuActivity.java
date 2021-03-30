@@ -11,23 +11,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,7 +35,6 @@ import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
-import com.bumptech.glide.Glide;
 
 import java.util.UUID;
 
@@ -54,20 +48,20 @@ public class MainMenuActivity extends AppCompatActivity {
     TextView percent_battery_textView;
     @BindView(R.id.menu_linearLayout)
     LinearLayout menu_linearLayout;
-    @BindView(R.id.vhf_linearLayout)
-    LinearLayout vhf_linearLayout;
+    @BindView(R.id.vhf_constraintLayout)
+    ConstraintLayout vhf_linearLayout;
     @BindView(R.id.state_view)
     View state_view;
     @BindView(R.id.state_textView)
     TextView state_textView;
     @BindView(R.id.name_textView)
     TextView name_textView;
-    @BindView(R.id.address_textView)
-    TextView address_textView;
+    @BindView(R.id.disconnect_button)
+    TextView disconnect_button;
     @BindView(R.id.connecting_device_mainMenu)
     LinearLayout connecting_device_linearLayout;
-    @BindView(R.id.disconnect_constraintLayout)
-    ConstraintLayout disconnect_constraintLayout;
+    @BindView(R.id.disconnect_linearLayout)
+    LinearLayout disconnect_constraintLayout;
     @BindView(R.id.check_avd_anim)
     ImageView check_avd_anim;
 
@@ -76,9 +70,9 @@ public class MainMenuActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
-
     private static final long MESSAGE_PERIOD = 1000;
     private static final long CONNECT_PERIOD = 3000;
+
     private String mDeviceName;
     private String mDeviceAddress;
     private String mPercentBattery;
@@ -159,8 +153,6 @@ public class MainMenuActivity extends AppCompatActivity {
         vhf_linearLayout.setVisibility(View.GONE);
         getSupportActionBar().hide();
 
-        name_textView.setText(mDeviceName);
-        address_textView.setText(mDeviceAddress);
         disconnect_constraintLayout.setVisibility(View.VISIBLE);
     }
 
@@ -246,6 +238,8 @@ public class MainMenuActivity extends AppCompatActivity {
         percent_battery_textView.setText(mPercentBattery);
         parameter = "scanning";
 
+        name_textView.setText(mDeviceName);
+
         check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
         final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
         animated.start();
@@ -311,21 +305,15 @@ public class MainMenuActivity extends AppCompatActivity {
         TextView disconnect_message = view.findViewById(R.id.disconnect_message);
         disconnect_message.setText(message);
 
-        Button continue_button = view.findViewById(R.id.continue_button);
-        continue_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-
         dialog.setView(view);
         dialog.show();
-        dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
+
+        mHandlerMenu.postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }, CONNECT_PERIOD);
     }
 
     private void connectingToReceiver() {
@@ -346,8 +334,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
                 animatable.start();
 
-                state_textView.setTextColor(ContextCompat.getColor(this, R.color.colorbutton));
-                state_view.setBackgroundResource(R.color.colorbutton);
+                state_textView.setTextColor(ContextCompat.getColor(this, R.color.mountain_meadow));
+                state_view.setBackgroundResource(R.color.mountain_meadow);
                 mHandlerMenu.postDelayed(() -> {
                     if (!scanning) {
                         getSupportActionBar().show();

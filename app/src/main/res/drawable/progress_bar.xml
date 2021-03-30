@@ -2,13 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="@color/colorlight"/>
+            <solid android:color="@color/humming_bird"/>
         </shape>
     </item>
     <item>
         <clip>
             <shape>
-                <solid android:color="@color/colorbutton"/>
+                <solid android:color="@color/mountain_meadow"/>
             </shape>
         </clip>
     </item>

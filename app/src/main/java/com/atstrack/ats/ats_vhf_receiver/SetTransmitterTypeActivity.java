@@ -1,9 +1,12 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 import android.content.BroadcastReceiver;
@@ -12,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,19 +23,30 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 
 public class SetTransmitterTypeActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_setTransmitterType)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_setTransmitterType)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_setTransmitterType)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
+    @BindView(R.id.pulse_rate_type_textView)
+    TextView pulse_rate_type_textView;
+    @BindView(R.id.filter_type_textView)
+    TextView filter_type_textView;
 
     private final static String TAG = SetTransmitterTypeActivity.class.getSimpleName();
 
@@ -47,10 +60,6 @@ public class SetTransmitterTypeActivity extends AppCompatActivity {
     private String mPercentBattery;
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
-
-    private Handler mHandler;
-    private int heightPixels;
-    private int widthPixels;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -107,19 +116,47 @@ public class SetTransmitterTypeActivity extends AppCompatActivity {
         return intentFilter;
     }
 
+    @OnClick(R.id.pulse_rate_type_imageView)
+    public void onClickPulseRateType(View v) {
+        Intent intent = new Intent(this, SelectValueActivity.class);
+        intent.putExtra(SelectValueActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(SelectValueActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(SelectValueActivity.EXTRAS_BATTERY, mPercentBattery);
+        intent.putExtra("type", SelectValueActivity.PULSE_RATE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, SelectValueActivity.PULSE_RATE);
+        mBluetoothLeService.disconnect();
+    }
+
+    @OnClick(R.id.filter_type_imageView)
+    public void onClickFilterType(View v) {
+        Intent intent = new Intent(this, SelectValueActivity.class);
+        intent.putExtra(SelectValueActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(SelectValueActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(SelectValueActivity.EXTRAS_BATTERY, mPercentBattery);
+        if (pulse_rate_type_textView.getText().toString().contains("Fixed"))
+            intent.putExtra("type", SelectValueActivity.FIXED_PULSE_RATE);
+        else
+            intent.putExtra("type", SelectValueActivity.VARIABLE_PULSE_RATE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, SelectValueActivity.PULSE_RATE);
+        mBluetoothLeService.disconnect();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_transmitter_type);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Set Transmitter Type");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("SET TRANSMITTER TYPE");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -130,10 +167,36 @@ public class SetTransmitterTypeActivity extends AppCompatActivity {
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
 
-        mHandler = new Handler();
-
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SelectValueActivity.PULSE_RATE) {
+            if (resultCode == SelectValueActivity.FIXED_PULSE_RATE) {
+                pulse_rate_type_textView.setText(R.string.lb_fixed_pulse_rate);
+                filter_type_textView.setText(R.string.lb_pattern_matching);
+            } else {
+                pulse_rate_type_textView.setText(R.string.lb_variable_pulse_rate);
+                filter_type_textView.setText(R.string.lb_temperature);
+            }
+        }
+        if (requestCode == SelectValueActivity.FILTER) {
+            if (resultCode == SelectValueActivity.PATTERN_MATCHING)
+                filter_type_textView.setText(R.string.lb_pattern_matching);
+            if (resultCode == SelectValueActivity.PULSES_PER_SCAN_TIME)
+                filter_type_textView.setText(R.string.lb_pulses_per_scan_time);
+            if (resultCode == SelectValueActivity.TEMPERATURE)
+                filter_type_textView.setText(R.string.lb_temperature);
+            if (resultCode == SelectValueActivity.PERIOD)
+                filter_type_textView.setText(R.string.lb_period);
+            if (resultCode == SelectValueActivity.ALTITUDE)
+                filter_type_textView.setText(R.string.lb_altitude);
+            if (resultCode == SelectValueActivity.DEPTH)
+                filter_type_textView.setText(R.string.lb_depth);
+        }
     }
 
     @Override
@@ -185,7 +248,6 @@ public class SetTransmitterTypeActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
 
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);

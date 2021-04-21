@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".CloneReceiverActivity">
 
     <LinearLayout
@@ -13,55 +13,100 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <include
+            layout="@layout/toolbar"/>
+
         <LinearLayout
             android:id="@+id/no_receiver_linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="22dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
             android:visibility="visible"
-            android:layout_weight="6">
+            android:layout_weight="1">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:padding="16sp"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:text="@string/lb_no_receiver_detected"
-                android:textSize="32dp"
-                android:textColor="@color/dark"/>
+                android:background="@color/catskill_white">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="@dimen/connect_image"
+                    android:layout_height="@dimen/connect_image"
+                    android:background="@drawable/ic_receiver_disconnected_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_no_receiver_detected"
+                    android:textColor="@color/tall_poppy"
+                    style="@style/h2"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16sp"
+                    android:gravity="center"
+                    android:text="@string/lb_make_sure_receivers"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/body_regular"/>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/lb_make_sure_receivers"
-                android:textSize="18dp"
-                android:textColor="@color/dark"/>
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="24sp"
+                android:text="@string/lb_retry_receiver_search"
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ready_clone_linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="22dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
             android:visibility="gone"
-            android:layout_weight="6">
+            android:layout_weight="1">
 
-            <Space
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:padding="16sp"
+                android:background="@color/catskill_white"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lb_ready_clone"
-                android:textSize="32dp"
-                android:textColor="@color/dark"/>
+                <ImageView
+                    android:layout_width="@dimen/connect_image"
+                    android:layout_height="@dimen/connect_image"
+                    android:background="@drawable/ic_receiver_connected_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_ready_clone"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/h1"/>
+
+            </LinearLayout>
 
             <Space
                 android:layout_width="wrap_content"
@@ -70,108 +115,54 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:background="@color/mountain_meadow"
-                android:text="@string/lb_start_cloning"
-                android:textColor="@color/colortextbutton"
-                android:textSize="20dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_weight="6">
-
-            <ImageView
-                android:id="@+id/clonning_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="@string/lb_clonning"
-                android:textSize="18dp"
-                android:textColor="@color/dark"/>
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="24sp"
+                android:text="@string/lb_start_cloning"
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/connecting_device_cloneReceiver"
-            android:orientation="vertical"
+            android:id="@+id/clonning_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorbackground"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_weight="1">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="14dp"
-                android:elevation="4dp"
-                android:background="@color/colortextbutton">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:padding="24sp"
+                android:background="@color/catskill_white"
+                android:orientation="vertical"
+                android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="6">
-
-                    <TextView
-                        android:id="@+id/device_name_cloneReceiver"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text_button"/>
-
-                    <TextView
-                        android:id="@+id/device_address_cloneReceiver"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/clonning_imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="40sp"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_battery_full"/>
-
-                    <TextView
-                        android:id="@+id/percent_battery_cloneReceiver"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24sp"
+                    android:text="@string/lb_clonning"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/subtitle"/>
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/state_view"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/mountain_meadow"/>
-
         </LinearLayout>
+
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

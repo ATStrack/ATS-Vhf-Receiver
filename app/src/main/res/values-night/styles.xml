@@ -1,24 +1,107 @@
 <resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colortextbutton</item>
-        <!-- <item name="colorPrimaryDark">@color/colorPrimaryDark</item> -->
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colortext</item>
-        <item name="android:textColorSecondary">@color/colortext</item>
+    <style name="h1" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/h1</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
-    <style name="Holo" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- no borrar este estilo, se ocupa en el toolbar de escaneo -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <!-- <item name="colorPrimaryDark">@color/colorPrimaryDark</item> -->
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colortext</item>
-        <item name="android:textColorSecondary">@color/colortext</item>
-        <item name="android:actionBarSize">12sp</item>
-        <item name="actionBarSize">12sp</item>
+    <style name="h2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/h2</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
+    <style name="subtitle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/subtitle</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_large" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_large</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_regular" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="body_small" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/body_small</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="button" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="text_button" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="paragraph" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/paragraph</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="lineHeight">@dimen/line_height</item>
+    </style>
+
+    <style name="button_primary" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/mountain_meadow</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_secondary" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/mountain_meadow</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="button_primary_destructive" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/tall_poppy</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_secondary_destructive" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary_destructive</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/tall_poppy</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_disabled" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/slate_gray</item>
+        <item name="android:height">@dimen/button_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/ghost</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_small" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:height">@dimen/button_small_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/mountain_meadow</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_primary_disabled_small" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@drawable/button_secondary_disabled</item>
+        <item name="android:height">@dimen/button_small_height</item>
+        <item name="android:textAppearance">@style/button</item>
+        <item name="android:textColor">@color/ghost</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -1,10 +1,13 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 import android.content.BroadcastReceiver;
@@ -13,7 +16,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,40 +25,40 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class StationaryDefaultsActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_stationaryDefaults)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_stationaryDefaults)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_stationaryDefaults)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
-    @BindView(R.id.stationary_tables_spinner)
-    Spinner stationary_tables_spinner;
-    @BindView(R.id.stationary_antennas_spinner)
-    Spinner stationary_antennas_spinner;
+    @BindView(R.id.frequency_table_number_stationary_textView)
+    TextView frequency_table_number_stationary_textView;
+    @BindView(R.id.scan_rate_seconds_stationary_textView)
+    TextView scan_rate_seconds_stationary_textView;
+    @BindView(R.id.scan_timeout_seconds_stationary_textView)
+    TextView scan_timeout_seconds_stationary_textView;
+    @BindView(R.id.number_of_antennas_stationary_textView)
+    TextView number_of_antennas_stationary_textView;
     @BindView(R.id.stationary_gps_switch)
     SwitchCompat stationary_gps_switch;
     @BindView(R.id.stationary_auto_record_switch)
     SwitchCompat stationary_auto_record_switch;
-    @BindView(R.id.scan_timeout_stationary_defaults_editText)
-    EditText scan_timeout_stationary_defaults_editText;
-    @BindView(R.id.scan_rate_stationary_defaults_editText)
-    EditText scan_rate_stationary_defaults_editText;
 
     private final static String TAG = StationaryDefaultsActivity.class.getSimpleName();
 
@@ -71,14 +73,7 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
-    private Handler mHandler;
-    private int heightPixels;
-    private int widthPixels;
-
-    private List<String> tables;
-    private int positionFrequencyTableNumber;
-    private int numberOfAntennas;
-
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -101,6 +96,11 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter = "";
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -114,16 +114,16 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
 //                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter.equals("save")) {
+                    if (parameter.equals("save")) { // Save stationary defaults data
                         onClickSave();
-                    } else if (parameter.equals("stationary")){
+                    } else if (parameter.equals("stationary")) { // Gets stationary defaults data
                         onClickStationaryDefaults();
                     }
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    if (parameter.equals("stationary"))
+                    if (parameter.equals("stationary")) // Gets stationary defaults data
                         downloadData(packet);
-                    else if (parameter.equals("save"))
+                    else if (parameter.equals("save")) // Save stationary defaults data
                         showMessage(packet);
                 }
             }
@@ -142,27 +142,92 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void onClickStationaryDefaults(){
+    /**
+     * Requests a read for get stationary defaults data.
+     * Service name: Scan.
+     * Characteristic name: Stationary.
+     */
+    private void onClickStationaryDefaults() {
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("6dd91f4d-b30b-46c4-b111-dd49cd1f952e");
         mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
+    /**
+     * Writes the modified stationary defaults data by the user.
+     * Service name: Scan.
+     * Characteristic name: Stationary.
+     */
     private void onClickSave() {
-        positionFrequencyTableNumber = stationary_tables_spinner.getSelectedItemPosition();
-        numberOfAntennas = stationary_antennas_spinner.getSelectedItemPosition() + 1;
         int info = (stationary_gps_switch.isChecked() ? 1 : 0) << 7;
         info = info | ((stationary_auto_record_switch.isChecked() ? 1 : 0) << 6);
-        info  = info | numberOfAntennas;
-        byte[] b = new byte[]{(byte) 0x7D, (byte) Integer.parseInt(tables.get(positionFrequencyTableNumber).replace("Table ", "")),
-                (byte) info, (byte) Integer.parseInt(scan_rate_stationary_defaults_editText.getText().toString()),
-                (byte) Integer.parseInt(scan_timeout_stationary_defaults_editText.getText().toString()), (byte) 0x0, (byte) 0x0, (byte) 0x0};
+        info = info | Integer.parseInt(number_of_antennas_stationary_textView.getText().toString());
+        float scanRate = Float.parseFloat(scan_rate_seconds_stationary_textView.getText().toString());
+        int frequencyTableNumber = Integer.parseInt(frequency_table_number_stationary_textView.getText().toString());
+        int scanTimeout = Integer.parseInt(scan_timeout_seconds_stationary_textView.getText().toString());
+        byte[] b = new byte[]{(byte) 0x7D, (byte) frequencyTableNumber, (byte) info, (byte) scanRate, (byte) scanTimeout, 0, 0, 0};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("6dd91f4d-b30b-46c4-b111-dd49cd1f952e");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b, false);
 
         finish();
+        mBluetoothLeService.disconnect();
+    }
+
+    @OnClick(R.id.frequency_table_number_stationary_imageView)
+    public void onClickFrequencyTableNumber(View v) {
+        Intent intent = new Intent(this, InputValueActivity.class);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
+        intent.putExtra("type", "stationary");
+        intent.putExtra("value", InputValueActivity.FREQUENCY_TABLE_NUMBER);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, InputValueActivity.FREQUENCY_TABLE_NUMBER);
+        mBluetoothLeService.disconnect();
+    }
+
+    @OnClick(R.id.scan_rate_seconds_stationary_imageView)
+    public void onClickScanRateSeconds(View v) {
+        Intent intent = new Intent(this, InputValueActivity.class);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
+        intent.putExtra("type", "stationary");
+        intent.putExtra("value", InputValueActivity.SCAN_RATE_SECONDS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, InputValueActivity.SCAN_RATE_SECONDS);
+        mBluetoothLeService.disconnect();
+    }
+
+    @OnClick(R.id.scan_timeout_seconds_stationary_imageView)
+    public void onClickScanTimeoutSeconds(View v) {
+        Intent intent = new Intent(this, InputValueActivity.class);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
+        intent.putExtra("type", "stationary");
+        intent.putExtra("value", InputValueActivity.SCAN_TIMEOUT_SECONDS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, InputValueActivity.SCAN_TIMEOUT_SECONDS);
+        mBluetoothLeService.disconnect();
+    }
+
+    @OnClick(R.id.number_of_antennas_stationary_imageView)
+    public void onClickNumberOfAntennas(View v) {
+        Intent intent = new Intent(this, InputValueActivity.class);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+        intent.putExtra(AerialDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
+        intent.putExtra("type", "stationary");
+        intent.putExtra("value", InputValueActivity.NUMBER_OF_ANTENNAS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivityForResult(intent, InputValueActivity.NUMBER_OF_ANTENNAS);
         mBluetoothLeService.disconnect();
     }
 
@@ -172,41 +237,53 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stationary_defaults);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Stationary Defaults");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("STATIONARY DEFAULTS");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
         parameter = "stationary";
-        tables = new ArrayList<>();
-
-        ArrayAdapter<CharSequence> antennasAdapter = ArrayAdapter.createFromResource(this, R.array.antennas, android.R.layout.simple_spinner_item);
-        antennasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stationary_antennas_spinner.setAdapter(antennasAdapter);
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
-
-        mHandler = new Handler();
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == InputValueActivity.FREQUENCY_TABLE_NUMBER) { // Gets the modified frequency table number
+            frequency_table_number_stationary_textView.setText(String.valueOf(resultCode));
+        }
+        if (requestCode == InputValueActivity.SCAN_RATE_SECONDS) { // Gets the modified scan rate
+            scan_rate_seconds_stationary_textView.setText(String.valueOf(resultCode));
+        }
+        if (requestCode == InputValueActivity.SCAN_TIMEOUT_SECONDS) { // Gets the modified scan timeout
+            scan_timeout_seconds_stationary_textView.setText(String.valueOf(resultCode));
+        }
+        if (requestCode == InputValueActivity.NUMBER_OF_ANTENNAS) { // Gets the modified number of antennas
+            number_of_antennas_stationary_textView.setText(String.valueOf(resultCode));
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+            case android.R.id.home: //Go back to the previous activity
                 parameter = "save";
-                mBluetoothLeService.connect(mDeviceAddress);
+                onRestartConnection();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -239,11 +316,14 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mConnected && !state)
-            showMessageDisconnect();
+            showDisconnectionMessage();
         return true;
     }
 
-    private void showMessageDisconnect() {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     */
+    private void showDisconnectionMessage() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -251,8 +331,8 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -261,46 +341,30 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
         }, MESSAGE_PERIOD);
     }
 
+    /**
+     * With the received packet, gets stationary defaults data.
+     *
+     * @param data The received packet.
+     */
     private void downloadData(byte[] data) {
         mBluetoothLeService.disconnect();
-        setTables(data);
-        stationary_tables_spinner.setSelection(positionFrequencyTableNumber);
+        frequency_table_number_stationary_textView.setText(Converters.getDecimalValue(data[1]));
         int gps = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 7 & 1;
         stationary_gps_switch.setChecked(gps == 1);
         int autoRecord = Integer.parseInt(Converters.getDecimalValue(data[2])) >> 6 & 1;
         stationary_auto_record_switch.setChecked(autoRecord == 1);
         int antennaNumber = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
-        stationary_antennas_spinner.setSelection(antennaNumber - 1);
-        scan_rate_stationary_defaults_editText.setText(Converters.getDecimalValue(data[3]));
-        scan_timeout_stationary_defaults_editText.setText(Converters.getDecimalValue(data[4]));
+        number_of_antennas_stationary_textView.setText(String.valueOf(antennaNumber));
+        float scanRate = (float) (Integer.parseInt(Converters.getDecimalValue(data[3])) * 0.1);
+        scan_rate_seconds_stationary_textView.setText(String.valueOf(scanRate));
+        scan_timeout_seconds_stationary_textView.setText(Converters.getDecimalValue(data[4]));
     }
 
-    private void setTables(byte[] data) {
-        positionFrequencyTableNumber = 0;
-        byte b = data[6];
-        for (int i = 1; i <= 8; i++) {
-            if ((b & 1) == 1) {
-                tables.add("Table " + i);
-                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
-            }
-            b = (byte) (b >> 1);
-        }
-        b = data[7];
-        for (int i = 9; i <= 12; i++) {
-            if ((b & 1) == 1) {
-                tables.add("Table " + i);
-                positionFrequencyTableNumber = (i == Integer.parseInt(Converters.getDecimalValue(data[1]))) ? tables.size() - 1 : 0;
-            }
-            b = (byte) (b >> 1);
-        }
-        if (tables.isEmpty()) {
-            tables.add("None");
-        }
-        ArrayAdapter<String> tablesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tables);
-        tablesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stationary_tables_spinner.setAdapter(tablesAdapter);
-    }
-
+    /**
+     * Displays a message indicating whether the writing was successful.
+     *
+     * @param data This packet indicates the writing status.
+     */
     private void showMessage(byte[] data) {
         int status = Integer.parseInt(Converters.getDecimalValue(data[0]));
 
@@ -309,12 +373,7 @@ public class StationaryDefaultsActivity extends AppCompatActivity {
         if (status == 0)
             builder.setMessage("Completed.");
         builder.setPositiveButton("OK", (dialog, which) -> {
-            Intent intent = new Intent(this, EditReceiverDefaultsActivity.class);
-            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-            intent.putExtra(EditReceiverDefaultsActivity.EXTRAS_BATTERY, mPercentBattery);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            finish();
             mBluetoothLeService.disconnect();
         });
         builder.show();

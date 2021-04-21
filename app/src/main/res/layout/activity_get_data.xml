@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".GetDataActivity">
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16sp"
         android:textSize="16sp"
-        android:textColor="@color/colortext"
+        android:textColor="@color/light_blue"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/iv_ProgressGIF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,150 +31,87 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/subMenuLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"/>
 
         <LinearLayout
+            android:id="@+id/menu_manage_receiver_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/memory_used_percent_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/dark"
-                android:textSize="24dp"/>
-
-            <ProgressBar
-                android:id="@+id/memory_used_progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:progressDrawable="@drawable/progress_bar"/>
-
-            <TextView
-                android:id="@+id/bytes_stored"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark"
-                android:textSize="12dp"/>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btt_Memory"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/mountain_meadow"
-            android:text="@string/lb_view_data"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/btt_DownloadData"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/mountain_meadow"
-            android:text="@string/lb_download_data"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/btt_EraseData"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/mountain_meadow"
-            android:text="@string/lb_erase_data"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/connecting_device_mainMenu"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorbackground"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:padding="14dp"
-            android:elevation="4dp"
-            android:background="@color/colortextbutton">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="6">
-
-                <TextView
-                    android:id="@+id/device_name_manageReceiverData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="20dp"/>
-
-                <TextView
-                    android:id="@+id/device_address_manageReceiverData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:padding="16sp"
+                android:background="@color/catskill_white"
                 android:orientation="vertical">
 
-                <ImageView
+                <TextView
+                    android:id="@+id/memory_used_percent_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_battery_full"/>
+                    android:layout_marginBottom="8sp"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/subtitle"/>
+
+                <ProgressBar
+                    android:id="@+id/memory_used_progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="24sp"
+                    android:progressDrawable="@drawable/progress_bar"/>
 
                 <TextView
-                    android:id="@+id/percent_battery_manageReceiverData"
+                    android:id="@+id/bytes_stored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="%75"
-                    android:textSize="12dp"
-                    android:textColor="@color/colortext"/>
+                    android:layout_marginTop="8sp"
+                    android:textColor="@color/ebony_clay"
+                    style="@style/body_small"/>
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/memory_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24sp"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:text="@string/lb_view_data"
+                style="@style/button_primary"/>
+
+            <Button
+                android:id="@+id/download_data_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16sp"
+                android:text="@string/lb_download_data"
+                style="@style/button_primary"/>
+
+            <Button
+                android:id="@+id/erase_data_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:text="@string/lb_erase_data"
+                style="@style/button_primary"/>
+
         </LinearLayout>
 
-        <View
-            android:id="@+id/state_view"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@drawable/connecting"/>
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

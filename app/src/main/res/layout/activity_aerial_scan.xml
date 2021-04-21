@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,6 +13,9 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <include
+            layout="@layout/toolbar"/>
+
         <LinearLayout
             android:id="@+id/ready_aerial_scan_LinearLayout"
             android:layout_width="match_parent"
@@ -21,7 +23,7 @@
             android:layout_margin="16sp"
             android:orientation="vertical"
             android:visibility="visible"
-            android:layout_weight="6">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/ready_aerial_textView"
@@ -48,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8sp"
-                        android:text="@string/lb_scan_rate"
+                        android:text="@string/lb_scan_rate_seconds"
                         android:textColor="@color/limed_spruce"
                         style="@style/body_small"/>
 
@@ -238,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16sp"
                 android:gravity="center"
-                android:background="@color/mountain_meadow">
+                android:background="@color/catskill_white">
 
                 <ImageView
                     android:id="@+id/aerial_exit_image"
@@ -251,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:textColor="@color/catskill_white"
+                    android:textColor="@color/ebony_clay"
                     android:text="@string/lb_aerial_scanning"
                     style="@style/subtitle"/>
 
@@ -259,127 +261,218 @@
                     android:id="@+id/aerial_setting_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_setting"/>
+                    android:src="@drawable/ic_settings"/>
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/table_freq_aerial"
-                android:layout_width="match_parent"
-                android:layout_height="66dp"
-                android:layout_margin="16dp"
-                android:gravity="center"
-                android:background="@color/colortextbutton"
-                android:textSize="16dp"
-                android:textColor="@color/colortext"
-                android:textStyle="bold"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:text="@string/lb_details"
+                android:textColor="@color/ebony_clay"
+                style="@style/subtitle"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="18dp"
-                android:padding="30dp"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="16sp"
+                android:background="@color/catskill_white"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1.12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:text="@string/lb_table"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <TextView
+                        android:id="@+id/table_aerial_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:text="@string/lb_table_index"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <TextView
+                        android:id="@+id/table_index_aerial_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1sp"
+                android:background="@color/light_gray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="16sp"
+                android:background="@color/catskill_white"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:text="@string/lb_scan_rate"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <TextView
+                        android:id="@+id/scan_rateD_aerial_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:text="@string/lb_frequency"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <TextView
+                        android:id="@+id/frequency_aerial_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/ebony_clay"
+                        style="@style/body_regular"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:text="@string/lb_scan_feed"
+                android:textColor="@color/ebony_clay"
+                style="@style/subtitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16sp"
+                android:padding="16sp"
                 android:orientation="vertical"
-                android:background="@color/colortextbutton">
+                android:background="@color/catskill_white">
 
                 <TextView
-                    android:id="@+id/lbFirstResult_aerial"
+                    android:id="@+id/first_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
                 <TextView
-                    android:id="@+id/lbSecondResult_aerial"
+                    android:id="@+id/second_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="16sp"
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
                 <TextView
-                    android:id="@+id/lbThirdResult_aerial"
+                    android:id="@+id/third_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="16sp"
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
                 <TextView
-                    android:id="@+id/lbForthResult_aerial"
+                    android:id="@+id/forth_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="16sp"
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
                 <TextView
-                    android:id="@+id/lbFifthResult_aerial"
+                    android:id="@+id/fifth_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="16sp"
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
                 <TextView
-                    android:id="@+id/lbSixthResult_aerial"
+                    android:id="@+id/sixth_result_aerial_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/lbSeventhResult_aerial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/lbEighthResult_aerial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/lbNinthResult_aerial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/lbTenthResult_aerial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/colortext"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="16sp"
+                    android:textColor="@color/light_blue"
+                    style="@style/body_regular"/>
 
             </LinearLayout>
 
@@ -391,89 +484,17 @@
             <Button
                 android:id="@+id/record_aerial_button"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginEnd="22dp"
-                android:layout_marginBottom="12dp"
-                android:background="@color/mountain_meadow"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginBottom="24sp"
                 android:text="@string/lb_hold"
-                android:textColor="@color/colortextbutton"
-                android:textSize="16dp"/>
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/connecting_device_aerialScan"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16sp"
-                android:background="@color/catskill_white">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="6">
-
-                    <TextView
-                        android:id="@+id/device_name_aerialScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8sp"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_large"/>
-
-                    <TextView
-                        android:id="@+id/device_address_aerialScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_battery_full"/>
-
-                    <TextView
-                        android:id="@+id/percent_battery_aerialScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center|bottom"
-                        android:gravity="bottom"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/state_view"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/mountain_meadow"/>
-
-        </LinearLayout>
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

@@ -1,72 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/athens_gray"
     tools:context=".EditTablesActivity">
 
-    <!--LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ScrollView
-            android:id="@+id/editTablesScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableLayout
-                    android:id="@+id/tableLayoutEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-
-                </TableLayout>
-
-            </HorizontalScrollView>
-
-        </ScrollView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2sp"
-            android:background="@color/colortext"/>
-
-        <Button
-            android:id="@+id/btt_SaveChanges"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:gravity="center"
-            android:text="@string/lb_save_changes"
-            android:textAlignment="center"
-            android:textColor="@color/colortextbutton"
-            android:textSize="@dimen/text"
-            android:backgroundTint="@color/colorbutton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    </LinearLayout-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,6 +40,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/lb_load_table_from_file"
                 android:textColor="@color/mountain_meadow"
+                style="@style/text_button"/>
+
+            <TextView
+                android:id="@+id/discard_changes_editTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/lb_discard_changes"
+                android:textColor="@color/ebony_clay"
                 style="@style/text_button"/>
 
         </LinearLayout>
@@ -127,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16sp"
             android:layout_marginEnd="16sp"
+            android:layout_marginBottom="80sp"
             android:background="@color/catskill_white"
             android:gravity="end">
 
@@ -142,16 +99,14 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/discard_changes_button"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_margin="22dp"
-            android:gravity="center"
-            android:elevation="0dp"
-            android:background="@drawable/cuadro"
-            android:text="@string/lb_discard_changes"
-            android:textColor="@color/dark"
-            android:textSize="20dp"/>
+            android:id="@+id/edit_table_message_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8sp"
+            android:layout_gravity="center"
+            android:text="@string/lb_edit_table_in_order"
+            android:textColor="@color/ebony_clay"
+            style="@style/body_small"/>
 
         <Button
             android:id="@+id/save_changes_button"
@@ -160,81 +115,12 @@
             android:layout_marginStart="16sp"
             android:layout_marginEnd="16sp"
             android:layout_marginBottom="24sp"
+            android:enabled="false"
             android:text="@string/lb_save_changes"
-            style="@style/button_primary"/>
+            style="@style/button_primary_disabled"/>
 
-        <LinearLayout
-            android:id="@+id/connecting_device_editTables"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16sp"
-                android:background="@color/catskill_white">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="6">
-
-                    <TextView
-                        android:id="@+id/device_name_editTables"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8sp"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_large"/>
-
-                    <TextView
-                        android:id="@+id/device_address_editTables"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_battery_full"/>
-
-                    <TextView
-                        android:id="@+id/percent_battery_editTables"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center|bottom"
-                        android:gravity="bottom"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/state_view"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/mountain_meadow"/>
-
-        </LinearLayout>
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

@@ -1,21 +1,12 @@
 package com.atstrack.ats.ats_vhf_receiver.Utils;
 
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.OpenableColumns;
 import android.util.Pair;
 
-import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -36,6 +26,12 @@ public class DriveServiceHelper {
         this.mDriveService = mDriveService;
     }
 
+    /**
+     * Sends a file from the local storage to the cloud.
+     * @param path The directory path of the file to be saved to the cloud.
+     * @param name The name of the file in that directory path.
+     * @return Return the file id if it was saved successfully.
+     */
     public Task<String> createFile(String path, String name) {
         return Tasks.call(mExecutor, () -> {
             File fileMetaData = new File();

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/athens_gray"
+    tools:context=".InputValueActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"/>
+
+        <LinearLayout
+            android:id="@+id/set_value_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16sp"
+            android:padding="16sp"
+            android:orientation="vertical"
+            android:background="@color/catskill_white"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/input_value_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_set_value"
+                    android:textColor="@color/limed_spruce"
+                    style="@style/body_small"/>
+
+                <EditText
+                    android:id="@+id/value_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:paddingStart="8sp"
+                    android:paddingEnd="8sp"
+                    android:layout_marginTop="8sp"
+                    android:layout_marginBottom="8sp"
+                    android:hint="@string/lb_input_value"
+                    android:textColorHint="@color/limed_spruce"
+                    android:background="@color/athens_gray"
+                    style="@style/body_regular"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/spinner_value_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_set_value"
+                    android:textColor="@color/limed_spruce"
+                    style="@style/body_small"/>
+
+                <Spinner
+                    android:id="@+id/value_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:layout_marginTop="8sp"
+                    android:layout_marginBottom="8sp"
+                    android:background="@color/athens_gray"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/message_error_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/tall_poppy"
+                style="@style/body_small"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/save_changes_input_value_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_save_changes"
+                style="@style/button_primary"/>
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/receiver_status"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

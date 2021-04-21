@@ -8,6 +8,10 @@
     android:background="@color/athens_gray"
     tools:context=".MainMenuActivity">
 
+    <include
+        android:id="@+id/toolbar_main"
+        layout="@layout/toolbar"/>
+
     <LinearLayout
         android:id="@+id/menu_linearLayout"
         android:layout_width="match_parent"
@@ -20,7 +24,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_main">
 
         <Button
             android:id="@+id/start_scanning_button"
@@ -93,7 +97,7 @@
             android:layout_gravity="center"
             android:text="@string/lb_vhf_receiver"
             android:textSize="24dp"
-            android:textColor="@color/colortext"
+            android:textColor="@color/light_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logo_image"/>
@@ -124,70 +128,11 @@
             android:layout_marginBottom="24sp"
             android:gravity="center"
             android:text="@string/lb_connecting_device"
-            android:textColor="@color/colortext"
-            android:textSize="16dp"/>
+            android:textColor="@color/light_blue"
+            style="@style/body_large"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16sp"
-            android:background="@color/catskill_white">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="6">
-
-                <TextView
-                    android:id="@+id/device_name_mainMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8sp"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_large"/>
-
-                <TextView
-                    android:id="@+id/device_address_mainMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_small"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_battery_full"/>
-
-                <TextView
-                    android:id="@+id/percent_battery_mainMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center|bottom"
-                    android:gravity="bottom"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_small"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/state_view"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@drawable/connecting"/>
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 
@@ -203,13 +148,13 @@
             android:id="@+id/disconnect_exit_image"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_baseline_close_24"
+            android:src="@drawable/ic_close"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
-            android:layout_width="134dp"
-            android:layout_height="134dp"
+            android:layout_width="@dimen/connect_image"
+            android:layout_height="@dimen/connect_image"
             android:layout_marginTop="80sp"
             android:layout_gravity="center"
             android:src="@drawable/ic_receiver_connected_dark"/>

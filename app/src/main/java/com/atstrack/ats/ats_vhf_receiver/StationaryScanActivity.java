@@ -2,6 +2,7 @@ package com.atstrack.ats.ats_vhf_receiver;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
@@ -19,12 +20,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,19 +35,27 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import static com.atstrack.ats.ats_vhf_receiver.R.color.dark;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.red;
+import static com.atstrack.ats.ats_vhf_receiver.R.color.light_blue;
+import static com.atstrack.ats.ats_vhf_receiver.R.color.tall_poppy;
 
 public class StationaryScanActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_stationaryScan)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_stationaryScan)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_stationaryScan)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
     @BindView(R.id.ready_stationary_scan_LinearLayout)
     LinearLayout ready_stationary_scan_LinearLayout;
+    @BindView(R.id.ready_stationary_textView)
+    TextView ready_stationary_textView;
     @BindView(R.id.scan_rate_stationary_textView)
     TextView scan_rate_stationary_textView;
     @BindView(R.id.selected_frequency_stationary_textView)
@@ -61,31 +70,33 @@ public class StationaryScanActivity extends AppCompatActivity {
     TextView auto_record_stationary_textView;
     @BindView(R.id.edit_stationary_defaults_textView)
     TextView edit_stationary_defaults_textView;
+    @BindView(R.id.frequency_empty_textView)
+    TextView frequency_empty_textView;
     @BindView(R.id.start_stationary_button)
     Button start_stationary_button;
     @BindView(R.id.stationary_result_constraintLayout)
     ConstraintLayout stationary_result_constraintLayout;
     @BindView(R.id.table_freq_stationary)
     TextView table_freq;
-    @BindView(R.id.lbFirstResult_stationary)
+    @BindView(R.id.first_result_stationary_textView)
     TextView firstResultTextView;
-    @BindView(R.id.lbSecondResult_stationary)
+    @BindView(R.id.second_result_stationary_textView)
     TextView secondResultTextView;
-    @BindView(R.id.lbThirdResult_stationary)
+    @BindView(R.id.third_result_stationary_textView)
     TextView thirdResultTextView;
-    @BindView(R.id.lbForthResult_stationary)
+    @BindView(R.id.forth_result_stationary_textView)
     TextView forthResultTextView;
-    @BindView(R.id.lbFifthResult_stationary)
+    @BindView(R.id.fifth_result_stationary_textView)
     TextView fifthResultTextView;
-    @BindView(R.id.lbSixthResult_stationary)
+    @BindView(R.id.sixth_result_stationary_textView)
     TextView sixthResultTextView;
-    @BindView(R.id.lbSeventhResult_stationary)
+    @BindView(R.id.seventh_result_stationary_textView)
     TextView seventhResultTextView;
-    @BindView(R.id.lbEighthResult_stationary)
+    @BindView(R.id.eighth_result_stationary_textView)
     TextView eighthResultTextView;
-    @BindView(R.id.lbNinthResult_stationary)
+    @BindView(R.id.ninth_result_stationary_textView)
     TextView ninthResultTextView;
-    @BindView(R.id.lbTenthResult_stationary)
+    @BindView(R.id.tenth_result_stationary_textView)
     TextView tenthResultTextView;
 
     private final static String TAG = StationaryScanActivity.class.getSimpleName();
@@ -102,10 +113,6 @@ public class StationaryScanActivity extends AppCompatActivity {
     private boolean state = true;
     private boolean response = true;
 
-    private Handler mHandler;
-    private int heightPixels;
-    private int widthPixels;
-
     private boolean scanning;
     private String currentData;
     private int selectedFrequency;
@@ -118,6 +125,7 @@ public class StationaryScanActivity extends AppCompatActivity {
     private String month;
     private boolean mortality;
 
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -140,6 +148,11 @@ public class StationaryScanActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter = "";
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -153,22 +166,33 @@ public class StationaryScanActivity extends AppCompatActivity {
 //                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter.equals("stationary"))
-                        onClickStationary();
-                    else if (parameter.equals("startStationary"))
-                        onClickStart();
-                    else if (parameter.equals("sendLog"))
-                        onClickLog();
-                    else if (parameter.equals("stopStationary"))
-                        onClickStop();
+                    switch (parameter) {
+                        case "stationary": // Gets stationary defaults data
+                            onClickStationary();
+                            break;
+                        case "startStationary": // Starts to scan
+                            onClickStart();
+                            break;
+                        case "sendLog": // Receives the data
+                            onClickLog();
+                            break;
+                        case "stopStationary": // Stops scan
+                            onClickStop();
+                            break;
+                    }
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    if (parameter.equals("stationary"))
-                        downloadData(packet);
-                    else if (parameter.equals("sendLog"))
-                        setCurrentLog(packet);
-                    else if (parameter.equals("stopStationary"))
-                        showMessage(packet);
+                    switch (parameter) {
+                        case "stationary": // Gets stationary defaults data
+                            downloadData(packet);
+                            break;
+                        case "sendLog": // Receives the data
+                            setCurrentLog(packet);
+                            break;
+                        case "stopStationary": // Stops scan
+                            showMessage(packet);
+                            break;
+                    }
                 }
             }
             catch (Exception e) {
@@ -186,13 +210,23 @@ public class StationaryScanActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void onClickStationary(){
+    /**
+     * Requests a read for get stationary defaults data.
+     * Service name: Scan.
+     * Characteristic name: Stationary.
+     */
+    private void onClickStationary() {
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("6dd91f4d-b30b-46c4-b111-dd49cd1f952e");
         mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
-    private void onClickStart(){
+    /**
+     * Writes the stationary scan data for start to scan.
+     * Service name: Scan.
+     * Characteristic name: Stationary.
+     */
+    private void onClickStart() {
         parameter = "sendLog";
 
         Calendar currentDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -215,22 +249,33 @@ public class StationaryScanActivity extends AppCompatActivity {
         scanning = true;
     }
 
-    private void onClickLog(){
+    /**
+     * Enables notification for receive the data.
+     * Service name: Screen.
+     * Characteristic name: SendLog.
+     */
+    private void onClickLog() {
         UUID uservice=UUID.fromString("26da3d0d-9119-48bb-af48-b0b96c665a66");
         UUID uservicechar=UUID.fromString("7052b8df-95f9-4ba3-8324-0d8ff9232435");
         mBluetoothLeService.setCharacteristicNotificationRead(uservice, uservicechar, true);
     }
 
-    private void onClickStop(){
+    /**
+     * Writes a value for stop scan.
+     * Service name: Scan.
+     * Characteristic name: Stationary.
+     */
+    private void onClickStop() {
         parameter = "stationary";
         byte[] b = new byte[]{(byte)0x87};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("6dd91f4d-b30b-46c4-b111-dd49cd1f952e");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b, false);
 
         scanning =false;
         getSupportActionBar().show();
+        state_view.setVisibility(View.VISIBLE);
         clear();
         stationary_result_constraintLayout.setVisibility(View.GONE);
         ready_stationary_scan_LinearLayout.setVisibility(View.VISIBLE);
@@ -241,7 +286,7 @@ public class StationaryScanActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.edit_stationary_defaults_textView)
-    public void onClickEditDefaults(View v){
+    public void onClickEditDefaults(View v) {
         Intent intent = new Intent(this, StationaryDefaultsActivity.class);
         intent.putExtra(StationaryDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StationaryDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -251,17 +296,17 @@ public class StationaryScanActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.start_stationary_button)
-    public void onClickStartStationary(View v){
+    public void onClickStartStationary(View v) {
         parameter = "startStationary";
         mBluetoothLeService.connect(mDeviceAddress);
-        //onRestartConnection();
         getSupportActionBar().hide();
+        state_view.setVisibility(View.GONE);
         ready_stationary_scan_LinearLayout.setVisibility(View.GONE);
         stationary_result_constraintLayout.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.stationary_exit_image)
-    public void onClickExit(View  v){
+    public void onClickExit(View  v) {
         parameter = "stopStationary";
         onRestartConnection();
     }
@@ -272,14 +317,16 @@ public class StationaryScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stationary_scan);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Stationary Scanning");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("STATIONARY SCANNING");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -288,23 +335,20 @@ public class StationaryScanActivity extends AppCompatActivity {
 
         mortality = false;
 
-        if (scanning) {
+        if (scanning) { // The device is already scanning
             parameter = "sendLog";
             year = intent.getExtras().getString("year");
             month = intent.getExtras().getString("month");
             getSupportActionBar().hide();
             ready_stationary_scan_LinearLayout.setVisibility(View.GONE);
             stationary_result_constraintLayout.setVisibility(View.VISIBLE);
-        } else {
+        } else { // Gets aerial defaults data
             parameter = "stationary";
         }
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
-        edit_stationary_defaults_textView.setText(Html.fromHtml(getResources().getString(R.string.lb_edit_defaults)));
-
-        mHandler = new Handler();
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -313,7 +357,7 @@ public class StationaryScanActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+            case android.R.id.home: //Go back to the previous activity
                 Intent intent = new Intent(this, StartScanningActivity.class);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -331,7 +375,7 @@ public class StationaryScanActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (scanning) {
+        if (scanning) { // Asks if you want to stop the scan
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Stop Stationary");
             builder.setMessage("Are you sure you want to stop scanning?");
@@ -342,7 +386,7 @@ public class StationaryScanActivity extends AppCompatActivity {
             builder.setNegativeButton("Cancel", null);
             AlertDialog dialog = builder.create();
             dialog.show();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorbackground)));
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.catskill_white)));
         }
     }
 
@@ -372,11 +416,14 @@ public class StationaryScanActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mConnected && !state)
-            showMessageDisconnect();
+            showDisconnectionMessage();
         return true;
     }
 
-    private void showMessageDisconnect() {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     */
+    private void showDisconnectionMessage() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -384,8 +431,8 @@ public class StationaryScanActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -394,6 +441,11 @@ public class StationaryScanActivity extends AppCompatActivity {
         }, MESSAGE_PERIOD);
     }
 
+    /**
+     * With the received packet, gets stationary defaults data.
+     *
+     * @param data The received packet.
+     */
     private void downloadData(byte[] data) {
         mBluetoothLeService.disconnect();
         if (!response) {
@@ -402,12 +454,20 @@ public class StationaryScanActivity extends AppCompatActivity {
         }
         parameter = "stationary";
         if (Converters.getHexValue(data[0]).equals("7C")) {
-            if (Integer.parseInt(Converters.getDecimalValue(data[1])) == 0) {
+            if (Integer.parseInt(Converters.getDecimalValue(data[1])) == 0) { // There are no tables with frequencies to scan
                 selected_frequency_stationary_textView.setText("None");
+                ready_stationary_textView.setText("Not Ready to Scan");
+                frequency_empty_textView.setVisibility(View.VISIBLE);
                 start_stationary_button.setEnabled(false);
-            } else {
+                start_stationary_button.setBackgroundResource(R.color.slate_gray);
+                start_stationary_button.setTextColor(ContextCompat.getColor(this, R.color.ghost));
+            } else { // Shows the table to be scanned
                 selected_frequency_stationary_textView.setText(Converters.getDecimalValue(data[1]));
+                ready_stationary_textView.setText("Ready to Scan");
+                frequency_empty_textView.setVisibility(View.GONE);
                 start_stationary_button.setEnabled(true);
+                start_stationary_button.setBackgroundResource(R.color.mountain_meadow);
+                start_stationary_button.setTextColor(ContextCompat.getColor(this, R.color.white));
             }
             selected_frequency_stationary_textView.setText(Converters.getDecimalValue(data[1]));
             selectedFrequency = Integer.parseInt(Converters.getDecimalValue(data[1]));
@@ -424,6 +484,11 @@ public class StationaryScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * With the received packet, gets the data of scanning.
+     *
+     * @param data The received packet.
+     */
     public void setCurrentLog(byte[] data) {
         currentData = "";
         String format = Converters.getHexValue(data[0]);
@@ -443,6 +508,11 @@ public class StationaryScanActivity extends AppCompatActivity {
         refresh();
     }
 
+    /**
+     * With the received packet, processes the data to display.
+     *
+     * @param data The received packet.
+     */
     public void logFreq(byte[] data){
         mortality = false;
         int freqOffset = 0;
@@ -473,6 +543,11 @@ public class StationaryScanActivity extends AppCompatActivity {
                 String.valueOf(freqOffset).substring(0, 3) + "." + String.valueOf(freqOffset).substring(3));
     }
 
+    /**
+     * With the received packet, processes the data to display.
+     *
+     * @param data The received packet.
+     */
     public void logCode(byte[] data){
         mortality = (Integer.parseInt(Converters.getDecimalValue(data[5])) >= 100);
         for (int i = 1;i < data.length; i++) {
@@ -500,48 +575,54 @@ public class StationaryScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the data displayed on the screen.
+     */
     public void refresh() {
         tenthResultTextView.setText(ninthResultTextView.getText());
         tenthResultTextView.setTextColor(ninthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         ninthResultTextView.setText(eighthResultTextView.getText());
         ninthResultTextView.setTextColor(eighthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         eighthResultTextView.setText(seventhResultTextView.getText());
         eighthResultTextView.setTextColor(seventhResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         seventhResultTextView.setText(sixthResultTextView.getText());
         seventhResultTextView.setTextColor(sixthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         sixthResultTextView.setText(fifthResultTextView.getText());
         sixthResultTextView.setTextColor(fifthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         fifthResultTextView.setText(forthResultTextView.getText());
         fifthResultTextView.setTextColor(forthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         forthResultTextView.setText(thirdResultTextView.getText());
         forthResultTextView.setTextColor(thirdResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         thirdResultTextView.setText(secondResultTextView.getText());
         thirdResultTextView.setTextColor(secondResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         secondResultTextView.setText(firstResultTextView.getText());
         secondResultTextView.setTextColor(firstResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         firstResultTextView.setText(currentData);
         firstResultTextView.setTextColor(mortality ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
     }
 
+    /**
+     * Clears the screen to start displaying the data.
+     */
     public void clear() {
         table_freq.setText("");
         firstResultTextView.setText("");
@@ -556,6 +637,11 @@ public class StationaryScanActivity extends AppCompatActivity {
         tenthResultTextView.setText("");
     }
 
+    /**
+     * Displays a message indicating whether the writing was successful.
+     *
+     * @param data This packet indicates the writing status.
+     */
     private void showMessage(byte[] data) {
         int status = Integer.parseInt(Converters.getDecimalValue(data[0]));
 

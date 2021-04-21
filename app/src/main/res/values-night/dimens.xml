@@ -12,4 +12,9 @@
     <dimen name="line_height">1.5sp</dimen>
     <dimen name="button_height">48sp</dimen>
     <dimen name="button_small_height">34sp</dimen>
+    <dimen name="input_height">32sp</dimen>
+    <dimen name="toolbar_height">56sp</dimen>
+    <dimen name="connect_image">134sp</dimen>
+    <dimen name="receiver_image">200sp</dimen>
+    <dimen name="disconnect_message">312sp</dimen>
 </resources>

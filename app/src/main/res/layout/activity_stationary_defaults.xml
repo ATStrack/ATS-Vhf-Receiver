@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".StationaryDefaultsActivity">
 
     <LinearLayout
@@ -12,332 +13,273 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ScrollView
+        <include
+            layout="@layout/toolbar"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="6">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
+                android:layout_marginTop="24sp"
+                android:text="@string/lb_base_defaults"
+                android:textColor="@color/limed_spruce"
+                style="@style/subtitle"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/lb_base_defaults"
-                    android:textSize="18dp"
-                    android:textColor="@color/dark"/>
+                android:layout_margin="16sp"
+                android:orientation="vertical"
+                android:background="@color/catskill_white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="vertical"
-                    android:background="@color/colortextbutton">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="@string/lb_frequency_table_number"
-                        android:textColor="@color/dark"
-                        android:textSize="18dp"/>
-
-                    <Spinner
-                        android:id="@+id/stationary_tables_spinner"
-                        android:layout_width="132dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/spinner_style"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
+                    android:padding="16sp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal"
-                        android:gravity="center">
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/lb_scan_rat"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
+                            android:layout_marginBottom="8sp"
+                            android:text="@string/lb_frequency_table_number"
+                            android:textColor="@color/limed_spruce"
+                            style="@style/body_small"/>
 
-                        <Space
+                        <TextView
+                            android:id="@+id/frequency_table_number_stationary_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <EditText
-                            android:id="@+id/scan_rate_stationary_defaults_editText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/cuadro_input"
-                            android:textColor="@color/colortext"
-                            android:textSize="14dp"/>
+                            android:textColor="@color/ebony_clay"
+                            style="@style/body_regular"/>
 
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_scan_timeout"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <EditText
-                            android:id="@+id/scan_timeout_stationary_defaults_editText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/cuadro_input"
-                            android:textColor="@color/colortext"
-                            android:textSize="14dp"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_antenna_number"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <Spinner
-                            android:id="@+id/stationary_antennas_spinner"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/spinner_style"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_gps"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_off"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/stationary_gps_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:thumb="@drawable/thumb_switch"
-                            app:track="@drawable/track_switch"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_on"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/grey"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_auto_record"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_off"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/stationary_auto_record_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:thumb="@drawable/thumb_switch"
-                            app:track="@drawable/track_switch"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/lb_on"
-                            android:textColor="@color/dark"
-                            android:textSize="18dp"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="8dp"
-                    />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/connecting_device_stationaryDefaults"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorbackground"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:padding="14dp"
-                android:elevation="4dp"
-                android:background="@color/colortextbutton">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="6">
-
-                    <TextView
-                        android:id="@+id/device_name_stationaryDefaults"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="@dimen/text_button"/>
-
-                    <TextView
-                        android:id="@+id/device_address_stationaryDefaults"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colortext"
-                        android:textSize="12dp"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/frequency_table_number_stationary_imageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_battery_full"/>
+                        android:background="@drawable/ic_next"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8sp"
+                            android:text="@string/lb_scan_rate_seconds"
+                            android:textColor="@color/limed_spruce"
+                            style="@style/body_small"/>
+
+                        <TextView
+                            android:id="@+id/scan_rate_seconds_stationary_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/ebony_clay"
+                            style="@style/body_regular"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/scan_rate_seconds_stationary_imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_next" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8sp"
+                            android:text="@string/lb_scan_timeout"
+                            android:textColor="@color/limed_spruce"
+                            style="@style/body_small"/>
+
+                        <TextView
+                            android:id="@+id/scan_timeout_seconds_stationary_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/ebony_clay"
+                            style="@style/body_regular"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/scan_timeout_seconds_stationary_imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_next" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8sp"
+                            android:text="@string/lb_number_antennas"
+                            android:textColor="@color/limed_spruce"
+                            style="@style/body_small"/>
+
+                        <TextView
+                            android:id="@+id/number_of_antennas_stationary_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/ebony_clay"
+                            style="@style/body_regular"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/number_of_antennas_stationary_imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_next" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/percent_battery_stationaryDefaults"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="%75"
-                        android:textSize="@dimen/body_small"
-                        android:textColor="@color/colortext"/>
+                        android:text="@string/lb_gps"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/stationary_gps_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumb="@drawable/thumb_switch"
+                        app:track="@drawable/track_switch"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16sp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lb_auto_record"
+                        android:textColor="@color/limed_spruce"
+                        style="@style/body_small"/>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/stationary_auto_record_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumb="@drawable/thumb_switch"
+                        app:track="@drawable/track_switch"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/state_view"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/mountain_meadow"/>
-
         </LinearLayout>
+
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

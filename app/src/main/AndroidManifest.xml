@@ -13,21 +13,57 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StationaryDefaultsActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".AerialDefaultsActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".TestReceiverActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".CloneReceiverActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".SetTransmitterTypeActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".EditReceiverDefaultsActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ReceiverConfigurationActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".StationaryScanActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".AerialScanActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ManualScanActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".StartScanningActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".MainMenuActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".EditTablesActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".TableOverviewActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".GetDataActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SelectValueActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InputValueActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".StationaryDefaultsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AerialDefaultsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TestReceiverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CloneReceiverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SetTransmitterTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditReceiverDefaultsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ReceiverConfigurationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".StationaryScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AerialScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ManualScanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".StartScanningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditTablesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TableOverviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GetDataActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -43,13 +79,14 @@
             android:name=".BluetoothATS.BluetoothLeService"
             android:enabled="true" />
     </application>
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
-
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="true" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -62,7 +99,7 @@
     <uses-permission
         android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

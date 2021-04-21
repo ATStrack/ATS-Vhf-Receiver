@@ -14,6 +14,9 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <include
+            layout="@layout/toolbar"/>
+
         <LinearLayout
             android:id="@+id/ready_stationary_scan_LinearLayout"
             android:layout_width="match_parent"
@@ -21,7 +24,7 @@
             android:layout_margin="16sp"
             android:orientation="vertical"
             android:visibility="visible"
-            android:layout_weight="6">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/ready_stationary_textView"
@@ -48,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8sp"
-                        android:text="@string/lb_scan_rate"
+                        android:text="@string/lb_scan_rate_seconds"
                         android:textColor="@color/limed_spruce"
                         style="@style/body_small"/>
 
@@ -248,7 +251,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8sp"
-                android:text="@string/lb_start_aerial_scan"
+                android:text="@string/lb_start_stationary_scan"
                 style="@style/button_primary"/>
 
         </LinearLayout>
@@ -258,7 +261,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:layout_weight="6">
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -288,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_weight="6"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         android:text="@string/lb_stationary_scanning"
                         android:textSize="18dp"/>
 
@@ -296,7 +299,7 @@
                         android:id="@+id/stationary_setting_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_setting"
+                        android:src="@drawable/ic_settings"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -310,7 +313,7 @@
                     android:gravity="center"
                     android:background="@color/ebony_clay"
                     android:textSize="18dp"
-                    android:textColor="@color/colortextbutton"/>
+                    android:textColor="@color/white"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -318,105 +321,105 @@
                     android:layout_margin="18dp"
                     android:padding="30dp"
                     android:orientation="vertical"
-                    android:background="@color/colortextbutton">
+                    android:background="@color/catskill_white">
 
                     <TextView
-                        android:id="@+id/lbFirstResult_stationary"
+                        android:id="@+id/first_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbSecondResult_stationary"
+                        android:id="@+id/second_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbThirdResult_stationary"
+                        android:id="@+id/third_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbForthResult_stationary"
+                        android:id="@+id/forth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbFifthResult_stationary"
+                        android:id="@+id/fifth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbSixthResult_stationary"
+                        android:id="@+id/sixth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbSeventhResult_stationary"
+                        android:id="@+id/seventh_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbEighthResult_stationary"
+                        android:id="@+id/eighth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbNinthResult_stationary"
+                        android:id="@+id/ninth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/lbTenthResult_stationary"
+                        android:id="@+id/tenth_result_stationary_textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textSize="12sp"
-                        android:textColor="@color/colortext"
+                        android:textColor="@color/light_blue"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </LinearLayout>
@@ -433,85 +436,15 @@
                 android:visibility="gone"
                 android:background="@color/mountain_meadow"
                 android:text="@string/lb_record"
-                android:textColor="@color/colortextbutton"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/connecting_device_stationaryScan"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16sp"
-                android:background="@color/catskill_white">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="6">
-
-                    <TextView
-                        android:id="@+id/device_name_stationaryScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8sp"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_large"/>
-
-                    <TextView
-                        android:id="@+id/device_address_stationaryScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_battery_full"/>
-
-                    <TextView
-                        android:id="@+id/percent_battery_stationaryScan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center|bottom"
-                        android:gravity="bottom"
-                        android:textColor="@color/ebony_clay"
-                        style="@style/body_small"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/state_view"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/mountain_meadow"/>
-
-        </LinearLayout>
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

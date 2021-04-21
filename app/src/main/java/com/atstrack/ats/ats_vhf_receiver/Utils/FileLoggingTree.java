@@ -55,6 +55,5 @@ public class FileLoggingTree extends Timber.DebugTree{
             Log.e(TAG, "Error while logging into file: " + e.toString());
             Toast.makeText(context,"Error while logging into file: " + e.getMessage(),Toast.LENGTH_LONG);
         }
-
     }
 }

@@ -1,14 +1,10 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -16,7 +12,6 @@ import timber.log.Timber;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -24,56 +19,45 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.atstrack.ats.ats_vhf_receiver.Utils.DriveServiceHelper;
 import com.atstrack.ats.ats_vhf_receiver.Utils.FileLoggingTree;
 import com.atstrack.ats.ats_vhf_receiver.Utils.LeDeviceListAdapter;
-import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.locEnablerLL)
-    LinearLayout locEnablerLL;
-    @BindView(R.id.locationmsgTV)
-    TextView locationmsgTV;
-    @BindView(R.id.locationONbtn)
-    Button locationONbtn;
-    @BindView(R.id.btEnablerLL)
-    LinearLayout btEnablerLL;
-    @BindView(R.id.bluetoothmsgTV)
-    TextView bluetoothmsgTV;
-    @BindView(R.id.bluetoothONbtn)
-    Button bluetoothONbtn;
-    @BindView(R.id.version)
-    TextView version;
+    @BindView(R.id.location_enable_linearLayout)
+    LinearLayout location_enable_linearLayout;
+    @BindView(R.id.location_textView)
+    TextView location_textView;
+    @BindView(R.id.location_button)
+    Button location_button;
+    @BindView(R.id.bluetooth_enable_linearLayout)
+    LinearLayout bluetooth_enable_linearLayout;
+    @BindView(R.id.bluetooth_textView)
+    TextView bluetooth_textView;
+    @BindView(R.id.bluetooth_button)
+    Button bluetooth_button;
+    @BindView(R.id.version_textView)
+    TextView version_textView;
     @BindView(R.id.switch_dark_mode)
-    Switch switchdarkmode;
+    Switch switch_dark_mode;
     @BindView(R.id.search_linearLayout)
     LinearLayout search_linearLayout;
     @BindView(R.id.device_recyclerView)
@@ -99,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private static final long SCAN_PERIOD = 8000;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning;
     private Handler mHandler;
 
     // Device scan callback.
@@ -123,29 +106,19 @@ public class MainActivity extends AppCompatActivity {
 
         Timber.plant(new FileLoggingTree(getApplicationContext()));
 
-        getSupportActionBar().hide();
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         String v = "version: " + BuildConfig.VERSION_NAME;
-        version.setText(v);
+        version_textView.setText(v);
 
-        initDarkMode();
+        init();
 
+        // Initializes the spinner to search for available devices
         anim_spinner.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
         final Animatable animated = (Animatable) anim_spinner.getDrawable();
         ((Animatable) animated).start();
-
-        /*SharedPreferences preferences = getSharedPreferences("Connection", 0);
-        connectState = preferences.edit();
-        retry = preferences.getBoolean("retry", false);
-        if (retry){
-            connectState.clear();
-            connectState.apply();
-            devices_scrollview.setVisibility(View.GONE);
-            search_linearLayout.setVisibility(View.GONE);
-            state_connect_textView.setText(R.string.lb_unable_connect);
-            state_connect_textView.setTextColor(ContextCompat.getColor(this, R.color.colordeletebutton));
-            retry_linearLayout.setVisibility(View.VISIBLE);
-        }*/
 
         mHandler = new Handler();
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -168,31 +141,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initDarkMode() {
+    /**
+     * Initializes the app theme and checks permissions to use bluetooth and storage.
+     */
+    private void init() {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         SharedPreferences appSettingPrefs = getSharedPreferences("AppSettingPrefs", 0);
         sharedPrefsEdit = appSettingPrefs.edit();
-        isNightModeOn = appSettingPrefs.getBoolean("NightMode", false);
+        isNightModeOn = (hour > 25) ? true : false;
+        sharedPrefsEdit.putBoolean("NightMode", isNightModeOn);
+        sharedPrefsEdit.apply();
+        //isNightModeOn = appSettingPrefs.getBoolean("NightMode", false);
 
-        if (isNightModeOn){
+        if (isNightModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            switchdarkmode.setChecked(true);
+            switch_dark_mode.setChecked(true);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            switchdarkmode.setChecked(false);
+            switch_dark_mode.setChecked(false);
         }
+
         checkPermissions();
-        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
-            btEnablerLL.setVisibility(View.VISIBLE);
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+            bluetooth_enable_linearLayout.setVisibility(View.VISIBLE);
         }
-        if(!isLocationEnable()){
-            locEnablerLL.setVisibility(View.VISIBLE);
+        if (!isLocationEnable()) {
+            location_enable_linearLayout.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
         if (!mBluetoothAdapter.isEnabled()) {
@@ -204,8 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter(this);
-        //if (!retry)
-            scanLeDevice(true);
+        scanLeDevice(true);
     }
 
     @Override
@@ -226,34 +205,36 @@ public class MainActivity extends AppCompatActivity {
         mLeDeviceListAdapter.clear();
     }
 
+    /**
+     * Method for scanning and displaying available BLE devices.
+     *
+     * @param enable If true, enable to scan available devices.
+     */
     private void scanLeDevice(final boolean enable) {
         if (enable) {
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(() -> {
-                mScanning = false;
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
 
                 search_linearLayout.setVisibility(View.GONE);
 
-                if (!mLeDeviceListAdapter.mLeDevices.isEmpty()) {
+                if (mLeDeviceListAdapter.getItemCount() > 0) { // Available devices were found to display
                     devices_scrollview.setVisibility(View.VISIBLE);
                     device_recyclerView.setAdapter(mLeDeviceListAdapter);
                     device_recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                } else {
+                } else { // Unable to find any devices within range
                     devices_scrollview.setVisibility(View.GONE);
                     state_connect_textView.setText(R.string.lb_unable_find);
-                    state_connect_textView.setTextColor(ContextCompat.getColor(this, R.color.colortext));
+                    state_connect_textView.setTextColor(ContextCompat.getColor(this, R.color.ebony_clay));
                     retry_linearLayout.setVisibility(View.VISIBLE);
                 }
 
                 invalidateOptionsMenu();
             }, SCAN_PERIOD);
 
-            mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
             Log.i("DeviceScanActivity", "DeviceScanActivity-scanLeDevice");
         } else {
-            mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
         invalidateOptionsMenu();
@@ -265,16 +246,17 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @OnClick(R.id.locationONbtn)
-    public void enableLocation(View v){
-        locEnablerLL.setVisibility(View.GONE);
+    @OnClick(R.id.location_button)
+    public void enableLocation(View v) {
+        location_enable_linearLayout.setVisibility(View.GONE);
         Intent enableLocIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         int REQUEST_ENABLE_LOC = 1;
         startActivityForResult(enableLocIntent, REQUEST_ENABLE_LOC);
     }
-    @OnClick (R.id.bluetoothONbtn)
-    public void enableBluetooth(View v){
-        btEnablerLL.setVisibility(View.GONE);
+
+    @OnClick (R.id.bluetooth_button)
+    public void enableBluetooth(View v) {
+        bluetooth_enable_linearLayout.setVisibility(View.GONE);
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         int REQUEST_ENABLE_BT = 1;
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -295,33 +277,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean isLocationEnable(){
+    /**
+     * Checks if location mode is enabled to use.
+     *
+     * @return Return true, if the location mode is not off.
+     */
+    private Boolean isLocationEnable() {
         int locationMode;
         try {
             locationMode = Settings.Secure.getInt(getApplicationContext().getContentResolver(), Settings.Secure.LOCATION_MODE);
-
         } catch (Settings.SettingNotFoundException e) {
             return false;
         }
-
         return locationMode != Settings.Secure.LOCATION_MODE_OFF;
     }
 
     @OnClick(R.id.retry_button)
-    public void onClickRetry(View v){
+    public void onClickRetry(View v) {
         retry_linearLayout.setVisibility(View.GONE);
         search_linearLayout.setVisibility(View.VISIBLE);
         scanLeDevice(true);
     }
 
     @OnClick(R.id.switch_dark_mode)
-    public void onDarkModeToggleClick(View v)
-    {
-        if (isNightModeOn){
+    public void onDarkModeToggleClick(View v) {
+        if (isNightModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             sharedPrefsEdit.putBoolean("NightMode", false);
             sharedPrefsEdit.apply();
-        }else{
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             sharedPrefsEdit.putBoolean("NightMode", true);
             sharedPrefsEdit.apply();

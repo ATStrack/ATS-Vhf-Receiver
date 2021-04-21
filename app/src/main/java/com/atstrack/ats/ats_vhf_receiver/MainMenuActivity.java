@@ -1,9 +1,10 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import butterknife.BindView;
@@ -28,7 +29,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,18 +41,22 @@ import java.util.UUID;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_mainMenu)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_mainMenu)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_mainMenu)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
     @BindView(R.id.menu_linearLayout)
     LinearLayout menu_linearLayout;
     @BindView(R.id.vhf_constraintLayout)
     ConstraintLayout vhf_linearLayout;
-    @BindView(R.id.state_view)
-    View state_view;
     @BindView(R.id.state_textView)
     TextView state_textView;
     @BindView(R.id.name_textView)
@@ -79,10 +84,9 @@ public class MainMenuActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
     private Handler mHandler;
     private Handler mHandlerMenu;
-    private int heightPixels;
-    private int widthPixels;
     private boolean scanning;
 
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -105,6 +109,11 @@ public class MainMenuActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter;
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -117,11 +126,11 @@ public class MainMenuActivity extends AppCompatActivity {
                     mConnected = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter.equals("scanning"))
+                    if (parameter.equals("scanning")) // Checks if the BLE device is scanning
                         onClickScanning();
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    if (parameter.equals("scanning"))
+                    if (parameter.equals("scanning")) // Checks if the BLE device is scanning
                         download(packet);
                 }
             }
@@ -140,33 +149,40 @@ public class MainMenuActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void onClickScanning(){
+    /**
+     * Requests a read for check if the BLE device is scanning.
+     * Service name: Diagnostic.
+     * Characteristic name: BoardStatus.
+     */
+    private void onClickScanning() {
         UUID uservice=UUID.fromString("fab2d796-3364-4b54-b9a1-7735545814ad");
         UUID uservicechar=UUID.fromString("cae6ad69-2a38-4285-b6f8-6a2f8517d1fd");
         mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
     @OnClick(R.id.connecting_device_mainMenu)
-    public void onClickConnectingDevice(View v){
+    public void onClickConnectingDevice(View v) {
         menu_linearLayout.setVisibility(View.GONE);
         connecting_device_linearLayout.setVisibility(View.GONE);
         vhf_linearLayout.setVisibility(View.GONE);
         getSupportActionBar().hide();
+        state_view.setVisibility(View.GONE);
 
         disconnect_constraintLayout.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.disconnect_exit_image)
-    public void onClickConnectExit(View v){
+    public void onClickConnectExit(View v) {
         disconnect_constraintLayout.setVisibility(View.GONE);
 
         getSupportActionBar().show();
+        state_view.setVisibility(View.VISIBLE);
         menu_linearLayout.setVisibility(View.VISIBLE);
         connecting_device_linearLayout.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.disconnect_button)
-    public void onClickDisconnect(View v){
+    public void onClickDisconnect(View v) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -174,7 +190,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.start_scanning_button)
-    public void onClickStartScanning(View v){
+    public void onClickStartScanning(View v) {
         Intent intent = new Intent(this, StartScanningActivity.class);
         intent.putExtra(StartScanningActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(StartScanningActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -184,7 +200,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.receiver_configuration_button)
-    public void onClickReceiverConfiguration(View v){
+    public void onClickReceiverConfiguration(View v) {
         Intent intent = new Intent(this, ReceiverConfigurationActivity.class);
         intent.putExtra(ReceiverConfigurationActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(ReceiverConfigurationActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -194,7 +210,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.manage_receiver_data_button)
-    public void onClickManageReceiverData(View v){
+    public void onClickManageReceiverData(View v) {
         Intent intent = new Intent(this, GetDataActivity.class);
         intent.putExtra(GetDataActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(GetDataActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -204,7 +220,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.test_receiver_button)
-    public void onClickTestReceiver(View v){
+    public void onClickTestReceiver(View v) {
         Intent intent = new Intent(this, TestReceiverActivity.class);
         intent.putExtra(TestReceiverActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(TestReceiverActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -219,15 +235,18 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("HOME");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         getSupportActionBar().hide();
+        state_view.setVisibility(View.GONE);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -236,18 +255,32 @@ public class MainMenuActivity extends AppCompatActivity {
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
-        parameter = "scanning";
 
         name_textView.setText(mDeviceName);
-
-        check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
-        final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
-        animated.start();
-
-        mHandlerMenu = new Handler();
-        mHandler = new Handler();
         scanning = false;
-        connectingToReceiver();
+
+        boolean isMenu = intent.getBooleanExtra("menu", false);
+
+        if (!isMenu) { // Connecting to the selected BLE device
+            // Checks if the BLE device is scanning
+            parameter = "scanning";
+
+            // Initializes the spinner to connect to BLE device
+            check_avd_anim.setImageDrawable(getResources().getDrawable(R.drawable.avd_anim_spinner_48));
+            final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
+            animated.start();
+
+            mHandlerMenu = new Handler();
+            mHandler = new Handler();
+            connectingToDevice();
+        } else { // Only displays the main menu
+            state_view.setVisibility(View.VISIBLE);
+            getSupportActionBar().show();
+            vhf_linearLayout.setVisibility(View.GONE);
+            menu_linearLayout.setVisibility(View.VISIBLE);
+            state_textView.setVisibility(View.GONE);
+            check_avd_anim.setVisibility(View.GONE);
+        }
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -279,7 +312,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: // Go back to the previous activity
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
@@ -291,16 +324,21 @@ public class MainMenuActivity extends AppCompatActivity {
         if (mConnected) {
             connecting_device_linearLayout.setVisibility(View.VISIBLE);
         } else if (menu_linearLayout.getVisibility() == View.VISIBLE) {
-            showMessageDisconnect("Receiver Disconnected");
+            showDisconnectionMessage("Receiver Disconnected");
         }
         return true;
     }
 
-    private void showMessageDisconnect(String message) {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     *
+     * @param message The message that will be displayed on the screen.
+     */
+    private void showDisconnectionMessage(String message) {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
-        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this).create();
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
 
         TextView disconnect_message = view.findViewById(R.id.disconnect_message);
         disconnect_message.setText(message);
@@ -308,6 +346,7 @@ public class MainMenuActivity extends AppCompatActivity {
         dialog.setView(view);
         dialog.show();
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         mHandlerMenu.postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -316,14 +355,16 @@ public class MainMenuActivity extends AppCompatActivity {
         }, CONNECT_PERIOD);
     }
 
-    private void connectingToReceiver() {
+    /**
+     * Tries to connect to the selected BLE device or shows a connection error.
+     */
+    private void connectingToDevice() {
         mHandler.postDelayed(() -> {
             if (mConnected){
                 state_textView.setText(R.string.lb_connected);
 
+                // Initializes the check animation when connected successfully
                 check_avd_anim.setImageDrawable((AnimatedVectorDrawable) getResources().getDrawable(R.drawable.check_avd_anim));
-                //final AnimatedVectorDrawable animated = (AnimatedVectorDrawable) check_avd_anim.getDrawable();
-                //((AnimatedVectorDrawable) animated).start();
                 Drawable drawable = check_avd_anim.getDrawable();
                 Animatable animatable = (Animatable) drawable;
                 AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, new Animatable2Compat.AnimationCallback() {
@@ -334,10 +375,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
                 animatable.start();
 
-                state_textView.setTextColor(ContextCompat.getColor(this, R.color.mountain_meadow));
-                state_view.setBackgroundResource(R.color.mountain_meadow);
                 mHandlerMenu.postDelayed(() -> {
-                    if (!scanning) {
+                    if (!scanning) { // After connecting displays the main menu
+                        state_view.setVisibility(View.VISIBLE);
                         getSupportActionBar().show();
                         vhf_linearLayout.setVisibility(View.GONE);
                         menu_linearLayout.setVisibility(View.VISIBLE);
@@ -346,25 +386,22 @@ public class MainMenuActivity extends AppCompatActivity {
                     }
                 }, MESSAGE_PERIOD);
             } else {
-                /*SharedPreferences preferences = getSharedPreferences("Connection", 0);
-                SharedPreferences.Editor connectState = preferences.edit();
-                connectState.putBoolean("retry", true);
-                connectState.apply();
-                unbindService(mServiceConnection);
-                mBluetoothLeService = null;
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);*/
-                showMessageDisconnect("Failed to connect to receiver");
+                showDisconnectionMessage("Failed to connect to receiver");
             }
         }, CONNECT_PERIOD);
     }
 
+    /**
+     * With the received packet, check if the BLE device is in scanning.
+     *
+     * @param data The received packet.
+     */
     public void download(byte[] data) {
         switch (Converters.getHexValue(data[0])) {
-            case "41":
+            case "41": // The BLE device is not in scanning
                 scanning = false;
                 break;
-            case "82":
+            case "82": // The BLE device in in aerial scanning
                 scanning = true;
                 Intent intentA = new Intent(this, AerialScanActivity.class);
                 intentA.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
@@ -378,7 +415,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(intentA);
                 mBluetoothLeService.disconnect();
                 break;
-            case "83":
+            case "83": // The BLE device is in stationary scanning
                 scanning = true;
                 Intent intentS = new Intent(this, StationaryScanActivity.class);
                 intentS.putExtra(StationaryScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);

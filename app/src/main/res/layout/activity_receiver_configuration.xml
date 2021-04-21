@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,118 +10,60 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16sp"
-        android:layout_marginEnd="16sp"
-        android:layout_marginTop="24sp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/edit_frequency_tables_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16sp"
-            android:text="@string/lb_edit_frequency_tables"
-            style="@style/button_primary"/>
-
-        <Button
-            android:id="@+id/edit_receiver_defaults_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16sp"
-            android:text="@string/lb_edit_receiver_defaults"
-            style="@style/button_primary"/>
-
-        <Button
-            android:id="@+id/set_transmitter_type_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16sp"
-            android:text="@string/lb_set_transmitter_type"
-            style="@style/button_primary"/>
-
-        <Button
-            android:id="@+id/clone_from_other_receiver_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lb_clone_from_other_receiver"
-            style="@style/button_primary"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/connecting_device_receiverConfiguration"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        <include
+            layout="@layout/toolbar"/>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16sp"
-            android:background="@color/catskill_white">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16sp"
+            android:layout_marginEnd="16sp"
+            android:layout_marginTop="24sp"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/edit_frequency_tables_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="6">
+                android:layout_marginBottom="16sp"
+                android:text="@string/lb_edit_frequency_tables"
+                style="@style/button_primary"/>
 
-                <TextView
-                    android:id="@+id/device_name_receiverConfiguration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8sp"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_large"/>
+            <Button
+                android:id="@+id/edit_receiver_defaults_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16sp"
+                android:text="@string/lb_edit_receiver_defaults"
+                style="@style/button_primary"/>
 
-                <TextView
-                    android:id="@+id/device_address_receiverConfiguration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_small"/>
+            <Button
+                android:id="@+id/set_transmitter_type_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16sp"
+                android:text="@string/lb_set_transmitter_type"
+                style="@style/button_primary"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_battery_full"/>
-
-                <TextView
-                    android:id="@+id/percent_battery_receiverConfiguration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center|bottom"
-                    android:gravity="bottom"
-                    android:textColor="@color/ebony_clay"
-                    style="@style/body_small"/>
-
-            </LinearLayout>
+            <Button
+                android:id="@+id/clone_from_other_receiver_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lb_clone_from_other_receiver"
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/state_view"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@color/mountain_meadow"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

@@ -1,115 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground"
+    android:background="@color/athens_gray"
     tools:context=".EditReceiverDefaultsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/aerial_defaults_button"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/mountain_meadow"
-            android:text="@string/lb_aerial_defaults"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/stationary_defaults_button"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="10dp"
-            android:background="@color/mountain_meadow"
-            android:text="@string/lb_stationary_defaults"
-            android:textColor="@color/colortextbutton"
-            android:textSize="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/connecting_device_editReceiverDefaults"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorbackground"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        <include
+            layout="@layout/toolbar"/>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:padding="14dp"
-            android:elevation="4dp"
-            android:background="@color/colortextbutton">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16sp"
+            android:layout_marginEnd="16sp"
+            android:layout_marginTop="24sp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_main">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/aerial_defaults_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="6">
+                android:layout_marginBottom="16sp"
+                android:text="@string/lb_aerial_defaults"
+                style="@style/button_primary"/>
 
-                <TextView
-                    android:id="@+id/device_name_editReceiverDefaults"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="18dp"/>
-
-                <TextView
-                    android:id="@+id/device_address_editReceiverDefaults"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="12dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/stationary_defaults_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_battery_full"/>
-
-                <TextView
-                    android:id="@+id/percent_battery_editReceiverDefaults"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="%75"
-                    android:textSize="12dp"
-                    android:textColor="@color/colortext"/>
-
-            </LinearLayout>
+                android:text="@string/lb_stationary_defaults"
+                style="@style/button_primary"/>
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/state_view"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@color/mountain_meadow"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <include
+            layout="@layout/receiver_status"/>
 
     </LinearLayout>
 

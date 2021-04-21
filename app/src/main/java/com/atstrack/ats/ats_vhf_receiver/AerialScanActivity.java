@@ -2,7 +2,7 @@ package com.atstrack.ats.ats_vhf_receiver;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,12 +19,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,16 +34,22 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import static com.atstrack.ats.ats_vhf_receiver.R.color.dark;
-import static com.atstrack.ats.ats_vhf_receiver.R.color.red;
+import static com.atstrack.ats.ats_vhf_receiver.R.color.light_blue;
+import static com.atstrack.ats.ats_vhf_receiver.R.color.tall_poppy;
 
 public class AerialScanActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_aerialScan)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_aerialScan)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_aerialScan)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
     @BindView(R.id.ready_aerial_scan_LinearLayout)
     LinearLayout ready_aerial_scan_LinearLayout;
@@ -67,28 +73,26 @@ public class AerialScanActivity extends AppCompatActivity {
     Button start_aerial_button;
     @BindView(R.id.aerial_result_linearLayout)
     LinearLayout aerial_result_linearLayout;
-    @BindView(R.id.table_freq_aerial)
-    TextView table_freq;
-    @BindView(R.id.lbFirstResult_aerial)
+    @BindView(R.id.table_aerial_textView)
+    TextView table_aerial_textView;
+    @BindView(R.id.table_index_aerial_textView)
+    TextView table_index_aerial_textView;
+    @BindView(R.id.scan_rateD_aerial_textView)
+    TextView scan_rateD_aerial_textView;
+    @BindView(R.id.frequency_aerial_textView)
+    TextView frequency_aerial_textView;
+    @BindView(R.id.first_result_aerial_textView)
     TextView firstResultTextView;
-    @BindView(R.id.lbSecondResult_aerial)
+    @BindView(R.id.second_result_aerial_textView)
     TextView secondResultTextView;
-    @BindView(R.id.lbThirdResult_aerial)
+    @BindView(R.id.third_result_aerial_textView)
     TextView thirdResultTextView;
-    @BindView(R.id.lbForthResult_aerial)
+    @BindView(R.id.forth_result_aerial_textView)
     TextView forthResultTextView;
-    @BindView(R.id.lbFifthResult_aerial)
+    @BindView(R.id.fifth_result_aerial_textView)
     TextView fifthResultTextView;
-    @BindView(R.id.lbSixthResult_aerial)
+    @BindView(R.id.sixth_result_aerial_textView)
     TextView sixthResultTextView;
-    @BindView(R.id.lbSeventhResult_aerial)
-    TextView seventhResultTextView;
-    @BindView(R.id.lbEighthResult_aerial)
-    TextView eighthResultTextView;
-    @BindView(R.id.lbNinthResult_aerial)
-    TextView ninthResultTextView;
-    @BindView(R.id.lbTenthResult_aerial)
-    TextView tenthResultTextView;
 
     private final static String TAG = AerialScanActivity.class.getSimpleName();
 
@@ -104,10 +108,6 @@ public class AerialScanActivity extends AppCompatActivity {
     private boolean state = true;
     private boolean response = true;
 
-    private Handler mHandler;
-    private int heightPixels;
-    private int widthPixels;
-
     private boolean scanning;
     private String currentData;
     private int selectedFrequency;
@@ -119,6 +119,7 @@ public class AerialScanActivity extends AppCompatActivity {
     private String month;
     private boolean mortality;
 
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -141,6 +142,11 @@ public class AerialScanActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter = "";
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -154,22 +160,33 @@ public class AerialScanActivity extends AppCompatActivity {
 //                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter.equals("aerial"))
-                        onClickAerial();
-                    else if (parameter.equals("startAerial"))
-                        onClickStart();
-                    else if (parameter.equals("sendLog"))
-                        onClickLog();
-                    else if (parameter.equals("stopAerial"))
-                        onClickStop();
+                    switch (parameter) {
+                        case "aerial": // Gets aerial defaults data
+                            onClickAerial();
+                            break;
+                        case "startAerial": // Starts to scan
+                            onClickStart();
+                            break;
+                        case "sendLog": // Receives the data
+                            onClickLog();
+                            break;
+                        case "stopAerial": // Stops scan
+                            onClickStop();
+                            break;
+                    }
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    if (parameter.equals("aerial"))
-                        downloadData(packet);
-                    else if (parameter.equals("sendLog"))
-                        setCurrentLog(packet);
-                    else if (parameter.equals("stopAerial"))
-                        showMessage(packet);
+                    switch (parameter) {
+                        case "aerial": // Gets aerial defaults data
+                            downloadData(packet);
+                            break;
+                        case "sendLog": // Receives the data
+                            setCurrentLog(packet);
+                            break;
+                        case "stopAerial": // Stops scan
+                            showMessage(packet);
+                            break;
+                    }
                 }
             }
             catch (Exception e) {
@@ -187,13 +204,23 @@ public class AerialScanActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void onClickAerial(){
+    /**
+     * Requests a read for get aerial defaults data.
+     * Service name: Scan.
+     * Characteristic name: Aerial.
+     */
+    private void onClickAerial() {
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
-        mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar); //aerial
+        mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
-    private void onClickStart(){
+    /**
+     * Writes the aerial scan data for start to scan.
+     * Service name: Scan.
+     * Characteristic name: Aerial.
+     */
+    private void onClickStart() {
         parameter = "sendLog";
 
         Calendar currentDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -211,27 +238,38 @@ public class AerialScanActivity extends AppCompatActivity {
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b, true);
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b, true);
 
         scanning = true;
     }
 
-    private void onClickLog(){
+    /**
+     * Enables notification for receive the data.
+     * Service name: Screen.
+     * Characteristic name: SendLog.
+     */
+    private void onClickLog() {
         UUID uservice=UUID.fromString("26da3d0d-9119-48bb-af48-b0b96c665a66");
         UUID uservicechar=UUID.fromString("7052b8df-95f9-4ba3-8324-0d8ff9232435");
         mBluetoothLeService.setCharacteristicNotificationRead(uservice, uservicechar, true);
     }
 
-    private void onClickStop(){
+    /**
+     * Writes a value for stop scan.
+     * Service name: Scan.
+     * Characteristic name: Aerial.
+     */
+    private void onClickStop() {
         parameter = "aerial";
-        byte[] b = new byte[]{(byte)0x87};
+        byte[] b = new byte[]{(byte) 0x87};
 
         UUID uservice = UUID.fromString("8d60a8bb-1f60-4703-92ff-411103c493e6");
         UUID uservicechar = UUID.fromString("111584dd-b374-417c-a51d-9314eba66d6c");
-        mBluetoothLeService.writeCharacteristic( uservice,uservicechar,b);
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b, false);
 
         scanning = false;
         getSupportActionBar().show();
+        state_view.setVisibility(View.VISIBLE);
         clear();
         aerial_result_linearLayout.setVisibility(View.GONE);
         ready_aerial_scan_LinearLayout.setVisibility(View.VISIBLE);
@@ -242,7 +280,7 @@ public class AerialScanActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.edit_aerial_defaults_textView)
-    public void onClickEditDefaults(View v){
+    public void onClickEditDefaults(View v) {
         Intent intent = new Intent(this, AerialDefaultsActivity.class);
         intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_NAME, mDeviceName);
         intent.putExtra(AerialDefaultsActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -252,17 +290,17 @@ public class AerialScanActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.start_aerial_button)
-    public void onClickStartAerial(View v){
+    public void onClickStartAerial(View v) {
         parameter = "startAerial";
         mBluetoothLeService.connect(mDeviceAddress);
-        //onRestartConnection();
         getSupportActionBar().hide();
+        state_view.setVisibility(View.GONE);
         ready_aerial_scan_LinearLayout.setVisibility(View.GONE);
         aerial_result_linearLayout.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.aerial_exit_image)
-    public void onClickExit(View  v){
+    public void onClickExit(View  v) {
         parameter = "stopAerial";
         onRestartConnection();
     }
@@ -273,14 +311,16 @@ public class AerialScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_aerial_scan);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Mobile Scanning");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("MOBILE SCANNING");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -289,22 +329,20 @@ public class AerialScanActivity extends AppCompatActivity {
 
         mortality = false;
 
-        if (scanning) {
+        if (scanning) { // The device is already scanning
             parameter = "sendLog";
             year = intent.getExtras().getString("year");
             month = intent.getExtras().getString("month");
             getSupportActionBar().hide();
             ready_aerial_scan_LinearLayout.setVisibility(View.GONE);
             aerial_result_linearLayout.setVisibility(View.VISIBLE);
-        } else {
+        } else { // Gets aerial defaults data
             parameter = "aerial";
         }
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
-
-        mHandler = new Handler();
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -313,7 +351,7 @@ public class AerialScanActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+            case android.R.id.home: //Go back to the previous activity
                 Intent intent = new Intent(this, StartScanningActivity.class);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
                 intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
@@ -331,7 +369,7 @@ public class AerialScanActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (scanning) {
+        if (scanning) { // Asks if you want to stop the scan
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Stop Aerial");
             builder.setMessage("Are you sure you want to stop scanning?");
@@ -342,7 +380,7 @@ public class AerialScanActivity extends AppCompatActivity {
             builder.setNegativeButton("Cancel", null);
             AlertDialog dialog = builder.create();
             dialog.show();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorbackground)));
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.catskill_white)));
         }
     }
 
@@ -372,11 +410,14 @@ public class AerialScanActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mConnected && !state)
-            showMessageDisconnect();
+            showDisconnectionMessage();
         return true;
     }
 
-    private void showMessageDisconnect() {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     */
+    private void showDisconnectionMessage() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -385,6 +426,7 @@ public class AerialScanActivity extends AppCompatActivity {
         dialog.setView(view);
         dialog.show();
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -393,6 +435,11 @@ public class AerialScanActivity extends AppCompatActivity {
         }, MESSAGE_PERIOD);
     }
 
+    /**
+     * With the received packet, gets aerial defaults data.
+     *
+     * @param data The received packet.
+     */
     private void downloadData(byte[] data) {
         mBluetoothLeService.disconnect();
         if (!response) {
@@ -401,18 +448,20 @@ public class AerialScanActivity extends AppCompatActivity {
         }
         parameter = "aerial";
         if (Converters.getHexValue(data[0]).equals("7D")) {
-            if (Integer.parseInt(Converters.getDecimalValue(data[1])) == 0) {
+            if (Integer.parseInt(Converters.getDecimalValue(data[1])) == 0) { // There are no tables with frequencies to scan
                 selected_frequency_aerial_textView.setText("None");
                 ready_aerial_textView.setText("Not Ready to Scan");
                 frequency_empty_textView.setVisibility(View.VISIBLE);
                 start_aerial_button.setEnabled(false);
-                start_aerial_button.setTextAppearance(this, R.style.button_primary_disabled);
-            } else {
+                start_aerial_button.setBackgroundResource(R.color.slate_gray);
+                start_aerial_button.setTextColor(ContextCompat.getColor(this, R.color.ghost));
+            } else { // Shows the table to be scanned
                 selected_frequency_aerial_textView.setText(Converters.getDecimalValue(data[1]));
                 ready_aerial_textView.setText("Ready to Scan");
                 frequency_empty_textView.setVisibility(View.GONE);
                 start_aerial_button.setEnabled(true);
-                start_aerial_button.setTextAppearance(this, R.style.button_primary);
+                start_aerial_button.setBackgroundResource(R.color.mountain_meadow);
+                start_aerial_button.setTextColor(ContextCompat.getColor(this, R.color.white));
             }
             selectedFrequency = Integer.parseInt(Converters.getDecimalValue(data[1]));
             numberAntennas = Integer.parseInt(Converters.getDecimalValue(data[2])) & 15;
@@ -426,6 +475,11 @@ public class AerialScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * With the received packet, gets the data of scanning.
+     *
+     * @param data The received packet.
+     */
     public void setCurrentLog(byte[] data) {
         currentData = "";
         String format = Converters.getHexValue(data[0]);
@@ -445,6 +499,11 @@ public class AerialScanActivity extends AppCompatActivity {
         refresh();
     }
 
+    /**
+     * With the received packet, processes the data to display.
+     *
+     * @param data The received packet.
+     */
     public void logFreq(byte[] data){
         mortality = false;
         int freqOffset = 0;
@@ -471,10 +530,17 @@ public class AerialScanActivity extends AppCompatActivity {
                     break;
             }
         }
-        table_freq.setText("Table: " + selectedFrequency + " [" + Converters.getDecimalValue(data[3]) + "] Freq: " +
-                String.valueOf(freqOffset).substring(0, 3) + "." + String.valueOf(freqOffset).substring(3));
+        table_aerial_textView.setText(String.valueOf(selectedFrequency));
+        table_index_aerial_textView.setText(Converters.getDecimalValue(data[3]));
+        scan_rateD_aerial_textView.setText(String.valueOf(scanRate));
+        frequency_aerial_textView.setText(String.valueOf(freqOffset).substring(0, 3) + "." + String.valueOf(freqOffset).substring(3));
     }
 
+    /**
+     * With the received packet, processes the data to display.
+     *
+     * @param data The received packet.
+     */
     public void logCode(byte[] data){
         mortality = (Integer.parseInt(Converters.getDecimalValue(data[5])) >= 100);
         for (int i = 1;i < data.length; i++) {
@@ -502,62 +568,56 @@ public class AerialScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the data displayed on the screen.
+     */
     public void refresh() {
-        tenthResultTextView.setText(ninthResultTextView.getText());
-        tenthResultTextView.setTextColor(ninthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
-
-        ninthResultTextView.setText(eighthResultTextView.getText());
-        ninthResultTextView.setTextColor(eighthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
-
-        eighthResultTextView.setText(seventhResultTextView.getText());
-        eighthResultTextView.setTextColor(seventhResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
-
-        seventhResultTextView.setText(sixthResultTextView.getText());
-        seventhResultTextView.setTextColor(sixthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
-
         sixthResultTextView.setText(fifthResultTextView.getText());
         sixthResultTextView.setTextColor(fifthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         fifthResultTextView.setText(forthResultTextView.getText());
         fifthResultTextView.setTextColor(forthResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         forthResultTextView.setText(thirdResultTextView.getText());
         forthResultTextView.setTextColor(thirdResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         thirdResultTextView.setText(secondResultTextView.getText());
         thirdResultTextView.setTextColor(secondResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         secondResultTextView.setText(firstResultTextView.getText());
         secondResultTextView.setTextColor(firstResultTextView.getText().toString().contains("M") ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
 
         firstResultTextView.setText(currentData);
         firstResultTextView.setTextColor(mortality ?
-                ContextCompat.getColor(this, red) : ContextCompat.getColor(this, dark));
+                ContextCompat.getColor(this, tall_poppy) : ContextCompat.getColor(this, light_blue));
     }
 
+    /**
+     * Clears the screen to start displaying the data.
+     */
     public void clear() {
-        table_freq.setText("");
+        table_aerial_textView.setText("");
+        table_index_aerial_textView.setText("");
+        scan_rateD_aerial_textView.setText("");
+        frequency_aerial_textView.setText("");
         firstResultTextView.setText("");
         secondResultTextView.setText("");
         thirdResultTextView.setText("");
         forthResultTextView.setText("");
         fifthResultTextView.setText("");
         sixthResultTextView.setText("");
-        seventhResultTextView.setText("");
-        eighthResultTextView.setText("");
-        ninthResultTextView.setText("");
-        tenthResultTextView.setText("");
     }
 
+    /**
+     * Displays a message indicating whether the writing was successful.
+     *
+     * @param data This packet indicates the writing status.
+     */
     private void showMessage(byte[] data) {
         int status = Integer.parseInt(Converters.getDecimalValue(data[0]));
 

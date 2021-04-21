@@ -3,6 +3,7 @@ package com.atstrack.ats.ats_vhf_receiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,7 +18,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +29,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -40,14 +40,12 @@ import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.Snapshots;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
 import com.atstrack.ats.ats_vhf_receiver.Utils.DriveServiceHelper;
-import com.atstrack.ats.ats_vhf_receiver.Utils.UploadZipFiles;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.signin.SignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -57,23 +55,24 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.UUID;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class GetDataActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_manageReceiverData)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_manageReceiverData)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_manageReceiverData)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
     @BindView(R.id.memory_used_percent_textView)
     TextView memory_used;
@@ -85,7 +84,7 @@ public class GetDataActivity extends AppCompatActivity {
     ImageView progressGIF;
     @BindView(R.id.percentage)
     TextView percentage;
-    @BindView(R.id.subMenuLinearLayout)
+    @BindView(R.id.menu_manage_receiver_linearLayout)
     LinearLayout subMenu;
 
     private final static String TAG = GetDataActivity.class.getSimpleName();
@@ -99,9 +98,6 @@ public class GetDataActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private final int MESSAGE_PERIOD = 3000;
 
-    private int widthPixels;
-    private int heightPixels;
-
     FileOutputStream stream;
     File newFile;
     File root;
@@ -110,7 +106,6 @@ public class GetDataActivity extends AppCompatActivity {
     private ArrayList<Snapshots> snapshotArray;
     private Snapshots rawDataCollector;
     private Snapshots processDataCollector;
-    private int fails;
     private int finalPageNumber;
     private int pageNumber;
     private int percent;
@@ -126,8 +121,7 @@ public class GetDataActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
-    private Handler mHandler;
-
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -150,6 +144,11 @@ public class GetDataActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter1;
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -163,38 +162,42 @@ public class GetDataActivity extends AppCompatActivity {
 //                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter1.equals("test"))
-                        onClickTest();
-                    else if (parameter1.equals("downloadData"))
-                        onClickDownloadData();
-                    else if (parameter1.equals("eraseData"))
-                        onClickEraseData();
+                    switch (parameter1) {
+                        case "test": // Gets memory used and byte stored
+                            onClickTest();
+                            break;
+                        case "downloadData": //
+                            onClickDownloadData();
+                            break;
+                        case "eraseData": // Delete data
+                            onClickEraseData();
+                            break;
+                    }
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                     if (parameter1.equals("downloadData")) {
-                        if (begin) {
-                            byte[] page = new byte[4];
-                            for (int i = 0; i < 4; i++)
-                                page[i] = packet[i];
-                            finalPageNumber = findPageNumber(page);
-                            for (int i = 4; i < 8; i++)
-                                page[i - 4] = packet[i];
-                            pageNumber = findPageNumber(page);
-                            fails = 0;
+                        // Gets raw data in pages, each page contains 2048 bytes.
+                        // 8 packets of 244 bytes and one of 96 bytes
+                        if (begin) { // Start download with an 8-byte packet
+                            // Only the first packet received contains 8 bytes
+                            // The first package indicates the total number of pages and the current page
+                            finalPageNumber = findPageNumber(new byte[]{packet[0], packet[1], packet[2], packet[3]});
+                            pageNumber = findPageNumber(new byte[]{packet[4], packet[5], packet[6], packet[7]});
                             error = false;
                             percent = 0;
                             begin = false;
                             percentage.setText(percent + "%");
+                            // The list that stores the raw and processed data
                             snapshotArray = new ArrayList<>();
-                            rawDataCollector = new Snapshots(finalPageNumber * 2048);
-                            processDataCollector = new Snapshots(((finalPageNumber * 2048) / 8) * 56);//Change snapshot size
+                            // size is defined
+                            rawDataCollector = new Snapshots(finalPageNumber * Snapshots.BYTES_PER_PAGE);
                         } else {
                             downloadData(packet);
                         }
                     }
-                    if (parameter1.equals("eraseData"))
+                    if (parameter1.equals("eraseData")) // Delete data
                         showMessage(packet);
-                    if (parameter1.equals("test"))
+                    if (parameter1.equals("test")) // Gets memory used and byte stored
                         downloadTest(packet);
                 }
             }
@@ -213,7 +216,12 @@ public class GetDataActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    private void onClickTest(){
+    /**
+     * Requests a read for get BLE device data.
+     * Service name: Diagnostic.
+     * Characteristic name: DiagInfo.
+     */
+    private void onClickTest() {
         UUID uservice=UUID.fromString("fab2d796-3364-4b54-b9a1-7735545814ad");
         UUID uservicechar=UUID.fromString("42d03a17-ebe1-4072-97a5-393f4a0515d7");
         mBluetoothLeService.readCharacteristicDiagnostic(uservice,uservicechar);
@@ -229,39 +237,35 @@ public class GetDataActivity extends AppCompatActivity {
         Glide.with(this).asGif().load(R.raw.barra_puntos).into(progressGIF);
     }
 
+    /**
+     * Writes delete data.
+     * Service name: StoredData.
+     * Characteristic name: StudyData.
+     */
     public void onClickEraseData() {
         byte[] b = new byte[]{(byte) 0x93};
 
         UUID uservice=UUID.fromString("609d10ad-d22d-48f3-9e6e-d035398c3606");
         UUID uservicechar=UUID.fromString("91dced42-a8ee-4d9d-aecf-dbd22d390568");
-        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b);
+        mBluetoothLeService.writeCharacteristic(uservice, uservicechar, b, false);
     }
 
-    @OnClick(R.id.btt_DownloadData)
+    @OnClick(R.id.download_data_button)
     public void onClickDownloadData(View v){
         parameter1 = "downloadData";
-        begin = true;//true
-
-        /*fails = 0;
-        error = false;
-        finalPageNumber = 3;
-        snapshotArray = new ArrayList<>();
-        rawDataCollector = new Snapshots(finalPageNumber * 2048);
-        processDataCollector = new Snapshots(((finalPageNumber * 2048) / 8) * 56);//Change snapshot size*/
+        begin = true;
 
         onRestartConnection();
     }
 
-    @OnClick(R.id.btt_EraseData)
+    @OnClick(R.id.erase_data_button)
     public void onClickEraseData(View v) {
-        //mBluetoothLeService.disconnect();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Warning");
         builder.setMessage("Are you sure you want to delete data?");
         builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("Delete", (dialog, which) -> {
             parameter1 = "eraseData";
-            //mBluetoothLeService.connect(mDeviceAddress);
             onRestartConnection();
         });
         builder.show();
@@ -271,17 +275,18 @@ public class GetDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_data);
-
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Manage Receiver Data");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("MANAGE RECEIVER DATA");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -292,10 +297,19 @@ public class GetDataActivity extends AppCompatActivity {
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
 
-        mHandler = new Handler();
-
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_SIGN_IN:
+                if (resultCode == RESULT_OK)
+                    handleSignInIntent(data);
+                break;
+        }
     }
 
     @Override
@@ -324,11 +338,14 @@ public class GetDataActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mConnected && !state)
-            showMessageDisconnect();
+            showDisconnectionMessage();
         return true;
     }
 
-    private void showMessageDisconnect() {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     */
+    private void showDisconnectionMessage() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -336,8 +353,8 @@ public class GetDataActivity extends AppCompatActivity {
 
         dialog.setView(view);
         dialog.show();
-        //dialog.getWindow().setLayout(widthPixels * 29 / 30, heightPixels * 2 / 3);
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -349,13 +366,18 @@ public class GetDataActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: //Go back to the previous activity
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * With the received packet, Gets memory used and byte stored and display on screen.
+     *
+     * @param data The received packet.
+     */
     public void downloadTest(byte[] data) {
         int numberPage = findPageNumber(new byte[]{data[18], data[17], data[16], data[15]});
         int lastPage = findPageNumber(new byte[]{data[22], data[21], data[20], data[19]});
@@ -364,15 +386,29 @@ public class GetDataActivity extends AppCompatActivity {
         bytes_stored.setText("Memory Used " + "(" + (numberPage * 2048) + " bytes stored)");
     }
 
+    /**
+     * Finds the page number of a 4-byte packet.
+     *
+     * @param packet The received packet.
+     *
+     * @return Returns the page number.
+     */
     private int findPageNumber(byte[] packet) {
-        int pageNumber = Integer.valueOf(Converters.getDecimalValue(packet[0]));
-        pageNumber = (Integer.valueOf(Converters.getDecimalValue(packet[1])) << 8) | pageNumber;
-        pageNumber = (Integer.valueOf(Converters.getDecimalValue(packet[2])) << 16) | pageNumber;
-        pageNumber = (Integer.valueOf(Converters.getDecimalValue(packet[3])) << 24) | pageNumber;
+        int pageNumber = Integer.parseInt(Converters.getDecimalValue(packet[0]));
+        pageNumber = (Integer.parseInt(Converters.getDecimalValue(packet[1])) << 8) | pageNumber;
+        pageNumber = (Integer.parseInt(Converters.getDecimalValue(packet[2])) << 16) | pageNumber;
+        pageNumber = (Integer.parseInt(Converters.getDecimalValue(packet[3])) << 24) | pageNumber;
         return pageNumber;
     }
 
-    private String readPacket(byte[] packet){
+    /**
+     * Processes the data when the download is complete.
+     *
+     * @param packet The raw data.
+     *
+     * @return Returns the processed data.
+     */
+    private String readPacket(byte[] packet) {
         String data = "";
         int index = 0;
         Log.i(TAG, "PACKET[0]: "+Converters.getHexValue(packet[0]));
@@ -380,20 +416,21 @@ public class GetDataActivity extends AppCompatActivity {
             data += "Year, Month, Day, Hour, Min, Sec, Ant, Freq, SS, Code, Det, Mort, Lat, Long, GpsAge" + CR + LF;
             data += Converters.getDecimalValue(packet[6]) + ", " + Converters.getDecimalValue(packet[7]) + ", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0" + CR + LF;
             index += 8;
-            while (index < packet.length){
-                if (Converters.getHexValue(packet[index]).equals("F0")){//52
+            while (index < packet.length) {
+                if (Converters.getHexValue(packet[index]).equals("F0")) {//52
                     Log.i(TAG, Converters.getHexValue(packet[index]));
                     data += "0, " + Converters.getDecimalValue(packet[index + 3]) + ", " + Converters.getDecimalValue(packet[index + 4]) + ", " +
                             Converters.getDecimalValue(packet[index + 5]) + ", " + Converters.getDecimalValue(packet[index + 6]) + ", " +
                             Converters.getDecimalValue(packet[index + 7]) + ", 0, " +
-                            ((Integer.valueOf(Converters.getDecimalValue(packet[index + 1])) * 256) + Integer.valueOf(Converters.getDecimalValue(packet[index + 2]))) +
+                            ((Integer.parseInt(Converters.getDecimalValue(packet[index + 1])) * 256) + Integer.parseInt(Converters.getDecimalValue(packet[index + 2]))) +
                             ", 0, 0, 0, 0, 0, 0, 0" + CR + LF;
-                } else if (Converters.getHexValue(packet[index]).equals("F1")){//52
+                } else if (Converters.getHexValue(packet[index]).equals("F1")) {//52
                     Log.i(TAG, Converters.getHexValue(packet[index]));
                     data += "0, 0, 0, 0, 0, 0, " + Converters.getDecimalValue(packet[index + 2]) + ", 0," +
-                            (Integer.valueOf(Converters.getDecimalValue(packet[index + 4])) + 200) + ", " + Converters.getDecimalValue(packet[index + 3]) + ", " +
-                            (Integer.valueOf(Converters.getDecimalValue(packet[index + 5])) - 100) + ", " +
-                            ((Integer.valueOf(Converters.getDecimalValue(packet[index + 5])) - 100) / 100) + ", 0, 0, 0" + CR + LF;
+                            (Integer.parseInt(Converters.getDecimalValue(packet[index + 4])) + 200) + ", " +
+                            Converters.getDecimalValue(packet[index + 3]) + ", " +
+                            (Integer.parseInt(Converters.getDecimalValue(packet[index + 5])) - 100) + ", " +
+                            ((Integer.parseInt(Converters.getDecimalValue(packet[index + 5])) - 100) / 100) + ", 0, 0, 0" + CR + LF;
                 }
                 index += 8;
             }
@@ -403,12 +440,17 @@ public class GetDataActivity extends AppCompatActivity {
         return data;
     }
 
-    private void downloadData(byte[] packet){
-        if((snapshotArray.size()== 0)&&(rawDataCollector.getPackIndex() == 0)&&(mConnected))
+    /**
+     * With the received packet, gets the raw data.
+     *
+     * @param packet The received packet.
+     */
+    private void downloadData(byte[] packet) {
+        if(snapshotArray.size() == 0 && mConnected)
             Timber.tag("DCA:dD 344").d("Collection begins");
         if (mConnected) {
-            if (packet.length == 4) {
-                if (finalPageNumber == 0) {
+            if (packet.length == 4) { // A 4-byte packet contains the current page number
+                if (finalPageNumber == 0) { // No data to download
                     progressGIF.setVisibility(View.GONE);
                     percentage.setVisibility(View.GONE);
                     showPrintDialog(this, "Message", "No data to download.", 1);
@@ -416,33 +458,33 @@ public class GetDataActivity extends AppCompatActivity {
                     return;
                 }
                 if ((pageNumber + 1) == findPageNumber(packet) && (pageNumber + 1) < finalPageNumber) {
+                    // The current page number must be one more than the previous one and less than the total number of pages
                     pageNumber = findPageNumber(packet);
+                    // Download percentage is updated
                     percent = (pageNumber / finalPageNumber) * 100;
                     percentage.setText(percent + "%");
-                } else {
+                } else { // Shows an error and stops downloading
                     progressGIF.setVisibility(View.GONE);
                     percentage.setVisibility(View.GONE);
                     showPrintDialog(this, "Error", "Download error.", 1);
                     parameter1 = "";
-                    return;
                 }
-            } else if (packet.length == 5){
+            } else if (packet.length == 5) { //Shows an error when the packet contains 5 bytes and stops downloading
                 Log.i(TAG, Converters.getHexValue(packet));
                 progressGIF.setVisibility(View.GONE);
                 percentage.setVisibility(View.GONE);
                 showPrintDialog(this, "Error", "Download error.", 1);
                 parameter1 = "";
-            } else {
+            } else { // Copy the downloaded package
                 Log.i(TAG, "SIZE: "+packet.length+" PAGE NUMBER: "+pageNumber);
-                rawDataCollector.processSnapshot(packet);
+                rawDataCollector.processSnapshotRaw(packet);
                 if (rawDataCollector.isFilled()) {
-                    if (rawDataCollector.isError())
-                        fails++;
-                    snapshotArray.add(rawDataCollector);
+                    // Completed the download and have to process the data
                     String processData = readPacket(rawDataCollector.getSnapshot());
-                    if (!error) {
+                    if (!error) { // Adds the data to the list if you didn't find any errors during processing
                         byte[] data = Converters.convertToUTF8(processData);
-                        processDataCollector.processSnapshotDownload(data);
+                        processDataCollector = new Snapshots(data.length);
+                        processDataCollector.processSnapshot(data);
                         snapshotArray.add(processDataCollector);
                     }
                     percentage.setText("100%");
@@ -450,18 +492,15 @@ public class GetDataActivity extends AppCompatActivity {
                 }
             }
         } else {
-            if(rawDataCollector.getFileName().contains("error")){
+            if (rawDataCollector.getFileName().contains("error"))
                 Timber.tag("DCA:dD 356").wtf("Data collection fail by disconnection. %s", rawDataCollector.getFileName());
-                fails++;
-                //snapshotArray.add(rawDataCollector);
-            }
-            Timber.tag("DCA:dD 360").d("All files collected: %s", snapshotArray.size());
+            else
+                Timber.tag("DCA:dD 360").d("All files collected: %s", snapshotArray.size());
         }
     }
 
     private void printSnapshotFiles() {
         int i = 0; boolean outcome; String msg;
-        //String[] filesToZip = new String[snapshotArray.size()];
         try {
             //set the directory path
             root = new File(Environment.getExternalStorageDirectory(), "atstrack");
@@ -479,7 +518,7 @@ public class GetDataActivity extends AppCompatActivity {
                 //see if there's a possible copy
                 int copy = 1;
                 while (!(newFile.createNewFile())) {
-                    newFile = new File(root.getAbsolutePath(), fName.substring(0, fName.length() - 4) + " (" + copy + ").txt");//ors
+                    newFile = new File(root.getAbsolutePath(), fName.substring(0, fName.length() - 4) + " (" + copy + ").txt");
                     copy++;
                 }
                 newFile.setReadable(true);
@@ -490,45 +529,34 @@ public class GetDataActivity extends AppCompatActivity {
                 //save the file
                 stream.flush();
                 stream.close();
-
-                //filesToZip[i]=newFile.getName();
                 //go for the next
                 i++;
             }
 
             if (i == snapshotArray.size()) {
-                //String zipName= snapshotArray.get(0).getFileName();
-                //zipName = zipName.substring(22,zipName.length() - 4);
-                //createFileZip(root.getAbsolutePath()+ File.separator +zipName,filesToZip,root.getAbsolutePath());
-                //sendViaSFTP();
                 progressGIF.setVisibility(View.GONE);
                 percentage.setVisibility(View.GONE);
-                if (fails == 0) {
-                    Timber.tag("DCA:psF 543").d("%s byte(s) downloaded successfully. No fails!", (2048 * finalPageNumber));
-                    msg = "Download finished: " + (2048 * finalPageNumber) + " byte(s) downloaded successfully.";//file(s)
-                    if (error) {
-                        msg += " No data found in bytes downloaded. No file was generated.";
-                        showPrintDialog(this,"Finished", msg, 1);
-                    } else {
-                        showPrintDialog(this,"Finished", msg, 3);
-                    }
+                Timber.tag("DCA:psF 543").d("%s byte(s) downloaded successfully. No fails!", (Snapshots.BYTES_PER_PAGE * finalPageNumber));
+                msg = "Download finished: " + (Snapshots.BYTES_PER_PAGE * finalPageNumber) + " byte(s) downloaded successfully.";
+                if (error) {
+                    msg += " No data found in bytes downloaded. No file was generated.";
+                    showPrintDialog(this,"Finished", msg, 1);
+                } else {
+                    showPrintDialog(this,"Finished", msg, 3);
                 }
-                else
-                    throw new Exception();
             }
         }
         catch (Exception e) {
             progressGIF.setVisibility(View.GONE);
             percentage.setVisibility(View.GONE);
-            Timber.tag("DCA:psF 552").e(e, "%s fail(s), %ss byte(s) downloaded in total.", fails, (2048 * finalPageNumber));
-            msg = "Download finished: "+ (2048 * finalPageNumber) + " byte(s) downloaded.";
+            Timber.tag("DCA:psF 552").e(e, "%s fail(s), %ss byte(s) downloaded in total.", 0, (Snapshots.BYTES_PER_PAGE * finalPageNumber));
+            msg = "Download finished: "+ (Snapshots.BYTES_PER_PAGE * finalPageNumber) + " byte(s) downloaded.";
             if (error) {
                 msg += " No data found in bytes downloaded. No file was generated.";
                 showPrintDialog(this,"Finished", msg, 1);
             } else {
                 showPrintDialog(this,"Finished", msg, 3);
             }
-            fails = 0;
         }
     }
 
@@ -536,24 +564,24 @@ public class GetDataActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         if (title != null) builder.setTitle(title);
         builder.setMessage(message);
-        if (buttonNum == 1)//error
+        if (buttonNum == 1) // No data found in bytes downloaded
             builder.setPositiveButton("OK", (dialog, which) -> {
                 subMenu.setVisibility(View.VISIBLE);
             });
-        if (buttonNum == 2) {//cloud
+        if (buttonNum == 2) { // Save to the cloud
             builder.setPositiveButton("OK", (dialog, which) -> {
-                sendSnapshotFiles();
+                requestSignIn();
             });
             builder.setNegativeButton("Cancel", null);
         }
-        if (buttonNum == 3)//finish and question
+        if (buttonNum == 3) // Ask if you want to save file to the cloud
             builder.setPositiveButton("OK", (dialog, which) -> {
                 subMenu.setVisibility(View.VISIBLE);
                 showPrintDialog(this, "Finished", "Do you want to send the file to the cloud?", 2);
             });
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorbackground)));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.catskill_white)));
     }
 
     public void onRestartConnection() {
@@ -562,26 +590,11 @@ public class GetDataActivity extends AppCompatActivity {
         mBluetoothLeService.connect(mDeviceAddress);
     }
 
-    public void sendSnapshotFiles() {
-        requestSignIn();
-    }
-
     private void requestSignIn() {
         GoogleSignInOptions signInOptions = new
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestScopes(new Scope(DriveScopes.DRIVE_FILE)).build();
         GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
         startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN:
-                if (resultCode == RESULT_OK)
-                    handleSignInIntent(data);
-                break;
-        }
     }
 
     private void handleSignInIntent(Intent data) {
@@ -629,6 +642,11 @@ public class GetDataActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Displays a message indicating whether the writing was successful.
+     *
+     * @param data This packet indicates the writing status.
+     */
     private void showMessage(byte[] data) {
         int status = Integer.parseInt(Converters.getDecimalValue(data[0]));
 
@@ -637,60 +655,8 @@ public class GetDataActivity extends AppCompatActivity {
         if (status == 0)
             builder.setMessage("Completed.");
         builder.setPositiveButton("OK", (dialog, which) -> {
-            Intent intent = new Intent(this, MainMenuActivity.class);
-            intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-            intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-            intent.putExtra(MainMenuActivity.EXTRAS_BATTERY, mPercentBattery);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            mBluetoothLeService.disconnect();
+            finish();
         });
         builder.show();
     }
-
-
-
-    /*public boolean createFileZip(String zipName, String[] filesToZip,String directory) {
-        Calendar zipTime = Calendar.getInstance();
-        //write strings to return
-        zipName = zipName + "_"+ zipTime.get((Calendar.YEAR)) +
-                (((zipTime.get(Calendar.MONTH) +1) < 10)? "0" + (zipTime.get(Calendar.MONTH) +1) : (zipTime.get(Calendar.MONTH) +1)) +
-                ((zipTime.get(Calendar.DAY_OF_MONTH) < 10)? "0"+zipTime.get(Calendar.DAY_OF_MONTH) : zipTime.get(Calendar.DAY_OF_MONTH)) +
-                ((zipTime.get(Calendar.HOUR_OF_DAY ) < 10)? "0"+zipTime.get(Calendar.HOUR_OF_DAY) : zipTime.get(Calendar.HOUR_OF_DAY)) +
-                ((zipTime.get(Calendar.MINUTE) < 10)? "0" + zipTime.get(Calendar.MINUTE) : zipTime.get(Calendar.MINUTE))+
-                ((zipTime.get(Calendar.SECOND) < 10)? "0" + zipTime.get(Calendar.SECOND) : zipTime.get(Calendar.SECOND));
-        int attempt = 0;
-        while(attempt < 3) {
-            File f = new File(directory + File.separator + zipName + ".zip");
-            if (f.exists()) f.delete();
-            try (ZipOutputStream os = new ZipOutputStream(new FileOutputStream(zipName + ".zip"))){
-                int j = 0;
-                while (j < filesToZip.length) {
-                    ZipEntry ingress = new ZipEntry(filesToZip[j]);
-                    try (FileInputStream fis = new FileInputStream(directory + File.separator + filesToZip[j])){
-                        os.putNextEntry(ingress);
-                        byte[] buffer = new byte[1024];
-                        int read;
-                        while (0 < (read = fis.read(buffer))) {
-                            os.write(buffer, 0, read);
-                        }
-                        fis.close();
-                        os.closeEntry();
-                        j++;
-                    } catch (IOException ignore) {
-                    }
-                }
-                return true;
-            } catch (Exception e) {
-                attempt++;
-            }
-        }
-        return false;
-    }
-
-    public void sendViaSFTP(){
-        //fijarse si hay carpeta //File[] faildir = new File(path).listFiles(File::isDirectory);
-        File[] zip = new File(root.getAbsolutePath()).listFiles(pathname -> pathname.getName().substring(pathname.getName().length() - 4).equals(".zip"));
-        new UploadZipFiles(zip).execute();
-    }*/
 }

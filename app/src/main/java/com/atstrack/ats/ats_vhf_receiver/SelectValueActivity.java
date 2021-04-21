@@ -23,11 +23,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 
-public class StartScanningActivity extends AppCompatActivity {
+import java.security.PublicKey;
+
+public class SelectValueActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -41,13 +45,46 @@ public class StartScanningActivity extends AppCompatActivity {
     TextView device_address_textView;
     @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
+    @BindView(R.id.select_pulse_rate_linearLayout)
+    LinearLayout select_pulse_rate_linearLayout;
+    @BindView(R.id.fixed_filter_type_linearLayout)
+    LinearLayout fixed_filter_type_linearLayout;
+    @BindView(R.id.variable_filter_type_linearLayout)
+    LinearLayout variable_filter_type_linearLayout;
+    @BindView(R.id.fixed_pulse_rate_imageView)
+    ImageView fixed_pulse_rate_imageView;
+    @BindView(R.id.variable_pulse_rate_imageView)
+    ImageView variable_pulse_rate_imageView;
+    @BindView(R.id.pattern_matching_imageView)
+    ImageView pattern_matching_imageView;
+    @BindView(R.id.pulses_per_scan_time_imageView)
+    ImageView pulses_per_scan_time_imageView;
+    @BindView(R.id.temperature_imageView)
+    ImageView temperature_imageView;
+    @BindView(R.id.period_imageView)
+    ImageView period_imageView;
+    @BindView(R.id.altitude_imageView)
+    ImageView altitude_imageView;
+    @BindView(R.id.depth_imageView)
+    ImageView depth_imageView;
 
-    private final static String TAG = StartScanningActivity.class.getSimpleName();
+    private final static String TAG = SelectValueActivity.class.getSimpleName();
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
-    private final int MESSAGE_PERIOD = 3000;
+    private static final long MESSAGE_PERIOD = 3000;
+
+    public static final int PULSE_RATE = 1001;
+    public static final int FILTER = 1002;
+    public static final int FIXED_PULSE_RATE = 1003;
+    public static final int VARIABLE_PULSE_RATE = 1004;
+    public static final int PATTERN_MATCHING = 1005;
+    public static final int PULSES_PER_SCAN_TIME = 1006;
+    public static final int TEMPERATURE = 1007;
+    public static final int PERIOD = 1008;
+    public static final int ALTITUDE = 1009;
+    public static final int DEPTH = 1010;
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -55,7 +92,9 @@ public class StartScanningActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
-    // Code to manage Service lifecycle.
+    private int type;
+    private int value;
+
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -76,12 +115,8 @@ public class StartScanningActivity extends AppCompatActivity {
     };
 
     private boolean mConnected = false;
+    private String parameter = "";
 
-    // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -92,12 +127,13 @@ public class StartScanningActivity extends AppCompatActivity {
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                     mConnected = false;
-                    state = false;
+//                    state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
+
                 }
             }
             catch (Exception e) {
@@ -115,58 +151,107 @@ public class StartScanningActivity extends AppCompatActivity {
         return intentFilter;
     }
 
-    @OnClick(R.id.start_manual_scan_button)
-    public void onClickStartManualScan(View v){
-        Intent intent = new Intent(this, ManualScanActivity.class);
-        intent.putExtra(ManualScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(ManualScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-        intent.putExtra(ManualScanActivity.EXTRAS_BATTERY, mPercentBattery);
-        startActivity(intent);
-        mBluetoothLeService.disconnect();
+    @OnClick(R.id.fixed_pulse_rate_linearLayout)
+    public void onClickFixedPulseRate(View v) {
+        fixed_pulse_rate_imageView.setVisibility(View.VISIBLE);
+        variable_pulse_rate_imageView.setVisibility(View.GONE);
+        value = FIXED_PULSE_RATE;
     }
 
-    @OnClick(R.id.start_aerial_scan_button)
-    public void onClickStartAerialScan(View v){
-        Intent intent = new Intent(this, AerialScanActivity.class);
-        intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(AerialScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-        intent.putExtra(AerialScanActivity.EXTRAS_BATTERY, mPercentBattery);
-        intent.putExtra("scanning", false);
-        startActivity(intent);
-        mBluetoothLeService.disconnect();
+    @OnClick(R.id.variable_pulse_rate_linearLayout)
+    public void onClickVariablePulseRate(View v) {
+        variable_pulse_rate_imageView.setVisibility(View.VISIBLE);
+        fixed_pulse_rate_imageView.setVisibility(View.GONE);
+        value = VARIABLE_PULSE_RATE;
     }
 
-    @OnClick(R.id.start_stationary_scan_button)
-    public void onClickStartStationaryScan(View v){
-        Intent intent = new Intent(this, StationaryScanActivity.class);
-        intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-        intent.putExtra(StationaryScanActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-        intent.putExtra(StationaryScanActivity.EXTRAS_BATTERY, mPercentBattery);
-        intent.putExtra("scanning", false);
-        startActivity(intent);
-        mBluetoothLeService.disconnect();
+    @OnClick(R.id.pattern_matching_linearLayout)
+    public void onClickPatternMatching(View v) {
+        pattern_matching_imageView.setVisibility(View.VISIBLE);
+        pulses_per_scan_time_imageView.setVisibility(View.GONE);
+        value = PATTERN_MATCHING;
+    }
+
+    @OnClick(R.id.pulses_per_scan_time_linearLayout)
+    public void onClickPulsesPerScanTime(View v) {
+        pulses_per_scan_time_imageView.setVisibility(View.VISIBLE);
+        pattern_matching_imageView.setVisibility(View.GONE);
+        value = PULSES_PER_SCAN_TIME;
+    }
+
+    @OnClick(R.id.temperature_linearLayout)
+    public void onClickTemperature(View v) {
+        temperature_imageView.setVisibility(View.VISIBLE);
+        period_imageView.setVisibility(View.GONE);
+        altitude_imageView.setVisibility(View.GONE);
+        depth_imageView.setVisibility(View.GONE);
+        value = TEMPERATURE;
+    }
+
+    @OnClick(R.id.period_linearLayout)
+    public void onClickPeriod(View v) {
+        period_imageView.setVisibility(View.VISIBLE);
+        temperature_imageView.setVisibility(View.GONE);
+        altitude_imageView.setVisibility(View.GONE);
+        depth_imageView.setVisibility(View.GONE);
+        value = PERIOD;
+    }
+
+    @OnClick(R.id.altitude_linearLayout)
+    public void onClickAltitude(View v) {
+        altitude_imageView.setVisibility(View.VISIBLE);
+        temperature_imageView.setVisibility(View.GONE);
+        period_imageView.setVisibility(View.GONE);
+        depth_imageView.setVisibility(View.GONE);
+        value = ALTITUDE;
+    }
+
+    @OnClick(R.id.depth_linearLayout)
+    public void onClickDepth(View v) {
+        depth_imageView.setVisibility(View.VISIBLE);
+        temperature_imageView.setVisibility(View.GONE);
+        period_imageView.setVisibility(View.GONE);
+        altitude_imageView.setVisibility(View.GONE);
+        value = DEPTH;
+    }
+
+    @OnClick(R.id.save_changes_select_value_button)
+    public void onClickSaveChanges(View v) {
+        setResult(value);
+        finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_scanning);
+        setContentView(R.layout.activity_select_value);
         ButterKnife.bind(this);
 
-        // Customize the activity menu
         setSupportActionBar(toolbar);
-        title_toolbar.setText("Start Scanning");
+        title_toolbar.setText("Edit Receiver Defaults");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         mPercentBattery = intent.getStringExtra(EXTRAS_BATTERY);
+
+        type = intent.getIntExtra("type", 0);
+        if (type == PULSE_RATE) {
+            select_pulse_rate_linearLayout.setVisibility(View.VISIBLE);
+            value = FIXED_PULSE_RATE;
+        }
+        if (type == FIXED_PULSE_RATE) {
+            fixed_filter_type_linearLayout.setVisibility(View.VISIBLE);
+            value = PATTERN_MATCHING;
+        }
+        if (type == VARIABLE_PULSE_RATE) {
+            variable_filter_type_linearLayout.setVisibility(View.VISIBLE);
+            value = TEMPERATURE;
+        }
 
         device_name_textView.setText(mDeviceName);
         device_address_textView.setText(mDeviceAddress);
@@ -174,6 +259,17 @@ public class StartScanningActivity extends AppCompatActivity {
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -200,36 +296,14 @@ public class StartScanningActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: //Go back to the previous activity
-                Intent intent = new Intent(this, MainMenuActivity.class);
-                intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-                intent.putExtra(MainMenuActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-                intent.putExtra(MainMenuActivity.EXTRAS_BATTERY, mPercentBattery);
-                // In the MainMenuActivity, only displays the main menu
-                intent.putExtra("menu", true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                mBluetoothLeService.disconnect();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mConnected && !state)
-            showDisconnectionMessage();
+        if (!mConnected && !state) {
+            showMessageDisconnect();
+        }
         return true;
     }
 
-    /**
-     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
-     */
-    private void showDisconnectionMessage() {
+    private void showMessageDisconnect() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -238,7 +312,6 @@ public class StartScanningActivity extends AppCompatActivity {
         dialog.setView(view);
         dialog.show();
 
-        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

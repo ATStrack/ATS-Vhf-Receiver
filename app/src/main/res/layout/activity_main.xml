@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,7 +26,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
-            android:id="@+id/btEnablerLL"
+            android:id="@+id/bluetooth_enable_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -35,25 +36,25 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/bluetoothONbtn"
+                android:id="@+id/bluetooth_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:background="@color/mountain_meadow"
                 android:text="@string/enable"
-                android:textColor="@color/colortextbutton" />
+                android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/bluetoothmsgTV"
+                android:id="@+id/bluetooth_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
                 android:text="@string/bluetooth_adapter_is_disabled"
-                android:textColor="@color/colortext"/>
+                android:textColor="@color/ebony_clay"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/locEnablerLL"
+            android:id="@+id/location_enable_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -62,202 +63,33 @@
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btEnablerLL">
+            app:layout_constraintTop_toBottomOf="@+id/bluetooth_enable_linearLayout">
 
             <Button
-                android:id="@+id/locationONbtn"
+                android:id="@+id/location_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:background="@color/mountain_meadow"
                 android:text="@string/enable"
-                android:textColor="@color/colortextbutton" />
+                android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/locationmsgTV"
+                android:id="@+id/location_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:text="@string/location_adapter_is_disabled" />
+                android:text="@string/location_adapter_is_disabled"
+                android:textColor="@color/ebony_clay"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <!--LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:orientation="vertical"
-        android:weightSum="6">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="center"
-                android:elevation="0dp"
-                android:src="@drawable/receiver"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_logo"/>
-
-            <TextView
-                android:id="@+id/vhf_receiver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/lb_vhf_receiver"
-                android:textSize="24dp"
-                android:textColor="@color/colortext"/>
-
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/devices_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_weight="6"
-            android:visibility="gone">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/device_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/search_linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="bottom|center"
-            android:visibility="visible"
-            android:layout_weight="6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <ImageView
-                android:id="@+id/anim_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="@string/lb_searching_receivers"
-                android:textSize="18dp"
-                android:textColor="@color/colortext"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/retry_linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="bottom|center"
-            android:visibility="gone"
-            android:layout_weight="6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <TextView
-                android:id="@+id/state_connect_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/lb_unable_find"
-                android:textColor="@color/colortext"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/retry_button"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/mountain_meadow"
-                android:text="@string/lb_retry"
-                android:textColor="@color/colortextbutton"
-                android:textSize="20dp"/>
-
-        </LinearLayout>
-
-        <com.codesgood.views.JustifiedTextView
-            android:id="@+id/update_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_weight="6"
-            android:gravity="bottom"
-            android:text="@string/lb_update"
-            android:textColor="@color/colortext"
-            android:textSize="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <LinearLayout
-            android:id="@+id/optionLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text=""
-                android:textColor="@color/colortext"
-                android:textAlignment="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="RtlCompat" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Switch
-                android:id="@+id/switch_dark_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lb_DarkMode"
-                android:textColor="@color/colortext"/>
-
-        </LinearLayout>
-
-    </LinearLayout-->
-
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/receiver_image"
+        android:layout_height="@dimen/receiver_image"
         android:layout_marginBottom="16sp"
         android:layout_gravity="center"
-        android:elevation="0dp"
         android:src="@drawable/receiver"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -281,6 +113,7 @@
         android:layout_marginTop="8sp"
         android:layout_gravity="center"
         android:text="@string/lb_vhf_receiver"
+        android:textColor="@color/light_blue"
         style="@style/h2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -320,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24sp"
             android:text="@string/lb_searching_receivers"
+            android:textColor="@color/ebony_clay"
             style="@style/body_large"/>
 
     </LinearLayout>
@@ -373,6 +207,7 @@
             android:layout_marginEnd="16sp"
             android:layout_marginBottom="24sp"
             android:text="@string/lb_retry"
+            android:textColor="@color/white"
             style="@style/button_primary"/>
 
     </LinearLayout>
@@ -388,13 +223,12 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/version"
+            android:id="@+id/version_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            android:text=""
-            android:textColor="@color/colortext"
+            android:textColor="@color/ebony_clay"
             android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -410,7 +244,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lb_DarkMode"
-            android:textColor="@color/colortext"/>
+            android:textColor="@color/ebony_clay"/>
 
     </LinearLayout>
 

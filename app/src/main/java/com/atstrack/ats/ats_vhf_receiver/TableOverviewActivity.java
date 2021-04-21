@@ -1,8 +1,8 @@
 package com.atstrack.ats.ats_vhf_receiver;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,48 +22,39 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atstrack.ats.ats_vhf_receiver.BluetoothATS.BluetoothLeService;
 import com.atstrack.ats.ats_vhf_receiver.Utils.Converters;
-import com.atstrack.ats.ats_vhf_receiver.Utils.DriveServiceHelper;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.UUID;
 
 public class TableOverviewActivity extends AppCompatActivity {
 
-    @BindView(R.id.device_name_tableOverview)
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.title_toolbar)
+    TextView title_toolbar;
+    @BindView(R.id.state_view)
+    View state_view;
+    @BindView(R.id.device_name)
     TextView device_name_textView;
-    @BindView(R.id.device_address_tableOverview)
+    @BindView(R.id.device_address)
     TextView device_address_textView;
-    @BindView(R.id.percent_battery_tableOverview)
+    @BindView(R.id.percent_battery)
     TextView percent_battery_textView;
     @BindView(R.id.table1_frequency)
     TextView table1_frequency;
@@ -102,7 +93,7 @@ public class TableOverviewActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_BATTERY = "DEVICE_BATTERY";
     private final int MESSAGE_PERIOD = 3000;
-    private static final int REQUEST_CODE_SIGN_IN = 1;
+    //private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final int REQUEST_CODE_OPEN_STORAGE = 3;
 
     private int[] data;
@@ -111,9 +102,9 @@ public class TableOverviewActivity extends AppCompatActivity {
     private int range;
     private boolean isFile = false;
 
-    private DriveServiceHelper driveServiceHelper;
+    /*private DriveServiceHelper driveServiceHelper;
     private String fileUrl;
-    private String fileId;
+    private String fileId;*/
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -121,10 +112,7 @@ public class TableOverviewActivity extends AppCompatActivity {
     private BluetoothLeService mBluetoothLeService;
     private boolean state = true;
 
-    private Handler mHandler;
-    private int heightPixels;
-    private int widthPixels;
-
+    // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -147,6 +135,11 @@ public class TableOverviewActivity extends AppCompatActivity {
     private boolean mConnected = false;
     private String parameter = "";
 
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -160,11 +153,11 @@ public class TableOverviewActivity extends AppCompatActivity {
                     state = false;
                     invalidateOptionsMenu();
                 } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                    if (parameter.equals("frequencies"))
+                    if (parameter.equals("frequencies")) // Gets the number of frequencies from each table
                         onClickFrequencies();
                 } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                     byte[] packet = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                    if (parameter.equals("frequencies"))
+                    if (parameter.equals("frequencies")) // Gets the number of frequencies from each table
                         downloadData(packet);
                 }
             } catch (Exception e) {
@@ -182,13 +175,18 @@ public class TableOverviewActivity extends AppCompatActivity {
         return intentFilter;
     }
 
+    /**
+     * Requests a read for get the number of frequencies from each table and display it.
+     * Service name: StoredData.
+     * Characteristic name: FreqTable.
+     */
     public void onClickFrequencies() {
         UUID uservice = UUID.fromString("609d10ad-d22d-48f3-9e6e-d035398c3606");
         UUID uservicechar = UUID.fromString("ad0ea6e5-d93a-47a5-a6fc-a930552520dd");
         mBluetoothLeService.readCharacteristicDiagnostic(uservice, uservicechar);
     }
 
-    @OnClick(R.id.ok_drive_button)
+    /*@OnClick(R.id.ok_drive_button)
     public void onClickOK(View v) {
         fileId = findFileId();
         requestSignIn();
@@ -197,7 +195,7 @@ public class TableOverviewActivity extends AppCompatActivity {
     public String findFileId() {
         String[] word = fileUrl.split("/");
         return word[5];
-    }
+    }*/
 
     @OnClick(R.id.load_from_file_overview)
     public void onClickLoadTablesFromFile(View v) {
@@ -205,14 +203,14 @@ public class TableOverviewActivity extends AppCompatActivity {
 
         intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().getPath()), "*/*");
         startActivityForResult(intent, REQUEST_CODE_OPEN_STORAGE);
-//        requestSignIn();
+        /*requestSignIn();
 
-//        google_drive_webView.loadUrl("https://drive.google.com/drive/my-drive");
-//        table_overview_linearLayout.setVisibility(View.GONE);
-//        google_drive_linearLayout.setVisibility(View.VISIBLE);
+        google_drive_webView.loadUrl("https://drive.google.com/drive/my-drive");
+        table_overview_linearLayout.setVisibility(View.GONE);
+        google_drive_linearLayout.setVisibility(View.VISIBLE);*/
     }
 
-    private class Callback extends WebViewClient {
+    /*private class Callback extends WebViewClient {
         @Override
         public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
             return true;
@@ -231,13 +229,13 @@ public class TableOverviewActivity extends AppCompatActivity {
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestScopes(new Scope(DriveScopes.DRIVE_FILE)).build();
         GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
         startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CODE_OPEN_STORAGE:
-                if (resultCode == RESULT_OK) { // Get the Uri of the selected file
+                if (resultCode == RESULT_OK) { // Gets the Uri of the selected file
                     Uri uri = data.getData();
                     String uriString = uri.toString();
                     File myFile = new File(uriString);
@@ -258,18 +256,20 @@ public class TableOverviewActivity extends AppCompatActivity {
                         }
                     } else if (uriString.startsWith("file://")) {
                         String fileName = myFile.getName();
+                        mBluetoothLeService.disconnect();
+                        readFile(path);
                     }
                 }
                 break;
-            case REQUEST_CODE_SIGN_IN:
+            /*case REQUEST_CODE_SIGN_IN:
                 if (resultCode == RESULT_OK)
                     handleSignInIntent(data);
-                break;
+                break;*/
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleSignInIntent(Intent data) {
+    /*private void handleSignInIntent(Intent data) {
         GoogleSignIn.getSignedInAccountFromIntent(data).addOnSuccessListener(new OnSuccessListener<GoogleSignInAccount>() {
             @Override
             public void onSuccess(GoogleSignInAccount googleSignInAccount) {
@@ -323,12 +323,18 @@ public class TableOverviewActivity extends AppCompatActivity {
                     })
                     .addOnFailureListener(exception -> Log.e(TAG, "Couldn't download file.", exception));
         }
-    }
+    }*/
 
-    private void readFile(String path){
+    /**
+     * Reads a file from the local storage and get the frequencies from each table.
+     *
+     * @param path The directory path where is the file.
+     */
+    private void readFile(String path) {
         if (isExternalStorageReadable()) {
             StringBuilder stringBuilder = new StringBuilder();
             try {
+                // Gets the selected file
                 File file = new File(Environment.getExternalStorageDirectory(), findPath(path));
                 FileInputStream fileInputStream = new FileInputStream(file);
 
@@ -340,7 +346,7 @@ public class TableOverviewActivity extends AppCompatActivity {
                     this.data = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
                     tables = new int[12][];
                     LinkedList<String> tableList = new LinkedList<>();
-                    while ((line = bufferedReader.readLine()) != null) {
+                    while ((line = bufferedReader.readLine()) != null) { // Reads each line of the file and add it to the list
                         stringBuilder.append(line + "\n");
                         tableList.add(line);
                     }
@@ -356,6 +362,13 @@ public class TableOverviewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Finds the directory path of the selected file.
+     *
+     * @param path The directory path where is the file.
+     *
+     * @return Returns the directory path separated by /.
+     */
     private String findPath(String path) {
         String[] splitPath = path.split("%");
         String newPath = "";
@@ -365,6 +378,11 @@ public class TableOverviewActivity extends AppCompatActivity {
         return newPath;
     }
 
+    /**
+     * Checks if external storage is readable.
+     *
+     * @return Returns true, if external storage is readable.
+     */
     private boolean isExternalStorageReadable() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || Environment.MEDIA_MOUNTED_READ_ONLY.equals(Environment.getExternalStorageState())) {
@@ -374,6 +392,11 @@ public class TableOverviewActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Processes the frequencies from each table that are in the list.
+     *
+     * @param tableList This list contains the lines read from the file.
+     */
     private void setData(LinkedList<String> tableList) {
         isFile = true;
         String line = tableList.removeFirst();
@@ -758,16 +781,16 @@ public class TableOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_table_overview);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setElevation(0);
+        // Customize the activity menu
+        setSupportActionBar(toolbar);
+        title_toolbar.setText("Edit Frequency Tables");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_back_icon_opt);
-        getSupportActionBar().setTitle("EDIT FREQUENCY TABLES");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
-        heightPixels = getResources().getDisplayMetrics().heightPixels;
-        widthPixels = getResources().getDisplayMetrics().widthPixels;
+        // Keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        parameter = "frequencies";
-
+        // Get device data from previous activity
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -777,10 +800,11 @@ public class TableOverviewActivity extends AppCompatActivity {
         device_address_textView.setText(mDeviceAddress);
         percent_battery_textView.setText(mPercentBattery);
 
-        google_drive_webView.getSettings().setJavaScriptEnabled(true);
-        google_drive_webView.setWebViewClient(new Callback());
+        // Gets the number of frequencies from each table
+        parameter = "frequencies";
 
-        mHandler = new Handler();
+        //google_drive_webView.getSettings().setJavaScriptEnabled(true);
+        //google_drive_webView.setWebViewClient(new Callback());
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -789,7 +813,7 @@ public class TableOverviewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+            case android.R.id.home: //Go back to the previous activity
                 finish();
                 return true;
             default:
@@ -823,11 +847,14 @@ public class TableOverviewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mConnected && !state)
-            showMessageDisconnect();
+            showDisconnectionMessage();
         return true;
     }
 
-    private void showMessageDisconnect() {
+    /**
+     * Shows an alert dialog because the connection with the BLE device was lost or the client disconnected it.
+     */
+    private void showDisconnectionMessage() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
         View view =inflater.inflate(R.layout.disconnect_message, null);
@@ -836,6 +863,7 @@ public class TableOverviewActivity extends AppCompatActivity {
         dialog.setView(view);
         dialog.show();
 
+        // The message disappears after a pre-defined period and will search for other available BLE devices again
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -844,6 +872,11 @@ public class TableOverviewActivity extends AppCompatActivity {
         }, MESSAGE_PERIOD);
     }
 
+    /**
+     * With the received packet, gets the number of frequencies from each table and display on the screen.
+     *
+     * @param data The received packet.
+     */
     private void downloadData(byte[] data) {
         table1_frequency.setText(Converters.getDecimalValue(data[1]) + " frequencies");
         table2_frequency.setText(Converters.getDecimalValue(data[2]) + " frequencies");
